@@ -17,9 +17,9 @@ export function themeColorForView(
     case "welcome":
       return "#ffffff";
     case "lab":
-      return "#efefe7";
+      return "#ffffff";
     default:
-      return "#f6f5f1";
+      return "#ffffff";
   }
 }
 

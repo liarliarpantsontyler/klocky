@@ -74,7 +74,7 @@ No location prompt on launch. Onboarding uses device time automatically and offe
 - Hidden tabs stop animation and clock scheduling; current system time is read when returning.
 - DPR is capped at 2; total render pixels are capped around 2.2 million and reduced when sampled frame times fall below target.
 - No WebGL2: the matching poster remains visible. Context loss preserves that fallback and restoration recreates GPU resources.
-- Antonio, Space Grotesk, Libre Baskerville, Rubik 80s Fade, Rubik Mono One, Silkscreen, Jersey 20, Danfo and Days One are bundled locally under the SIL Open Font License. Tiempos Headline, American Typewriter and Black Valentine are bundled from local installed copies. The remaining choices use system sans, serif and mono stacks. No external font requests are made at runtime.
+- App UI chrome (onboarding, gallery, editor, settings) uses **Humin** (`humin-regular.ttf`, `humin-bold.ttf`), the same VAG Rounded Next subset as humin.work, bundled under your brand license. Clock display typefaces are separate: Antonio, Space Grotesk, Libre Baskerville, Rubik 80s Fade, Rubik Mono One, Silkscreen, Jersey 20, Danfo and Days One under the SIL Open Font License; Tiempos Headline, American Typewriter and Black Valentine from local installed copies; remaining clock choices use system stacks. No external font requests are made at runtime.
 - Every collection preview keeps an exact 11:5 landscape ratio. Each of the thirteen curated presets has its own composition/background pairing, with deliberate typeface, weight, color and placement choices.
 
 ## Research and validation

@@ -99,14 +99,14 @@ export function Onboarding({
           {step === "welcome"
             ? "Your time, your way."
             : step === "location"
-              ? "First, where are you?"
+              ? "First, set your time. Where are you?"
               : "Pick one."}
         </h1>
         <p className="onboarding-copy">
           {step === "welcome"
             ? "Set your time and place, then pick a clock to make your own."
             : step === "location"
-              ? "Klocky uses your location for the right time, timezone, date and local details."
+              ? 'Tap "Use My Location" or set it manually below:'
               : "You can change everything later."}
         </p>
         {step === "location" ? (

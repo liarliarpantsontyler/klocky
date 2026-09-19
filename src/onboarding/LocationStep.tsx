@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, ChevronDown, LocateFixed, Search } from "lucide-react";
+import { Check, LocateFixed, Search } from "lucide-react";
 import type { UserPreferences, WeatherLocation } from "../types";
 import { searchCities } from "../weather/useWeather";
 import { timeParts, useTime } from "../hooks/useTime";
@@ -160,22 +160,22 @@ export function LocationStep({
       </button>
       <div className="onboarding-place">
         <div>
-          <strong>{cityName}</strong>
-          <span>
-            {t.hour}:{t.minute} {t.period} <span aria-hidden="true">·</span>{" "}
-            {details.abbreviation}
-          </span>
-          <small>
-            {preferences.weatherLocation ? (
-              <>
-                <Check size={11} /> Looks good
-              </>
-            ) : (
-              "From your device timezone"
-            )}
-          </small>
+          <div className="onboarding-place-heading">
+            <strong>{cityName}</strong>
+            <span className="onboarding-place-time">
+              {t.hour}:{t.minute} {t.period}{" "}
+              <span aria-hidden="true">·</span> {details.abbreviation}
+            </span>
+          </div>
+          {preferences.weatherLocation && (
+            <small>
+              <Check size={11} /> Looks good
+            </small>
+          )}
         </div>
         <button
+          type="button"
+          className="onboarding-place-edit"
           onClick={() => {
             generation.current++;
             request.current?.abort();
@@ -233,11 +233,10 @@ export function LocationStep({
           {status}
         </p>
       )}
-      <details className="onboarding-time-settings">
-        <summary>
-          Time settings
-          <ChevronDown size={13} />
-        </summary>
+      <section
+        className="onboarding-time-settings"
+        aria-label="Time settings"
+      >
         <div className="onboarding-time-options">
           <div>
             <span>Time format</span>
@@ -280,7 +279,7 @@ export function LocationStep({
             Updates automatically.
           </small>
         </div>
-      </details>
+      </section>
       <button
         className="onboarding-primary"
         disabled={!!zoneError}

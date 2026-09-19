@@ -1,6 +1,7 @@
 .onboarding {
-  --onboarding-ink: #242522;
-  --onboarding-paper: #ffffff;
+  --onboarding-ink: var(--ink);
+  --onboarding-paper: var(--paper);
+  font-family: var(--font-ui);
   min-height: 100svh;
   min-height: 100dvh;
   display: flex;
@@ -43,10 +44,10 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  color: #777971;
+  color: var(--muted);
 }
 .onboarding-back:hover {
-  background: #eeeee9;
+  background: var(--surface-subtle);
 }
 .onboarding-carousel {
   width: 100%;
@@ -122,13 +123,13 @@
   height: 25px;
   border-radius: 50%;
   background: var(--onboarding-paper);
-  color: #242522;
+  color: var(--onboarding-ink);
   box-shadow: 0 1px 8px #0002;
 }
 .onboarding-choose .onboarding-clock-card.is-selected {
   box-shadow:
     0 0 0 4px var(--onboarding-paper),
-    0 0 0 5px #969a8e;
+    0 0 0 5px var(--klocky-gray-mid);
 }
 .onboarding-carousel-caption {
   display: flex;
@@ -137,7 +138,7 @@
   gap: 13px;
   margin-top: 11px;
   height: 36px;
-  color: #64665e;
+  color: var(--muted);
 }
 .onboarding-carousel-caption > span {
   min-width: 100px;
@@ -146,11 +147,11 @@
   text-align: center;
 }
 .onboarding-clock-number {
-  color: #9d9f95;
+  color: var(--muted);
   margin-right: 13px;
-  font:
-    10px "SFMono-Regular",
-    monospace;
+  font-size: 10px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
 }
 .onboarding-carousel-caption button {
   width: 36px;
@@ -158,11 +159,11 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: #93968c;
+  color: var(--muted);
 }
 .onboarding-carousel-caption button:hover {
-  background: #eeeee9;
-  color: #242522;
+  background: var(--surface-subtle);
+  color: var(--onboarding-ink);
 }
 .onboarding-content {
   width: min(100% - 40px, 490px);
@@ -173,13 +174,13 @@
 .onboarding h1 {
   font-size: clamp(32px, 3.1vw, 46px);
   line-height: 1.12;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.055em;
   margin: 0;
   outline: none;
 }
 .onboarding-copy {
-  color: #7b7d74;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.65;
   letter-spacing: -0.01em;
@@ -202,16 +203,16 @@
   min-height: 54px;
   padding: 0 24px;
   border-radius: 999px;
-  background: #292c27;
-  color: #fafaf8;
+  background: var(--ink);
+  color: var(--klocky-white);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
   transition:
     background 0.2s,
     transform 0.2s;
 }
 .onboarding-primary:hover {
-  background: #45493f;
+  background: color-mix(in srgb, var(--ink) 72%, var(--klocky-white));
   transform: translateY(-1px);
 }
 .onboarding-primary:active {
@@ -220,7 +221,7 @@
 .onboarding-secondary {
   min-height: 44px;
   margin-top: 9px;
-  color: #8a8d81;
+  color: var(--muted);
   font-size: 11px;
 }
 .onboarding-secondary-button {
@@ -232,28 +233,28 @@
   align-items: center;
   justify-content: center;
   gap: 27px;
-  border: 1px solid #d8dbd1;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #f3f4ef;
-  color: #50534c;
+  background: var(--surface-subtle);
+  color: var(--ink);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
   transition:
     background 0.2s,
     transform 0.2s;
 }
 .onboarding-secondary-button:hover {
-  background: #eaebe4;
-  color: #242522;
+  background: var(--line);
+  color: var(--onboarding-ink);
   transform: translateY(-1px);
 }
 .onboarding-secondary:hover {
-  color: #242522;
+  color: var(--onboarding-ink);
 }
 .onboarding-footer {
   font-size: 9px;
   letter-spacing: 0.07em;
-  color: #a3a69a;
+  color: var(--muted);
   margin-top: auto;
   padding: 37px 20px 0;
 }
@@ -304,15 +305,15 @@
   gap: 15px;
 }
 .onboarding-clock-list-meta span {
-  color: #a0a297;
-  font:
-    10px "SFMono-Regular",
-    monospace;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
 }
 .onboarding-clock-list-meta h2 {
   margin: 0;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 .onboarding-clock-cta {
@@ -323,17 +324,17 @@
   gap: 10px;
   padding: 0 17px;
   border-radius: 999px;
-  background: #292c27;
-  color: #fafaf8;
+  background: var(--ink);
+  color: var(--klocky-white);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 700;
   white-space: nowrap;
   transition:
     background 0.2s,
     transform 0.2s;
 }
 .onboarding-clock-cta:hover {
-  background: #45493f;
+  background: color-mix(in srgb, var(--ink) 72%, var(--klocky-white));
   transform: translateY(-1px);
 }
 .onboarding-location .onboarding-carousel {
@@ -368,12 +369,12 @@
   justify-content: center;
   gap: 9px;
   font-size: 12px;
-  border: 1px solid #dcdfd5;
+  border: 1px solid var(--line);
   border-radius: 999px;
-  background: #f3f4ef;
+  background: var(--surface-subtle);
 }
 .onboarding-locate:hover {
-  background: #eceee6;
+  background: var(--line);
 }
 .onboarding-place {
   display: flex;
@@ -389,54 +390,49 @@
   gap: 7px;
   min-width: 0;
 }
+.onboarding-place-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
 .onboarding-place strong {
   font-size: 14px;
   font-weight: 500;
   line-height: 1.45;
 }
-.onboarding-place span {
+.onboarding-place-time {
   font-size: 12px;
-  color: #7b7e72;
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .onboarding-place small {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #838c76;
+  color: var(--muted);
   font-size: 10px;
 }
-.onboarding-place button {
-  font-size: 11px;
-  color: #7b7e72;
+.onboarding-place-edit {
+  flex: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--klocky-blue);
   min-height: 44px;
-  padding: 0 8px;
+  padding: 0 10px;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+.onboarding-place-edit:hover {
+  color: color-mix(in srgb, var(--klocky-blue) 82%, var(--ink));
 }
 .onboarding-time-settings {
   text-align: left;
   margin: 0 0 13px;
 }
-.onboarding-time-settings summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 38px;
-  list-style: none;
-  cursor: pointer;
-  color: #8a8d81;
-  font-size: 11px;
-}
-.onboarding-time-settings summary::-webkit-details-marker {
-  display: none;
-}
-.onboarding-time-settings[open] summary svg {
-  transform: rotate(180deg);
-}
 .onboarding-time-options {
-  border-top: 1px solid #e7e9df;
-  padding: 10px 0;
+  padding: 4px 0 10px;
   font-size: 11px;
 }
 .onboarding-time-options > div,
@@ -451,7 +447,7 @@
   min-width: 0;
   width: 185px;
   max-width: 65%;
-  border: 1px solid #dce0d4;
+  border: 1px solid var(--line);
   background: transparent;
   border-radius: 7px;
   padding: 9px 7px;
@@ -459,17 +455,17 @@
 }
 .onboarding-time-options > small {
   display: block;
-  color: #8a8d81;
+  color: var(--muted);
   margin-top: 8px;
   line-height: 1.5;
 }
 .onboarding-time-options > p {
   font-size: 11px;
-  color: #925d40;
+  color: var(--klocky-blue);
 }
 .onboarding-format {
   display: flex;
-  background: #eeefe8;
+  background: var(--surface-subtle);
   border-radius: 7px;
   padding: 3px;
 }
@@ -479,7 +475,7 @@
   border-radius: 5px;
 }
 .onboarding-format button[aria-pressed="true"] {
-  background: #fff;
+  background: var(--klocky-white);
   box-shadow: 0 1px 3px #0001;
 }
 .onboarding-location .onboarding-primary {
@@ -493,10 +489,10 @@
   display: flex;
   gap: 9px;
   align-items: center;
-  border: 1px solid #dce0d4;
+  border: 1px solid var(--line);
   border-radius: 9px;
   padding: 0 12px;
-  color: #8a8d81;
+  color: var(--muted);
 }
 .onboarding-search input {
   width: 100%;
@@ -505,14 +501,14 @@
   background: none;
   border: 0;
   font-size: 12px;
-  color: #292c27;
+  color: var(--ink);
 }
 .onboarding-search-results {
   max-height: 180px;
   overflow: auto;
   margin-top: 5px;
   border-radius: 8px;
-  background: #f1f2ec;
+  background: var(--surface-subtle);
 }
 .onboarding-search-results button {
   width: 100%;
@@ -523,19 +519,19 @@
   padding: 10px 12px;
   text-align: left;
   font-size: 11px;
-  border-bottom: 1px solid #e4e7dc;
+  border-bottom: 1px solid var(--line);
 }
 .onboarding-search-results button:hover {
-  background: #e5e8dd;
+  background: var(--line);
 }
 .onboarding-search-results small {
   font-size: 9px;
-  color: #858b79;
+  color: var(--muted);
 }
 .onboarding-status {
   font-size: 11px;
   line-height: 1.5;
-  color: #838a76;
+  color: var(--muted);
   text-align: left;
 }
 @keyframes onboarding-arrive {

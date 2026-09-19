@@ -2109,9 +2109,27 @@ button svg {
   line-height: 1.5;
   font-size: calc(11px * var(--ui-scale));
 }
+.account-sync-email {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(6px * var(--ui-scale));
+  min-height: 0;
+  margin: 0 0 calc(4px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
+}
+.account-sync-email .field-label {
+  margin: 0;
+}
 .account-sync-email input {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
   min-height: calc(48px * var(--ui-scale));
   font-size: max(16px, calc(14px * var(--ui-scale)));
+  padding: calc(12px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  border-radius: calc(12px * var(--ui-scale));
+  background: #fff;
 }
 .account-sync-note {
   margin-top: calc(10px * var(--ui-scale));
@@ -2130,12 +2148,16 @@ button svg {
 .account-sync-skip {
   width: 100%;
   min-height: calc(44px * var(--ui-scale));
+  justify-content: center;
+  text-align: center;
 }
 .modal--sheet {
-  max-height: min(88dvh, 100%);
+  max-height: min(92dvh, 100%);
+  margin: 0;
 }
 .modal-backdrop--sheet {
   align-items: flex-end;
+  justify-content: center;
   padding: 0;
 }
 .modal-backdrop--sheet .modal {
@@ -2144,6 +2166,17 @@ button svg {
   border-radius: calc(22px * var(--ui-scale)) calc(22px * var(--ui-scale)) 0 0;
   border-bottom: 0;
   box-shadow: 0 -12px 60px #18201038;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.modal-backdrop--sheet .modal::before {
+  content: "";
+  display: block;
+  width: calc(36px * var(--ui-scale));
+  height: calc(4px * var(--ui-scale));
+  margin: calc(8px * var(--ui-scale)) auto calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
+  background: var(--line);
+  flex-shrink: 0;
 }
 .modal-backdrop--sheet .panel-heading {
   padding: calc(18px * var(--ui-scale)) calc(22px * var(--ui-scale))
@@ -2166,6 +2199,10 @@ button svg {
     width: min(calc(420px * var(--ui-scale)), 100%);
     border-radius: calc(15px * var(--ui-scale));
     border-bottom: 1px solid #ffffff80;
+    padding-bottom: 0;
+  }
+  .modal-backdrop--sheet .modal::before {
+    display: none;
   }
 }
 .reset-row {
@@ -2556,8 +2593,12 @@ button svg {
   .display-top {
     gap: calc(10px * var(--ui-scale));
   }
-  .modal-backdrop {
+  .modal-backdrop:not(.modal-backdrop--sheet) {
     padding: calc(12px * var(--ui-scale));
+  }
+  .modal-backdrop--sheet {
+    padding: 0;
+    align-items: flex-end;
   }
   .settings-body {
     padding: 0 calc(22px * var(--ui-scale)) calc(20px * var(--ui-scale));

@@ -63,8 +63,8 @@ export function AccountSyncSheet({
               <li>Saved favorites & custom setups</li>
               <li>Weather city & time zone</li>
             </ul>
-            <label className="select-row account-sync-email">
-              Email
+            <label className="account-sync-email">
+              <span className="field-label">Email</span>
               <input
                 type="email"
                 name="email"

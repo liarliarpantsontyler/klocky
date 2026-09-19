@@ -24,6 +24,16 @@
   align-items: center;
   justify-content: center;
 }
+.onboarding-welcome .onboarding-header {
+  min-height: 0;
+  padding-bottom: 8px;
+}
+.onboarding-welcome .onboarding-carousel {
+  margin-top: clamp(16px, 3.5vh, 32px);
+}
+.onboarding-welcome .onboarding-carousel-viewport {
+  padding-top: 8px;
+}
 .onboarding-back {
   position: absolute;
   left: max(28px, env(safe-area-inset-left));
@@ -535,6 +545,9 @@
   .onboarding-carousel {
     margin-top: 11vh;
   }
+  .onboarding-welcome .onboarding-carousel {
+    margin-top: clamp(24px, 5vh, 48px);
+  }
   .onboarding-content {
     margin-top: 48px;
   }
@@ -546,6 +559,13 @@
   .onboarding-header {
     min-height: 168px;
     padding-bottom: 12px;
+  }
+  .onboarding-welcome .onboarding-header {
+    min-height: 0;
+    padding-bottom: 4px;
+  }
+  .onboarding-welcome .onboarding-carousel {
+    margin-top: clamp(10px, 2.5vh, 20px);
   }
   .onboarding-back {
     left: max(14px, env(safe-area-inset-left));
@@ -648,6 +668,9 @@
   .onboarding-carousel {
     margin-top: 24px;
   }
+  .onboarding-welcome .onboarding-carousel {
+    margin-top: 16px;
+  }
   .onboarding-clock-card {
     width: clamp(250px, 27vw, 365px);
   }
@@ -670,6 +693,9 @@
 @media (max-height: 730px) and (max-width: 650px) {
   .onboarding-carousel {
     margin-top: 24px;
+  }
+  .onboarding-welcome .onboarding-carousel {
+    margin-top: 12px;
   }
   .onboarding-content {
     margin-top: 20px;

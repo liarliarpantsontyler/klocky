@@ -65,8 +65,13 @@ export function ClockPreview({
 }
 export const ClockCarousel = forwardRef<
   CarouselHandle,
-  { preferences: UserPreferences; reduced: boolean; choosing: boolean }
->(function ClockCarousel({ preferences, reduced, choosing }, handle) {
+  {
+    preferences: UserPreferences;
+    reduced: boolean;
+    choosing: boolean;
+    onClockTap?: () => void;
+  }
+>(function ClockCarousel({ preferences, reduced, choosing, onClockTap }, handle) {
   const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const motion = useRef(new CarouselMotion());
@@ -330,9 +335,13 @@ export const ClockCarousel = forwardRef<
                 tabIndex={-1}
                 data-clock-index={i}
                 className={`onboarding-clock-card ${selected === i ? "is-selected" : ""}`}
-                aria-label={`Select ${preset.name} clock`}
+                aria-label={
+                  onClockTap
+                    ? `Continue with ${preset.name} clock`
+                    : `Select ${preset.name} clock`
+                }
                 aria-pressed={selected === i}
-                onClick={() => center(i)}
+                onClick={() => (onClockTap ? onClockTap() : center(i))}
               >
                 <ClockPreview
                   preset={preset}

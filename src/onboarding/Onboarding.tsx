@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { KlockyPreset, UserPreferences } from "../types";
-import { ClockCarousel, type CarouselHandle } from "./ClockCarousel";
+import { ClockCarousel } from "./ClockCarousel";
 import {
   ChooseClockList,
   type ChooseClockListHandle,
@@ -29,7 +29,6 @@ export function Onboarding({
   const [step, setStep] = useState<"welcome" | "location" | "choose">(
     "welcome",
   );
-  const carousel = useRef<CarouselHandle>(null);
   const clockList = useRef<ChooseClockListHandle>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -53,10 +52,6 @@ export function Onboarding({
       selection.element,
       edit,
     );
-  }
-
-  function finishWelcome() {
-    complete(carousel.current?.selected() ?? null);
   }
 
   function startRandom() {
@@ -88,10 +83,12 @@ export function Onboarding({
       </header>
       {step !== "choose" && (
         <ClockCarousel
-          ref={carousel}
           preferences={preferences}
           reduced={reduced}
           choosing={false}
+          onClockTap={
+            step === "welcome" ? () => setStep("location") : undefined
+          }
         />
       )}
       <div
@@ -137,9 +134,6 @@ export function Onboarding({
               onClick={() => setStep("location")}
             >
               Get Started <ArrowRight size={18} />
-            </button>
-            <button className="onboarding-secondary" onClick={finishWelcome}>
-              Just show me a clock
             </button>
           </div>
         )}

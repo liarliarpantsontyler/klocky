@@ -16,6 +16,7 @@ import {
   Link as LinkIcon,
   Settings2,
   X,
+  Heart,
 } from "lucide-react";
 import { Onboarding } from "../onboarding/Onboarding";
 import { devicePreferences } from "../onboarding/location";
@@ -31,6 +32,8 @@ import {
   routePreset,
   defaults,
   encodePreset,
+  presetsMatchConfiguration,
+  snapshotFavoritePreset,
 } from "../state/storage";
 import { clocks, safeClockOptions, clockOptionsWithWeatherEnabled, presetWithWeatherDefaults } from "../clock/definitions";
 import { backgrounds, backgroundById } from "../backgrounds/definitions";
@@ -94,6 +97,24 @@ export default function App() {
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(""), 6000);
   }, []);
+  const configurationFavorited = saved.savedFavorites.some((item) =>
+    presetsMatchConfiguration(item, preset),
+  );
+  function toggleConfigurationFavorite() {
+    setSaved((s) => {
+      const savedFavorites = configurationFavorited
+        ? s.savedFavorites.filter(
+            (item) => !presetsMatchConfiguration(item, preset),
+          )
+        : [...s.savedFavorites, snapshotFavoritePreset(preset)].slice(0, 100);
+      return { ...s, savedFavorites };
+    });
+    notify(
+      configurationFavorited
+        ? "Removed from My favorites."
+        : "Saved to My favorites.",
+    );
+  }
   const weather = useWeather(
     preset.clockOptions.showWeather,
     preferences.weatherLocation,
@@ -342,12 +363,28 @@ export default function App() {
           onSelect={select}
           onSettings={() => setSettings(true)}
           favorites={saved.favorites}
+          savedFavorites={saved.savedFavorites}
           onFavorite={(id) =>
             setSaved((s) => ({
               ...s,
               favorites: s.favorites.includes(id)
                 ? s.favorites.filter((f) => f !== id)
                 : [...s.favorites, id],
+            }))
+          }
+          onToggleSavedFavorite={(target) =>
+            setSaved((s) => ({
+              ...s,
+              savedFavorites: s.savedFavorites.some((item) =>
+                presetsMatchConfiguration(item, target),
+              )
+                ? s.savedFavorites.filter(
+                    (item) => !presetsMatchConfiguration(item, target),
+                  )
+                : [...s.savedFavorites, snapshotFavoritePreset(target)].slice(
+                    0,
+                    100,
+                  ),
             }))
           }
           recent={saved.recent}
@@ -408,27 +445,50 @@ export default function App() {
                 >
                   <Settings2 size={18} />
                 </IconButton>
-                <IconButton
-                  label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-                  onClick={() => void fullscreen(notify)}
-                >
-                  {isFullscreen ? (
-                    <Minimize size={18} />
-                  ) : (
-                    <Maximize size={18} />
-                  )}
-                </IconButton>
               </div>
             </div>
             <div className="display-bottom">
               <span className="display-hint">A moment, just for you.</span>
-              <div className="display-dock glass-panel">
-                <button
-                  className="edit-button"
-                  onClick={() => setEditing((v) => !v)}
-                >
-                  <SlidersHorizontal size={16} /> Edit clock
-                </button>
+              <div className="display-bottom-actions">
+                <div className="display-dock glass-panel">
+                  <button
+                    className="edit-button"
+                    onClick={() => setEditing((v) => !v)}
+                  >
+                    <SlidersHorizontal size={16} /> Edit clock
+                  </button>
+                </div>
+                <div className="display-dock-tools glass-panel">
+                  <IconButton
+                    label={
+                      isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                    }
+                    onClick={() => void fullscreen(notify)}
+                  >
+                    {isFullscreen ? (
+                      <Minimize size={18} />
+                    ) : (
+                      <Maximize size={18} />
+                    )}
+                  </IconButton>
+                  <IconButton
+                    label={
+                      configurationFavorited
+                        ? "Remove from My favorites"
+                        : "Save to My favorites"
+                    }
+                    aria-pressed={configurationFavorited}
+                    className={
+                      configurationFavorited ? "icon-button--active" : ""
+                    }
+                    onClick={toggleConfigurationFavorite}
+                  >
+                    <Heart
+                      size={18}
+                      fill={configurationFavorited ? "currentColor" : "none"}
+                    />
+                  </IconButton>
+                </div>
               </div>
               <span className="display-shortcuts">
                 E to edit <span>·</span> F for fullscreen

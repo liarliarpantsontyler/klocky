@@ -12,7 +12,6 @@ import {
   isFontId,
   presetWithWeatherDefaults,
   safeClockOptions,
-  clockOptionsWithWeatherEnabled,
 } from "../clock/definitions";
 import { backgrounds, uniformControls } from "../backgrounds/definitions";
 export const STORAGE_KEY = "klocky.v1";
@@ -35,6 +34,7 @@ export const defaults = (): SavedState => ({
   preferences: { ...defaultPreferences },
   recent: [],
   favorites: [],
+  savedFavorites: [],
 });
 const hex = (v: unknown): v is string =>
   typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v);
@@ -173,6 +173,14 @@ export function readState(): SavedState {
             .filter((x: unknown) => typeof x === "string")
             .slice(0, 100)
         : [],
+      savedFavorites: Array.isArray(data.savedFavorites)
+        ? data.savedFavorites
+            .map((item: unknown) => sanitizePreset(item))
+            .filter(
+              (item: KlockyPreset | null): item is KlockyPreset => item !== null,
+            )
+            .slice(0, 100)
+        : [],
     };
   } catch {
     return defaults();
@@ -192,6 +200,27 @@ export function encodePreset(p: KlockyPreset) {
     .replaceAll("+", "-")
     .replaceAll("/", "_")
     .replace(/=+$/, "");
+}
+
+export function presetConfigurationKey(p: KlockyPreset) {
+  const clean = sanitizePreset(p);
+  if (!clean) return "";
+  return encodePreset({ ...clean, id: "config", name: "config" });
+}
+
+export function snapshotFavoritePreset(p: KlockyPreset): KlockyPreset {
+  const clean = sanitizePreset(p) ?? structuredClone(p);
+  const key = presetConfigurationKey(clean);
+  return {
+    ...clean,
+    id: `saved-${key.slice(0, 20).replace(/[^a-zA-Z0-9]/g, "") || "clock"}`,
+    name: clean.name.slice(0, 80) || "My clock",
+  };
+}
+
+export function presetsMatchConfiguration(a: KlockyPreset, b: KlockyPreset) {
+  const left = presetConfigurationKey(a);
+  return left !== "" && left === presetConfigurationKey(b);
 }
 export function decodePreset(s: string): KlockyPreset | null {
   if (s.length > 10000) return null;

@@ -6,6 +6,7 @@ import { presets } from "./presets";
 import { clockById } from "../clock/definitions";
 import { backgroundById, backgroundStyle } from "../backgrounds/definitions";
 import { entitlements } from "../state/entitlements";
+import { presetsMatchConfiguration } from "../state/storage";
 import { Clock } from "../clock/Clock";
 import { BrandLogo } from "../components/BrandLogo";
 import { IconButton } from "../components/Controls";
@@ -15,14 +16,18 @@ export function Gallery({
   onSelect,
   onSettings,
   favorites,
+  savedFavorites,
   onFavorite,
+  onToggleSavedFavorite,
   recent,
 }: {
   preferences: UserPreferences;
   onSelect: (p: KlockyPreset, element: HTMLElement) => void;
   onSettings: () => void;
   favorites: string[];
+  savedFavorites: KlockyPreset[];
   onFavorite: (id: string) => void;
+  onToggleSavedFavorite: (preset: KlockyPreset) => void;
   recent: string[];
 }) {
   const [filter, setFilter] = useState("All clocks");
@@ -49,14 +54,35 @@ export function Gallery({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const items = presets.filter(
-    (p) =>
-      (collection === "Collection" || favorites.includes(p.id)) &&
-      (filter === "All clocks" ||
-        (filter === "Recent"
-          ? recent.includes(p.id)
-          : clockById(p.clockId).category === filter)),
+  const curatedIds = new Set(presets.map((p) => p.id));
+  const favoriteItems = [
+    ...presets.filter((p) => favorites.includes(p.id)),
+    ...savedFavorites.filter(
+      (saved) =>
+        !presets.some(
+          (curated) =>
+            favorites.includes(curated.id) &&
+            presetsMatchConfiguration(curated, saved),
+        ),
+    ),
+  ];
+  const matchesFilter = (p: KlockyPreset) =>
+    filter === "All clocks" ||
+    (filter === "Recent"
+      ? recent.includes(p.id) ||
+        savedFavorites.some((saved) => presetsMatchConfiguration(saved, p))
+      : clockById(p.clockId).category === filter);
+  const items = (collection === "Collection" ? presets : favoriteItems).filter(
+    matchesFilter,
   );
+  function isFavorited(p: KlockyPreset) {
+    if (curatedIds.has(p.id) && favorites.includes(p.id)) return true;
+    return savedFavorites.some((saved) => presetsMatchConfiguration(saved, p));
+  }
+  function toggleFavorite(p: KlockyPreset) {
+    if (curatedIds.has(p.id)) onFavorite(p.id);
+    else onToggleSavedFavorite(p);
+  }
   return (
     <div className="gallery-shell">
       <header
@@ -86,8 +112,8 @@ export function Gallery({
           <div className="gallery-header-actions">
             <IconButton
               label={
-                favorites.length > 0
-                  ? `My favorites, ${favorites.length} saved`
+                favorites.length + savedFavorites.length > 0
+                  ? `My favorites, ${favorites.length + savedFavorites.length} saved`
                   : "My favorites"
               }
               className={
@@ -173,9 +199,9 @@ export function Gallery({
                     </span>
                   </div>
                   <IconButton
-                    label={`${favorites.includes(p.id) ? "Unfavorite" : "Favorite"} ${p.name}`}
-                    onClick={() => onFavorite(p.id)}
-                    aria-pressed={favorites.includes(p.id)}
+                    label={`${isFavorited(p) ? "Unfavorite" : "Favorite"} ${p.name}`}
+                    onClick={() => toggleFavorite(p)}
+                    aria-pressed={isFavorited(p)}
                   >
                     <PikaIcon icon={PikaHeart} size={20} />
                   </IconButton>
@@ -194,7 +220,7 @@ export function Gallery({
             </h2>
             <p>
               {collection === "Favorites"
-                ? "Tap the heart beside a clock to save it here."
+                ? "Tap the heart on a clock, or save your exact setup from the display."
                 : "Open a clock, then find it in Recent."}
             </p>
           </div>

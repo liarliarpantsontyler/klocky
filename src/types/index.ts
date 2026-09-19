@@ -147,4 +147,5 @@ export interface SavedState {
   preferences: UserPreferences;
   recent: string[];
   favorites: string[];
+  savedFavorites: KlockyPreset[];
 }

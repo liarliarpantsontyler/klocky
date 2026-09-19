@@ -810,12 +810,48 @@ button svg {
   backdrop-filter: blur(34px) saturate(1.15);
 }
 .display-dock {
-  --display-dock-extra-width: 120px;
+  --display-dock-extra-width: 48px;
   border-radius: 999px;
   display: flex;
   align-items: stretch;
   padding: 4px;
   pointer-events: auto;
+  flex: none;
+}
+.display-bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.display-dock-tools {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  pointer-events: auto;
+  flex: none;
+}
+.display-dock-tools .icon-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  color: #fffaf0;
+  transition: background 0.18s var(--ease);
+}
+.display-dock-tools .icon-button + .icon-button {
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+.display-dock-tools .icon-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.display-dock-tools .icon-button:active {
+  background: rgba(255, 255, 255, 0.24);
+}
+.display-dock-tools .icon-button--active {
+  color: #ffb4bc;
 }
 .edit-button {
   display: flex;
@@ -2481,8 +2517,9 @@ button svg {
   .display-bottom {
     bottom: 13px;
   }
-  .display-dock {
+  .display-bottom-actions {
     transform: scale(0.9);
+    transform-origin: bottom right;
   }
   .modal {
     max-height: 94dvh;

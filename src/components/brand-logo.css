@@ -23,7 +23,7 @@
 }
 
 .brand-logo-shell--hero .brand-logo-art {
-  height: clamp(calc(84px * var(--ui-scale)), 19.6vw, calc(118px * var(--ui-scale)));
+  height: clamp(calc(63px * var(--ui-scale)), 14.7vw, calc(88.5px * var(--ui-scale)));
 }
 
 .brand-logo-shell--header .brand-logo-art {

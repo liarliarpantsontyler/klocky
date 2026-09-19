@@ -1,0 +1,811 @@
+.clock {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  user-select: none;
+  -webkit-user-select: none;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.clock-composition {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 7cqw;
+  transform: scale(var(--clock-size-scale, 1));
+  transform-origin: center;
+}
+.time-text {
+  font-size: min(21cqw, 49cqh);
+  letter-spacing: -0.065em;
+  font-weight: inherit;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  line-height: 1;
+}
+.colon {
+  position: relative;
+  top: -0.035em;
+  margin: 0 0.025em;
+  font-weight: 300;
+}
+.clock-meta {
+  display: flex;
+  gap: 1.8em;
+  align-items: center;
+  justify-content: center;
+  font-size: max(8px, 1.2cqmin);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  margin-top: 4cqh;
+  max-width: 90%;
+  flex-wrap: wrap;
+}
+.clock-date {
+  white-space: nowrap;
+}
+.seconds {
+  font-size: 0.22em;
+  letter-spacing: 0;
+  margin-left: 0.5em;
+  opacity: 0.6;
+  font-weight: 400;
+  min-width: 1.3em;
+}
+.fill-translucent .clock-composition {
+  opacity: 0.6;
+}
+/* Filter the merged glyph silhouette to avoid font contour seams. Only the
+   primary lettering is filtered; labels, panel borders and metadata stay solid. */
+.clock-ink {
+  display: inline-block;
+}
+.clock-ink-filter {
+  position: absolute;
+  pointer-events: none;
+}
+.thumbnail .clock-meta {
+  font-size: 2.1cqw;
+  gap: 1.5em;
+}
+.thumbnail .time-text {
+  font-size: 23cqw;
+  letter-spacing: -0.075em;
+}
+.clock-meridian .clock-meta {
+  text-transform: uppercase;
+  font-size: max(9px, 1.05cqmin);
+  letter-spacing: 0.12em;
+}
+.thumbnail.clock-meridian .clock-meta {
+  font-size: 1.65cqw;
+}
+.flip-pair {
+  display: flex;
+  gap: 1.8cqw;
+  font-size: min(23cqw, 55cqh);
+  letter-spacing: -0.065em;
+  font-weight: inherit;
+  line-height: 1.1;
+}
+.flip-block {
+  padding: 1cqh 2cqw 2cqh;
+  border-radius: 1.7cqw;
+  position: relative;
+  background: linear-gradient(#edf4e517, #bdcbb412);
+  border: 1px solid #ffffff16;
+  box-shadow:
+    inset 0 1px 0 #ffffff20,
+    0 10px 40px #11281815;
+  backdrop-filter: blur(12px);
+  min-width: 1.38em;
+  text-align: center;
+}
+.flip-block:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: #23332330;
+  box-shadow: 0 1px #ffffff16;
+}
+.flip-block > span {
+  display: block;
+  animation: flip-in 0.5s var(--ease);
+}
+.flip-block small {
+  position: absolute;
+  right: 9%;
+  bottom: 7%;
+  font-size: max(7px, 0.055em);
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.clock-fold .clock-meta {
+  margin-top: 5cqh;
+  font-size: max(9px, 1.25cqmin);
+}
+.clock-fold .clock-composition > .seconds {
+  position: absolute;
+  right: 9%;
+  bottom: 11%;
+  font-size: 2cqmin;
+}
+.analog-face {
+  width: min(45cqw, 65cqh);
+  height: min(45cqw, 65cqh);
+}
+.analog-face svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.clock-orbit .clock-meta,
+.clock-swiss .clock-meta {
+  font-size: max(9px, 1.3cqmin);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4cqh;
+}
+.thumbnail .analog-face {
+  width: 44cqw;
+  height: 44cqw;
+}
+.thumbnail.clock-orbit .clock-meta,
+.thumbnail.clock-swiss .clock-meta {
+  font-size: 1.5cqw;
+  margin-top: 4cqh;
+}
+.swiss-face {
+  border: 1px solid #ffffff30;
+  border-radius: 50%;
+  padding: 1.3cqmin;
+}
+.clock-stack .clock-composition {
+  flex-direction: row;
+  gap: 3cqw;
+}
+.stack-hours,
+.minute-stack {
+  font-size: min(28cqw, 29cqh);
+  letter-spacing: -0.08em;
+  font-weight: inherit;
+}
+.minute-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2cqh;
+  line-height: 0.88;
+}
+.minute-stack > span {
+  opacity: 0.15;
+}
+.minute-stack strong {
+  font-weight: inherit;
+  animation: digit-up 0.55s var(--ease);
+}
+.clock-stack .clock-meta {
+  position: absolute;
+  right: 7%;
+  bottom: 8%;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4em;
+  max-width: 35%;
+}
+.clock-editorial .clock-composition {
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 10cqh 9cqw;
+}
+.editorial-date {
+  font-family: inherit;
+  font-size: 4cqmin;
+  line-height: 1.2;
+  font-weight: 400;
+}
+.editorial-date i {
+  opacity: 0.65;
+}
+.clock-editorial .time-text {
+  font-family: inherit;
+  font-size: min(23cqw, 40cqh);
+  font-weight: 400;
+  align-self: flex-end;
+  letter-spacing: -0.08em;
+}
+.editorial-line {
+  position: absolute;
+  top: 35%;
+  left: 9%;
+  width: 82%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.25;
+}
+.editorial-weather {
+  font-size: max(9px, 1.6cqmin);
+  position: absolute;
+  bottom: 8%;
+  left: 9%;
+}
+.sentence-copy {
+  font-family: inherit;
+  font-size: min(8cqw, 15cqh);
+  line-height: 1.16;
+  letter-spacing: -0.045em;
+  max-width: 90%;
+  font-weight: 400;
+}
+.sentence-copy strong {
+  font-weight: 400;
+}
+.sentence-copy em {
+  font-style: italic;
+  opacity: 0.65;
+}
+.sentence-copy sup {
+  font:
+    400 0.2em -apple-system,
+    sans-serif;
+  vertical-align: top;
+  position: relative;
+  top: 1.6em;
+  letter-spacing: 0;
+  margin-left: 0.6em;
+}
+.sentence-copy small {
+  display: block;
+  font:
+    400 0.17em -apple-system,
+    sans-serif;
+  letter-spacing: 0.05em;
+  margin-top: 2em;
+}
+.clock-mono .clock-composition {
+  align-items: flex-start;
+  justify-content: center;
+  font-family: inherit;
+  padding: 12%;
+}
+.mono-label {
+  font-size: max(9px, 1.5cqmin);
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+  margin-bottom: 6cqh;
+}
+.clock-mono .time-text {
+  font-size: min(13cqw, 34cqh);
+  letter-spacing: -0.065em;
+}
+.mono-seconds {
+  font-size: 0.5em;
+  opacity: 0.5;
+}
+.mono-rule {
+  width: 100%;
+  height: 1px;
+  opacity: 0.3;
+  background: currentColor;
+  margin-top: 5cqh;
+}
+.clock-mono .clock-meta {
+  font-size: max(9px, 1.5cqmin);
+  justify-content: flex-start;
+  margin-top: 3cqh;
+}
+.mono-status {
+  position: absolute;
+  bottom: 10%;
+  left: 12%;
+  font-size: max(9px, 1.1cqmin);
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+.clock-glass .clock-composition {
+  align-items: flex-end;
+  padding: 7cqh 6cqw;
+}
+.glass-plaque {
+  width: 46cqw;
+  height: 80cqh;
+  position: relative;
+  border-radius: 5cqmin;
+  padding: 7cqh 4cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(140deg, #77788745, #20233350);
+  border: 1px solid #ffffff50;
+  box-shadow:
+    inset 0 1px 1px #ffffff60,
+    0 8px 50px #11182712;
+  backdrop-filter: blur(24px) saturate(0.75);
+}
+.glass-plaque.clear {
+  backdrop-filter: blur(4px);
+  background: #35384435;
+}
+.glass-plaque .clock-meta {
+  justify-content: flex-end;
+  margin: 0;
+  max-width: 100%;
+  font-size: max(9px, 1.8cqmin);
+}
+.glass-time {
+  font-size: min(15cqw, 24cqh);
+  font-weight: inherit;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+  margin-top: auto;
+}
+.glass-plaque > small {
+  font-size: max(9px, 1.6cqmin);
+  margin-top: 2cqh;
+  opacity: 0.6;
+}
+.clock-edge .clock-composition {
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10cqh 8cqw;
+}
+.clock-edge .clock-meta {
+  position: absolute;
+  top: 9%;
+  left: 8%;
+  margin: 0;
+  align-items: flex-start;
+  flex-direction: column;
+  font-size: max(9px, 1.5cqmin);
+  gap: 0.5em;
+  letter-spacing: 0.06em;
+}
+.clock-edge .time-text {
+  font-size: min(27cqw, 42cqh);
+  font-weight: 300;
+}
+.edge-period {
+  font-size: max(9px, 1.7cqmin);
+  margin-top: 3cqh;
+}
+.clock-grid .clock-composition {
+  padding: 12cqh 17cqw;
+}
+.clock-grid {
+  font-family: inherit;
+}
+.clock-grid .clock-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+}
+.clock-grid .clock-grid > div {
+  padding: 3cqh 4cqw;
+  border-bottom: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  font-size: max(9px, 1.65cqmin);
+  min-height: 8cqh;
+}
+.clock-grid .clock-grid .grid-hour,
+.clock-grid .clock-grid .grid-minute {
+  font-size: min(17cqw, 31cqh);
+  letter-spacing: -0.06em;
+  position: relative;
+  font-weight: inherit;
+  padding-bottom: 7cqh;
+}
+.clock-grid small {
+  display: block;
+  font-size: max(9px, 1.1cqmin);
+  letter-spacing: 0.1em;
+  margin-top: 3cqh;
+}
+.clock-ticker .clock-composition {
+  padding: 12cqh 10cqw;
+  align-items: stretch;
+}
+.ticker-top,
+.ticker-bottom {
+  font-size: max(9px, 1.3cqmin);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.ticker-top {
+  padding-bottom: 4cqh;
+  border-bottom: 1px solid #ffffff35;
+}
+.ticker-time {
+  display: flex;
+  gap: 1.5cqw;
+  justify-content: center;
+  font-size: min(22cqw, 47cqh);
+  letter-spacing: -0.08em;
+  line-height: 1;
+  padding: 3cqh 0;
+}
+.ticker-cell {
+  overflow: hidden;
+  display: block;
+  min-width: 0.55em;
+  text-align: center;
+}
+.ticker-cell:nth-child(2) {
+  margin-right: 2cqw;
+}
+.ticker-cell b {
+  display: block;
+  font-weight: inherit;
+  animation: digit-up 0.6s var(--ease);
+}
+.ticker-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 3cqh;
+  border-top: 1px solid #ffffff35;
+}
+.ticker-bottom .seconds {
+  font-size: 1em;
+}
+.clock-minimal .clock-composition {
+  padding: 15cqh 10cqw;
+  justify-content: space-between;
+}
+.minimal-time {
+  font-size: 10cqmin;
+  font-weight: inherit;
+  letter-spacing: -0.05em;
+  margin: auto;
+}
+.clock-minimal .clock-meta {
+  position: absolute;
+  bottom: 13%;
+  font-size: max(9px, 1.2cqmin);
+  opacity: 0.6;
+}
+.clock[data-aspect="portrait"] .time-text {
+  font-size: 27cqw;
+}
+.clock[data-aspect="portrait"].clock-meridian .clock-composition {
+  justify-content: center;
+  padding: 8cqw;
+}
+.clock[data-aspect="portrait"].clock-meridian .time-text {
+  font-size: 29cqw;
+}
+.clock[data-aspect="portrait"] .clock-meta {
+  font-size: 2.4cqw;
+  gap: 1em;
+  margin-top: 4cqh;
+}
+.clock[data-aspect="portrait"] .flip-pair {
+  flex-direction: column;
+  font-size: min(45cqw, 27cqh);
+  gap: 2cqh;
+}
+.clock[data-aspect="portrait"] .flip-block {
+  padding: 0 5cqw 1.5cqh;
+  border-radius: 4cqw;
+}
+.clock[data-aspect="portrait"] .analog-face {
+  width: 75cqw;
+  height: 75cqw;
+}
+.clock[data-aspect="portrait"] .glass-numerals {
+  flex-direction: column;
+  font-size: 44cqw;
+  gap: 2cqh;
+}
+.clock[data-aspect="portrait"] .glass-numerals > span {
+  padding: 2cqh 7cqw;
+  border-radius: 5cqw;
+}
+.clock[data-aspect="portrait"].clock-stack .clock-composition {
+  gap: 4cqw;
+}
+.clock[data-aspect="portrait"] .stack-hours,
+.clock[data-aspect="portrait"] .minute-stack {
+  font-size: 36cqw;
+}
+.clock[data-aspect="portrait"].clock-stack .clock-meta {
+  bottom: 12%;
+  max-width: 80%;
+}
+.clock[data-aspect="portrait"] .editorial-date {
+  font-size: 7cqw;
+}
+.clock[data-aspect="portrait"].clock-editorial .time-text {
+  font-size: 29cqw;
+}
+.clock[data-aspect="portrait"] .editorial-line {
+  top: 36%;
+}
+.clock[data-aspect="portrait"] .sentence-copy {
+  font-size: 13cqw;
+}
+.clock[data-aspect="portrait"] .mono-label {
+  font-size: 2cqw;
+}
+.clock[data-aspect="portrait"].clock-mono .time-text {
+  font-size: 18cqw;
+}
+.clock[data-aspect="portrait"] .mono-status {
+  font-size: 1.8cqw;
+}
+.clock[data-aspect="portrait"].clock-edge .clock-composition {
+  padding-bottom: 20cqh;
+}
+.clock[data-aspect="portrait"].clock-edge .clock-meta {
+  top: 13%;
+}
+.clock[data-aspect="portrait"].clock-grid .clock-composition {
+  padding: 20cqh 9cqw;
+}
+.clock[data-aspect="portrait"].clock-grid .clock-grid > div {
+  font-size: 2cqw;
+  padding: 3cqh 4cqw;
+}
+.clock[data-aspect="portrait"].clock-grid .clock-grid .grid-hour,
+.clock[data-aspect="portrait"].clock-grid .clock-grid .grid-minute {
+  font-size: 27cqw;
+}
+.clock[data-aspect="portrait"].clock-grid small {
+  font-size: 1.7cqw;
+}
+.clock[data-aspect="portrait"] .ticker-top,
+.clock[data-aspect="portrait"] .ticker-bottom {
+  font-size: 2.1cqw;
+}
+.clock[data-aspect="portrait"] .ticker-time {
+  font-size: 26cqw;
+}
+.clock[data-aspect="portrait"] .minimal-time {
+  font-size: 15cqw;
+}
+.clock[data-aspect="wide"] .time-text {
+  font-size: 50cqh;
+}
+.clock[data-aspect="wide"] .analog-face {
+  width: 65cqh;
+  height: 65cqh;
+}
+.clock[data-aspect="wide"] .clock-meta {
+  font-size: 1.8cqh;
+}
+.clock[data-aspect="wide"].clock-grid .clock-composition {
+  padding: 12cqh 30cqw;
+}
+@keyframes flip-in {
+  from {
+    opacity: 0.5;
+    transform: perspective(500px) rotateX(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes digit-up {
+  from {
+    opacity: 0.3;
+    transform: translateY(0.2em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.flip-pair.clear .flip-block {
+  backdrop-filter: blur(3px);
+  background: #ffffff09;
+}
+
+/* Every collection window is 11:5, with its own intentional landscape composition. */
+.clock.thumbnail .clock-composition {
+  padding: 7cqh 7cqw;
+}
+.clock.thumbnail .time-text {
+  font-size: min(23cqw, 47cqh);
+}
+.clock.thumbnail .analog-face {
+  width: 62cqh;
+  height: 62cqh;
+}
+.clock.thumbnail.clock-stack .clock-meta {
+  font-size: 1.6cqw;
+  bottom: 9%;
+  right: 6%;
+}
+.clock.thumbnail.clock-editorial .clock-composition {
+  padding: 12cqh 9cqw;
+}
+.clock.thumbnail.clock-editorial .time-text {
+  font-size: 43cqh;
+  font-style: italic;
+}
+.clock.thumbnail.clock-editorial .editorial-date {
+  font-size: 5cqh;
+}
+.clock.thumbnail.clock-editorial .editorial-line {
+  top: 39%;
+}
+.clock.thumbnail.clock-mono .clock-composition {
+  padding: 11cqh 12cqw;
+}
+.clock.thumbnail.clock-mono .time-text {
+  font-size: 13cqw;
+}
+.clock.thumbnail.clock-mono .mono-label {
+  font-size: 1.5cqw;
+  margin-bottom: 5cqh;
+}
+.clock.thumbnail.clock-mono .clock-meta {
+  font-size: 1.6cqw;
+}
+.clock.thumbnail.clock-mono .mono-status {
+  font-size: 1.3cqw;
+  bottom: 9%;
+}
+.clock.thumbnail.clock-edge .clock-composition {
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 10cqh 8cqw;
+}
+.clock.thumbnail.clock-edge .time-text {
+  font-size: 23cqh;
+}
+.clock.thumbnail.clock-edge .clock-meta {
+  font-size: 1.7cqw;
+}
+.clock.thumbnail .edge-period {
+  font-size: 1.7cqw;
+}
+.clock.thumbnail.clock-sentence .sentence-copy {
+  font-size: 13cqh;
+  font-style: italic;
+}
+.clock.thumbnail.clock-sentence .clock-composition {
+  align-items: flex-start;
+  padding-left: 17cqw;
+}
+.clock.thumbnail.clock-grid .clock-composition {
+  padding: 13cqh 24cqw;
+}
+.clock.thumbnail.clock-grid .clock-grid > div {
+  font-size: 1.35cqw;
+  padding: 3cqh 3cqw;
+}
+.clock.thumbnail.clock-grid .clock-grid .grid-hour,
+.clock.thumbnail.clock-grid .clock-grid .grid-minute {
+  font-size: 25cqh;
+  padding-bottom: 4cqh;
+}
+.clock.thumbnail.clock-grid small {
+  font-size: 1.3cqw;
+  margin-top: 2cqh;
+}
+.clock.thumbnail.clock-ticker .clock-composition {
+  padding: 11cqh 15cqw;
+}
+.clock.thumbnail .ticker-time {
+  font-size: 46cqh;
+  letter-spacing: 0.01em;
+}
+.clock.thumbnail .ticker-top,
+.clock.thumbnail .ticker-bottom {
+  font-size: 1.5cqw;
+}
+.clock.thumbnail.clock-glass .clock-composition {
+  padding: 7cqh 6cqw;
+}
+.clock.thumbnail .glass-plaque .clock-meta {
+  font-size: 1.7cqw;
+}
+.clock.thumbnail .glass-plaque > small {
+  font-size: 1.6cqw;
+}
+.clock.thumbnail .minimal-time {
+  font-size: 13cqh;
+}
+.clock.thumbnail.clock-minimal .clock-meta {
+  font-size: 1.6cqw;
+}
+.clock-swiss .clock-composition {
+  flex-direction: row;
+  gap: 7cqw;
+}
+.clock-swiss .clock-meta {
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 24cqw;
+  margin: 0;
+}
+.clock-swiss .clock-date {
+  white-space: normal;
+  max-width: 8em;
+}
+.clock[data-aspect="portrait"].clock-swiss .clock-composition {
+  flex-direction: column;
+}
+.clock[data-aspect="portrait"].clock-swiss .clock-meta {
+  max-width: 80%;
+  align-items: center;
+}
+.clock[data-aspect="portrait"] .glass-plaque {
+  width: 84cqw;
+  height: 48cqh;
+  padding: 5cqh 7cqw;
+  border-radius: 7cqw;
+}
+.clock[data-aspect="portrait"] .glass-time {
+  font-size: 24cqw;
+}
+.clock[data-aspect="portrait"] .glass-plaque .clock-meta {
+  font-size: 2.6cqw;
+}
+
+.word-clock {
+  width: 100%;
+  text-align: left;
+}
+.word-clock > span,
+.word-clock > small {
+  display: block;
+  font-size: 2.4cqmin;
+  letter-spacing: 0.12em;
+}
+.word-clock strong {
+  display: block;
+  font-size: min(12cqw, 17cqh);
+  line-height: 0.98;
+  letter-spacing: -0.075em;
+  white-space: pre-line;
+  margin: 3.5cqh 0;
+  font-weight: inherit;
+  animation: arrive 0.35s var(--ease);
+}
+.world-clock {
+  width: 100%;
+  display: grid;
+  gap: 0;
+}
+.world-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 2cqw;
+  padding: 3cqh 0;
+  align-items: center;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+}
+.world-row:last-child {
+  border: 0;
+}
+.world-row > span {
+  font-size: 3cqmin;
+}
+.world-row strong {
+  display: flex;
+  align-items: baseline;
+  gap: 1cqw;
+  font-size: 7cqmin;
+  font-weight: 400;
+  letter-spacing: -0.07em;
+}
+.world-row small {
+  display: block;
+  font-size: 1.8cqmin;
+  opacity: 0.55;
+  margin-top: 1cqh;
+  letter-spacing: 0;
+}

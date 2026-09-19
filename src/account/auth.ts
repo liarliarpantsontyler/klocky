@@ -39,7 +39,7 @@ export async function startSignUp(
     return {
       ok: false,
       message:
-        "Account sync isn’t configured. Add Supabase env vars and restart the dev server.",
+        "Sign-in isn’t available on this version yet. Favorites still save on this device.",
     };
   }
   const trimmed = email.trim();

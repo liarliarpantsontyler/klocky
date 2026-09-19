@@ -164,14 +164,13 @@ export function Settings({
                 type="button"
                 className="quiet-button"
                 onClick={onOpenAccountSync}
-                disabled={!syncConfigured}
               >
                 Sync favorites across devices
               </button>
               <p className="help-text">
                 {syncConfigured
                   ? "Optional free account. Works fully on this device without one."
-                  : "Add Supabase env vars to enable cloud sync in this build."}
+                  : "Cloud sign-in is still rolling out on this deploy."}
               </p>
             </>
           )}

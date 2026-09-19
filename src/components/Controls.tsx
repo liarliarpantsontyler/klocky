@@ -61,15 +61,23 @@ export function Modal({
   title,
   onClose,
   children,
+  layout = "center",
+  closeLabel = "Close dialog",
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  layout?: "center" | "sheet";
+  closeLabel?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const prior = document.activeElement as HTMLElement;
-    ref.current?.querySelector<HTMLElement>("button")?.focus();
+    const focusTarget =
+      ref.current?.querySelector<HTMLElement>(
+        "input:not([disabled]),textarea:not([disabled]),select:not([disabled])",
+      ) ?? ref.current?.querySelector<HTMLElement>("button");
+    focusTarget?.focus();
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
@@ -100,21 +108,24 @@ export function Modal({
   }, [onClose]);
   return (
     <div
-      className="modal-backdrop"
+      className={
+        "modal-backdrop" +
+        (layout === "sheet" ? " modal-backdrop--sheet" : "")
+      }
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
         ref={ref}
-        className="modal"
+        className={"modal" + (layout === "sheet" ? " modal--sheet" : "")}
         role="dialog"
         aria-modal="true"
         aria-label={title}
       >
         <div className="panel-heading">
           <h2>{title}</h2>
-          <IconButton label="Close settings" onClick={onClose}>
+          <IconButton label={closeLabel} onClick={onClose}>
             <X size={uiPx(18)} />
           </IconButton>
         </div>

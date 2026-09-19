@@ -28,13 +28,18 @@ export function AccountSyncSheet({
   }
 
   return (
-    <Modal title="Keep favorites across devices" onClose={onClose}>
+    <Modal
+      title="Sync favorites"
+      layout="sheet"
+      closeLabel="Close sync"
+      onClose={onClose}
+    >
       <div className="account-sync-body">
         {session ? (
           <>
-            <p className="help-text">
+            <p className="help-text account-sync-lede">
               Signed in as <strong>{session.email ?? "your account"}</strong>.
-              Favorites and weather preferences sync when you’re online.
+              Favorites sync when you’re online.
             </p>
             <div className="account-sync-actions">
               <button type="button" className="primary-button" onClick={onClose}>
@@ -44,30 +49,34 @@ export function AccountSyncSheet({
           </>
         ) : (
           <>
-            <p className="help-text">
-              Create a free account — your clocks follow you to phone, tablet,
-              and desktop. Everything still works without signing in.
+            <p className="help-text account-sync-lede">
+              Free account — same favorites on phone, tablet, and desktop. Or
+              keep everything on this device only.
             </p>
             {!syncConfigured && (
-              <p className="help-text" role="status">
-                Sync isn’t configured in this build yet (missing Supabase env
-                vars).
+              <p className="account-sync-notice" role="status">
+                Sign-in isn’t live on this deploy yet. Favorites still save here;
+                try again after the site finishes updating.
               </p>
             )}
             <ul className="account-sync-list help-text">
-              <li>Saved favorites and custom clock setups</li>
-              <li>Weather city and time zone preferences</li>
-              <li>No raw GPS in shared links — only what you choose to save</li>
+              <li>Saved favorites & custom setups</li>
+              <li>Weather city & time zone</li>
             </ul>
             <label className="select-row account-sync-email">
               Email
               <input
                 type="email"
+                name="email"
                 autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 inputMode="email"
+                enterKeyHint="send"
                 placeholder="you@example.com"
                 value={email}
-                disabled={!syncConfigured || busy}
+                disabled={busy}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") void submit();
@@ -75,7 +84,7 @@ export function AccountSyncSheet({
               />
             </label>
             {note && (
-              <p className="help-text" role="status">
+              <p className="help-text account-sync-note" role="status">
                 {note}
               </p>
             )}
@@ -83,14 +92,14 @@ export function AccountSyncSheet({
               <button
                 type="button"
                 className="primary-button"
-                disabled={!syncConfigured || busy}
+                disabled={busy}
                 onClick={() => void submit()}
               >
                 {busy ? "Sending link…" : "Email me a sign-in link"}
               </button>
               <button
                 type="button"
-                className="quiet-button"
+                className="quiet-button account-sync-skip"
                 onClick={onContinueLocal}
               >
                 Continue without account

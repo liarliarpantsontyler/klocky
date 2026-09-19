@@ -2075,6 +2075,99 @@ button svg {
   text-align: center;
   margin: calc(25px * var(--ui-scale)) 0 0;
 }
+.settings-sync-row {
+  margin-top: calc(18px * var(--ui-scale));
+  padding-top: calc(18px * var(--ui-scale));
+  border-top: 1px solid var(--line);
+}
+.settings-sync-row button {
+  width: 100%;
+}
+.account-sync-body {
+  padding: 0 calc(22px * var(--ui-scale))
+    max(calc(22px * var(--ui-scale)), env(safe-area-inset-bottom));
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+.account-sync-lede {
+  margin: 0 0 calc(12px * var(--ui-scale));
+  line-height: 1.55;
+}
+.account-sync-notice {
+  margin: 0 0 calc(14px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-radius: calc(10px * var(--ui-scale));
+  background: #ebece4;
+  color: var(--ink);
+  font-size: calc(11px * var(--ui-scale));
+  line-height: 1.5;
+}
+.account-sync-list {
+  margin: 0 0 calc(16px * var(--ui-scale));
+  padding-left: 1.15em;
+  line-height: 1.5;
+  font-size: calc(11px * var(--ui-scale));
+}
+.account-sync-email input {
+  min-height: calc(48px * var(--ui-scale));
+  font-size: max(16px, calc(14px * var(--ui-scale)));
+}
+.account-sync-note {
+  margin-top: calc(10px * var(--ui-scale));
+}
+.account-sync-actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(10px * var(--ui-scale));
+  margin-top: calc(16px * var(--ui-scale));
+}
+.account-sync-actions .primary-button {
+  width: 100%;
+  min-height: calc(48px * var(--ui-scale));
+  justify-content: center;
+}
+.account-sync-skip {
+  width: 100%;
+  min-height: calc(44px * var(--ui-scale));
+}
+.modal--sheet {
+  max-height: min(88dvh, 100%);
+}
+.modal-backdrop--sheet {
+  align-items: flex-end;
+  padding: 0;
+}
+.modal-backdrop--sheet .modal {
+  width: 100%;
+  max-width: 100%;
+  border-radius: calc(22px * var(--ui-scale)) calc(22px * var(--ui-scale)) 0 0;
+  border-bottom: 0;
+  box-shadow: 0 -12px 60px #18201038;
+}
+.modal-backdrop--sheet .panel-heading {
+  padding: calc(18px * var(--ui-scale)) calc(22px * var(--ui-scale))
+    calc(12px * var(--ui-scale));
+}
+.modal-backdrop--sheet .panel-heading h2 {
+  font-size: calc(21px * var(--ui-scale));
+  line-height: 1.2;
+  padding-right: calc(8px * var(--ui-scale));
+}
+.modal-backdrop--sheet .account-sync-body {
+  padding-bottom: max(calc(24px * var(--ui-scale)), env(safe-area-inset-bottom));
+}
+@media (min-width: 651px) {
+  .modal-backdrop--sheet {
+    align-items: center;
+    padding: calc(20px * var(--ui-scale));
+  }
+  .modal-backdrop--sheet .modal {
+    width: min(calc(420px * var(--ui-scale)), 100%);
+    border-radius: calc(15px * var(--ui-scale));
+    border-bottom: 1px solid #ffffff80;
+  }
+}
 .reset-row {
   display: flex;
   gap: calc(10px * var(--ui-scale));

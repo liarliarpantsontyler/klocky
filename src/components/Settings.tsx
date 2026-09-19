@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { AccountSession } from "../account/auth";
 import type { UserPreferences, WeatherState } from "../types";
 import { Modal, Toggle } from "./Controls";
 import { WeatherControls } from "../editor/WeatherControls";
@@ -8,6 +9,10 @@ export function Settings({
   onClose,
   onReset,
   onWelcome,
+  onOpenAccountSync,
+  session,
+  syncConfigured,
+  onSignOut,
   weather,
 }: {
   preferences: UserPreferences;
@@ -15,6 +20,10 @@ export function Settings({
   onClose: () => void;
   onReset: () => void;
   onWelcome: () => void;
+  onOpenAccountSync: () => void;
+  session: AccountSession;
+  syncConfigured: boolean;
+  onSignOut: () => void;
   weather: WeatherState;
 }) {
   const [reset, setReset] = useState(false);
@@ -138,6 +147,35 @@ export function Settings({
             Escape — close the current layer
           </p>
         </details>
+        <div className="settings-sync-row">
+          {session ? (
+            <>
+              <p className="help-text">
+                Signed in as <strong>{session.email ?? "your account"}</strong>.
+                Favorites sync when you’re online.
+              </p>
+              <button type="button" className="quiet-button" onClick={onSignOut}>
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="quiet-button"
+                onClick={onOpenAccountSync}
+                disabled={!syncConfigured}
+              >
+                Sync favorites across devices
+              </button>
+              <p className="help-text">
+                {syncConfigured
+                  ? "Optional free account. Works fully on this device without one."
+                  : "Add Supabase env vars to enable cloud sync in this build."}
+              </p>
+            </>
+          )}
+        </div>
         <div className="reset-row">
           <button onClick={onWelcome}>Show Welcome Again</button>
         </div>
@@ -155,7 +193,7 @@ export function Settings({
         <p className="settings-foot">
           Klocky · V1 preview
           <br />
-          All designs unlocked. No account. No tracking.
+          All designs unlocked. No tracking. Account optional for sync.
         </p>
       </div>
     </Modal>

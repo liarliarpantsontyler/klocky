@@ -17,7 +17,7 @@
   position: relative;
   flex: none;
   width: 100%;
-  min-height: 188px;
+  min-height: calc(188px * var(--ui-scale));
   padding: 10px max(20px, env(safe-area-inset-right)) 16px
     max(20px, env(safe-area-inset-left));
   display: flex;
@@ -27,22 +27,22 @@
 }
 .onboarding-welcome .onboarding-header {
   min-height: 0;
-  padding-bottom: 8px;
+  padding-bottom: calc(8px * var(--ui-scale));
 }
 .onboarding-welcome .onboarding-carousel {
-  margin-top: clamp(16px, 3.5vh, 32px);
+  margin-top: clamp(calc(16px * var(--ui-scale)), 3.5vh, calc(32px * var(--ui-scale)));
 }
 .onboarding-welcome .onboarding-carousel-viewport {
-  padding-top: 8px;
+  padding-top: calc(8px * var(--ui-scale));
 }
 .onboarding-back {
   position: absolute;
-  left: max(28px, env(safe-area-inset-left));
-  top: 6px;
+  left: max(calc(28px * var(--ui-scale)), env(safe-area-inset-left));
+  top: calc(6px * var(--ui-scale));
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
   border-radius: 50%;
   color: var(--muted);
 }
@@ -52,7 +52,7 @@
 .onboarding-carousel {
   width: 100%;
   flex: none;
-  margin: clamp(48px, 8vh, 100px) 0 0;
+  margin: clamp(calc(48px * var(--ui-scale)), 8vh, calc(100px * var(--ui-scale))) 0 0;
   transition: margin 0.45s var(--ease);
   overscroll-behavior-x: contain;
 }
@@ -61,7 +61,7 @@
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 16px 0;
+  padding: calc(16px * var(--ui-scale)) 0;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x;
   overscroll-behavior: contain;
@@ -74,12 +74,12 @@
   display: none;
 }
 .onboarding-carousel-viewport:focus-visible {
-  outline-offset: -5px;
-  border-radius: 12px;
+  outline-offset: calc(-5px * var(--ui-scale));
+  border-radius: calc(12px * var(--ui-scale));
 }
 .onboarding-carousel-track {
   display: flex;
-  gap: 22px;
+  gap: calc(22px * var(--ui-scale));
   width: max-content;
   min-width: 100%;
   padding-inline: var(--carousel-edge, 0px);
@@ -117,10 +117,10 @@
   display: grid;
   place-items: center;
   position: absolute;
-  bottom: 14px;
-  right: 14px;
-  width: 25px;
-  height: 25px;
+  bottom: calc(14px * var(--ui-scale));
+  right: calc(14px * var(--ui-scale));
+  width: calc(25px * var(--ui-scale));
+  height: calc(25px * var(--ui-scale));
   border-radius: 50%;
   background: var(--onboarding-paper);
   color: var(--onboarding-ink);
@@ -135,27 +135,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 13px;
-  margin-top: 11px;
-  height: 36px;
+  gap: calc(13px * var(--ui-scale));
+  margin-top: calc(11px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   color: var(--muted);
 }
 .onboarding-carousel-caption > span {
-  min-width: 100px;
-  font-size: 11px;
+  min-width: calc(100px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
   letter-spacing: 0.02em;
   text-align: center;
 }
 .onboarding-clock-number {
   color: var(--muted);
-  margin-right: 13px;
-  font-size: 10px;
+  margin-right: calc(13px * var(--ui-scale));
+  font-size: calc(10px * var(--ui-scale));
   font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
 .onboarding-carousel-caption button {
-  width: 36px;
-  height: 36px;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -166,13 +166,13 @@
   color: var(--onboarding-ink);
 }
 .onboarding-content {
-  width: min(100% - 40px, 490px);
+  width: min(calc(100% - 40px * var(--ui-scale)), calc(490px * var(--ui-scale)));
   text-align: center;
-  margin: 38px auto 0;
+  margin: calc(38px * var(--ui-scale)) auto 0;
   animation: onboarding-arrive 0.4s var(--ease) both;
 }
 .onboarding h1 {
-  font-size: clamp(32px, 3.1vw, 46px);
+  font-size: clamp(calc(32px * var(--ui-scale)), 3.1vw, calc(46px * var(--ui-scale)));
   line-height: 1.12;
   font-weight: 700;
   letter-spacing: -0.055em;
@@ -181,31 +181,31 @@
 }
 .onboarding-copy {
   color: var(--muted);
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-scale));
   line-height: 1.65;
   letter-spacing: -0.01em;
-  max-width: 380px;
-  margin: 16px auto 0;
+  max-width: calc(380px * var(--ui-scale));
+  margin: calc(16px * var(--ui-scale)) auto 0;
   text-wrap: balance;
 }
 .onboarding-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  margin-top: calc(30px * var(--ui-scale));
 }
 .onboarding-primary {
-  width: min(100%, 265px);
+  width: min(100%, calc(265px * var(--ui-scale)));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 27px;
-  min-height: 54px;
-  padding: 0 24px;
-  border-radius: 999px;
+  gap: calc(27px * var(--ui-scale));
+  min-height: calc(54px * var(--ui-scale));
+  padding: 0 calc(24px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: var(--ink);
   color: var(--klocky-white);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   font-weight: 700;
   transition:
     background 0.2s,
@@ -219,25 +219,25 @@
   transform: translateY(1px);
 }
 .onboarding-secondary {
-  min-height: 44px;
-  margin-top: 9px;
+  min-height: calc(44px * var(--ui-scale));
+  margin-top: calc(9px * var(--ui-scale));
   color: var(--muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
 }
 .onboarding-secondary-button {
-  width: min(100%, 265px);
-  min-height: 54px;
-  margin-top: 12px;
-  padding: 0 24px;
+  width: min(100%, calc(265px * var(--ui-scale)));
+  min-height: calc(54px * var(--ui-scale));
+  margin-top: calc(12px * var(--ui-scale));
+  padding: 0 calc(24px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 27px;
+  gap: calc(27px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: calc(999px * var(--ui-scale));
   background: var(--surface-subtle);
   color: var(--ink);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   font-weight: 700;
   transition:
     background 0.2s,
@@ -252,32 +252,32 @@
   color: var(--onboarding-ink);
 }
 .onboarding-footer {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   letter-spacing: 0.07em;
   color: var(--muted);
   margin-top: auto;
-  padding: 37px 20px 0;
+  padding: calc(37px * var(--ui-scale)) calc(20px * var(--ui-scale)) 0;
 }
 .onboarding-choose {
   display: block;
-  padding-bottom: max(56px, env(safe-area-inset-bottom));
+  padding-bottom: max(calc(56px * var(--ui-scale)), env(safe-area-inset-bottom));
 }
 .onboarding-choose .onboarding-header {
   position: relative;
 }
 .onboarding-choose-intro {
-  margin-top: clamp(58px, 9vh, 108px);
+  margin-top: clamp(calc(58px * var(--ui-scale)), 9vh, calc(108px * var(--ui-scale)));
 }
 .onboarding-choose-actions {
-  margin-top: 30px;
+  margin-top: calc(30px * var(--ui-scale));
 }
 .onboarding-clock-list {
-  width: min(100% - 48px, 1040px);
-  margin: clamp(64px, 9vh, 112px) auto 0;
+  width: min(calc(100% - 48px * var(--ui-scale)), calc(1040px * var(--ui-scale)));
+  margin: clamp(calc(64px * var(--ui-scale)), 9vh, calc(112px * var(--ui-scale))) auto 0;
 }
 .onboarding-clock-list-inner {
   display: grid;
-  gap: clamp(48px, 7vw, 84px);
+  gap: clamp(calc(48px * var(--ui-scale)), 7vw, calc(84px * var(--ui-scale)));
 }
 .onboarding-clock-list-item {
   width: 100%;
@@ -290,11 +290,11 @@
   background: transparent;
   text-align: inherit;
   cursor: pointer;
-  border-radius: 22px;
+  border-radius: calc(22px * var(--ui-scale));
 }
 .onboarding-clock-list-surface-hit:focus-visible {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 3px;
+  outline-offset: calc(3px * var(--ui-scale));
 }
 .onboarding-clock-list-item .onboarding-clock-surface {
   position: relative;
@@ -309,38 +309,38 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  min-height: 74px;
-  padding: 16px 4px 0;
+  gap: calc(24px * var(--ui-scale));
+  min-height: calc(74px * var(--ui-scale));
+  padding: calc(16px * var(--ui-scale)) calc(4px * var(--ui-scale)) 0;
 }
 .onboarding-clock-list-meta > div {
   display: flex;
   align-items: baseline;
-  gap: 15px;
+  gap: calc(15px * var(--ui-scale));
 }
 .onboarding-clock-list-meta span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
 .onboarding-clock-list-meta h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: calc(15px * var(--ui-scale));
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 .onboarding-clock-cta {
-  min-height: 40px;
+  min-height: calc(40px * var(--ui-scale));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0 17px;
-  border-radius: 999px;
+  gap: calc(10px * var(--ui-scale));
+  padding: 0 calc(17px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: var(--ink);
   color: var(--klocky-white);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   font-weight: 700;
   white-space: nowrap;
   transition:
@@ -352,7 +352,7 @@
   transform: translateY(-1px);
 }
 .onboarding-location .onboarding-carousel {
-  margin-top: 20px;
+  margin-top: calc(20px * var(--ui-scale));
 }
 .onboarding-location .onboarding-clock-card {
   width: clamp(200px, 19vw, 290px);
@@ -361,30 +361,30 @@
   display: none;
 }
 .onboarding-location .onboarding-content {
-  margin-top: 28px;
+  margin-top: calc(28px * var(--ui-scale));
 }
 .onboarding-location .onboarding-copy {
-  max-width: 350px;
-  font-size: 13px;
+  max-width: calc(350px * var(--ui-scale));
+  font-size: calc(13px * var(--ui-scale));
 }
 .onboarding-content > .onboarding-location {
-  width: min(100%, 320px);
+  width: min(100%, calc(320px * var(--ui-scale)));
   min-height: 0;
   display: block;
   padding: 0;
   overflow: visible;
-  margin: 23px auto 0;
+  margin: calc(23px * var(--ui-scale)) auto 0;
 }
 .onboarding-locate {
   width: 100%;
-  min-height: 46px;
+  min-height: calc(46px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  font-size: 12px;
+  gap: calc(9px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: calc(999px * var(--ui-scale));
   background: var(--surface-subtle);
 }
 .onboarding-locate:hover {
@@ -394,29 +394,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 2px 13px;
+  padding: calc(18px * var(--ui-scale)) calc(2px * var(--ui-scale)) calc(13px * var(--ui-scale));
   text-align: left;
-  gap: 14px;
+  gap: calc(14px * var(--ui-scale));
 }
 .onboarding-place > div {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: calc(7px * var(--ui-scale));
   min-width: 0;
 }
 .onboarding-place-heading {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 10px;
+  gap: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
 }
 .onboarding-place strong {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-scale));
   font-weight: 500;
   line-height: 1.45;
 }
 .onboarding-place-time {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -424,17 +424,17 @@
 .onboarding-place small {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: calc(4px * var(--ui-scale));
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
 }
 .onboarding-place-edit {
   flex: none;
-  font-size: 16px;
+  font-size: calc(16px * var(--ui-scale));
   font-weight: 500;
   color: var(--klocky-blue);
-  min-height: 44px;
-  padding: 0 10px;
+  min-height: calc(44px * var(--ui-scale));
+  padding: 0 calc(10px * var(--ui-scale));
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -443,50 +443,50 @@
 }
 .onboarding-time-settings {
   text-align: left;
-  margin: 0 0 13px;
+  margin: 0 0 calc(13px * var(--ui-scale));
 }
 .onboarding-time-options {
-  padding: 4px 0 10px;
-  font-size: 11px;
+  padding: calc(4px * var(--ui-scale)) 0 calc(10px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
 }
 .onboarding-time-options > div,
 .onboarding-time-options > label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  min-height: 44px;
+  gap: calc(8px * var(--ui-scale));
+  min-height: calc(44px * var(--ui-scale));
 }
 .onboarding-time-options input {
   min-width: 0;
-  width: 185px;
+  width: calc(185px * var(--ui-scale));
   max-width: 65%;
   border: 1px solid var(--line);
   background: transparent;
-  border-radius: 7px;
-  padding: 9px 7px;
-  font-size: 10px;
+  border-radius: calc(7px * var(--ui-scale));
+  padding: calc(9px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  font-size: calc(10px * var(--ui-scale));
 }
 .onboarding-time-options > small {
   display: block;
   color: var(--muted);
-  margin-top: 8px;
+  margin-top: calc(8px * var(--ui-scale));
   line-height: 1.5;
 }
 .onboarding-time-options > p {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   color: var(--klocky-blue);
 }
 .onboarding-format {
   display: flex;
   background: var(--surface-subtle);
-  border-radius: 7px;
-  padding: 3px;
+  border-radius: calc(7px * var(--ui-scale));
+  padding: calc(3px * var(--ui-scale));
 }
 .onboarding-format button {
-  font-size: 10px;
-  padding: 8px 10px;
-  border-radius: 5px;
+  font-size: calc(10px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border-radius: calc(5px * var(--ui-scale));
 }
 .onboarding-format button[aria-pressed="true"] {
   background: var(--klocky-white);
@@ -496,54 +496,54 @@
   width: 100%;
 }
 .onboarding-search {
-  margin: 5px 0 10px;
+  margin: calc(5px * var(--ui-scale)) 0 calc(10px * var(--ui-scale));
   text-align: left;
 }
 .onboarding-search > label {
   display: flex;
-  gap: 9px;
+  gap: calc(9px * var(--ui-scale));
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 9px;
-  padding: 0 12px;
+  border-radius: calc(9px * var(--ui-scale));
+  padding: 0 calc(12px * var(--ui-scale));
   color: var(--muted);
 }
 .onboarding-search input {
   width: 100%;
   min-width: 0;
-  min-height: 44px;
+  min-height: calc(44px * var(--ui-scale));
   background: none;
   border: 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   color: var(--ink);
 }
 .onboarding-search-results {
-  max-height: 180px;
+  max-height: calc(180px * var(--ui-scale));
   overflow: auto;
-  margin-top: 5px;
-  border-radius: 8px;
+  margin-top: calc(5px * var(--ui-scale));
+  border-radius: calc(8px * var(--ui-scale));
   background: var(--surface-subtle);
 }
 .onboarding-search-results button {
   width: 100%;
-  min-height: 48px;
+  min-height: calc(48px * var(--ui-scale));
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 10px 12px;
+  gap: calc(5px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
   text-align: left;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   border-bottom: 1px solid var(--line);
 }
 .onboarding-search-results button:hover {
   background: var(--line);
 }
 .onboarding-search-results small {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   color: var(--muted);
 }
 .onboarding-status {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   line-height: 1.5;
   color: var(--muted);
   text-align: left;
@@ -563,159 +563,159 @@
     margin-top: 11vh;
   }
   .onboarding-welcome .onboarding-carousel {
-    margin-top: clamp(24px, 5vh, 48px);
+    margin-top: clamp(calc(24px * var(--ui-scale)), 5vh, calc(48px * var(--ui-scale)));
   }
   .onboarding-content {
-    margin-top: 48px;
+    margin-top: calc(48px * var(--ui-scale));
   }
 }
 @media (max-width: 650px) {
   .onboarding {
-    padding-top: max(24px, env(safe-area-inset-top));
+    padding-top: max(calc(24px * var(--ui-scale)), env(safe-area-inset-top));
   }
   .onboarding-header {
-    min-height: 168px;
-    padding-bottom: 12px;
+    min-height: calc(168px * var(--ui-scale));
+    padding-bottom: calc(12px * var(--ui-scale));
   }
   .onboarding-welcome .onboarding-header {
     min-height: 0;
-    padding-bottom: 4px;
+    padding-bottom: calc(4px * var(--ui-scale));
   }
   .onboarding-welcome .onboarding-carousel {
-    margin-top: clamp(10px, 2.5vh, 20px);
+    margin-top: clamp(calc(10px * var(--ui-scale)), 2.5vh, calc(20px * var(--ui-scale)));
   }
   .onboarding-back {
-    left: max(14px, env(safe-area-inset-left));
+    left: max(calc(14px * var(--ui-scale)), env(safe-area-inset-left));
     top: 0;
   }
   .onboarding-carousel {
-    margin-top: clamp(32px, 7vh, 65px);
+    margin-top: clamp(calc(32px * var(--ui-scale)), 7vh, calc(65px * var(--ui-scale)));
   }
   .onboarding-carousel-track {
-    gap: 17px;
+    gap: calc(17px * var(--ui-scale));
   }
   .onboarding-clock-card {
     width: 76vw;
-    border-radius: 17px;
+    border-radius: calc(17px * var(--ui-scale));
   }
   .onboarding-content {
-    margin-top: 30px;
-    width: calc(100% - 44px);
+    margin-top: calc(30px * var(--ui-scale));
+    width: calc(100% - 44px * var(--ui-scale));
   }
   .onboarding h1 {
-    font-size: 34px;
+    font-size: calc(34px * var(--ui-scale));
   }
   .onboarding-copy {
-    max-width: 295px;
-    font-size: 13px;
-    margin-top: 14px;
+    max-width: calc(295px * var(--ui-scale));
+    font-size: calc(13px * var(--ui-scale));
+    margin-top: calc(14px * var(--ui-scale));
   }
   .onboarding-actions {
-    margin-top: 27px;
+    margin-top: calc(27px * var(--ui-scale));
   }
   .onboarding-primary {
-    width: min(100%, 290px);
-    min-height: 53px;
+    width: min(100%, calc(290px * var(--ui-scale)));
+    min-height: calc(53px * var(--ui-scale));
   }
   .onboarding-secondary-button {
-    width: min(100%, 290px);
-    min-height: 53px;
+    width: min(100%, calc(290px * var(--ui-scale)));
+    min-height: calc(53px * var(--ui-scale));
   }
   .onboarding-footer {
-    padding-top: 28px;
+    padding-top: calc(28px * var(--ui-scale));
   }
   .onboarding-location .onboarding-carousel {
-    margin-top: 18px;
+    margin-top: calc(18px * var(--ui-scale));
   }
   .onboarding-location .onboarding-clock-card {
     width: 46vw;
-    border-radius: 10px;
+    border-radius: calc(10px * var(--ui-scale));
   }
   .onboarding-location .onboarding-content {
-    margin-top: 17px;
+    margin-top: calc(17px * var(--ui-scale));
   }
   .onboarding-location h1 {
-    font-size: 30px;
+    font-size: calc(30px * var(--ui-scale));
   }
   .onboarding-content > .onboarding-location {
-    margin-top: 19px;
+    margin-top: calc(19px * var(--ui-scale));
   }
   .onboarding-search input,
   .onboarding-time-options input {
-    font-size: 16px;
+    font-size: calc(16px * var(--ui-scale));
   }
   .onboarding-time-options input {
     max-width: 72%;
   }
   .onboarding-choose-intro {
-    margin-top: 48px;
+    margin-top: calc(48px * var(--ui-scale));
   }
   .onboarding-clock-list {
-    width: calc(100% - 32px);
-    margin-top: 64px;
+    width: calc(100% - 32px * var(--ui-scale));
+    margin-top: calc(64px * var(--ui-scale));
   }
   .onboarding-clock-list-inner {
-    gap: 48px;
+    gap: calc(48px * var(--ui-scale));
   }
   .onboarding-clock-list-item .onboarding-clock-surface {
-    border-radius: 14px;
+    border-radius: calc(14px * var(--ui-scale));
   }
   .onboarding-clock-list-meta {
     align-items: flex-start;
-    min-height: 70px;
-    padding: 13px 2px 0;
+    min-height: calc(70px * var(--ui-scale));
+    padding: calc(13px * var(--ui-scale)) calc(2px * var(--ui-scale)) 0;
   }
   .onboarding-clock-list-meta > div {
-    gap: 10px;
-    padding-top: 12px;
+    gap: calc(10px * var(--ui-scale));
+    padding-top: calc(12px * var(--ui-scale));
   }
   .onboarding-clock-list-meta h2 {
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-scale));
   }
   .onboarding-clock-cta {
-    min-height: 44px;
-    padding: 0 14px;
-    font-size: 10px;
+    min-height: calc(44px * var(--ui-scale));
+    padding: 0 calc(14px * var(--ui-scale));
+    font-size: calc(10px * var(--ui-scale));
   }
 }
 @media (max-height: 730px) and (min-width: 651px) {
   .onboarding {
-    padding-top: 18px;
+    padding-top: calc(18px * var(--ui-scale));
   }
   .onboarding-carousel {
-    margin-top: 24px;
+    margin-top: calc(24px * var(--ui-scale));
   }
   .onboarding-welcome .onboarding-carousel {
-    margin-top: 16px;
+    margin-top: calc(16px * var(--ui-scale));
   }
   .onboarding-clock-card {
-    width: clamp(250px, 27vw, 365px);
+    width: clamp(calc(250px * var(--ui-scale)), 27vw, calc(365px * var(--ui-scale)));
   }
   .onboarding-content {
-    margin-top: 20px;
+    margin-top: calc(20px * var(--ui-scale));
   }
   .onboarding-actions {
-    margin-top: 22px;
+    margin-top: calc(22px * var(--ui-scale));
   }
   .onboarding-footer {
-    padding-top: 20px;
+    padding-top: calc(20px * var(--ui-scale));
   }
   .onboarding-location .onboarding-clock-card {
-    width: 190px;
+    width: calc(190px * var(--ui-scale));
   }
   .onboarding-location .onboarding-carousel {
-    margin-top: 5px;
+    margin-top: calc(5px * var(--ui-scale));
   }
 }
 @media (max-height: 730px) and (max-width: 650px) {
   .onboarding-carousel {
-    margin-top: 24px;
+    margin-top: calc(24px * var(--ui-scale));
   }
   .onboarding-welcome .onboarding-carousel {
-    margin-top: 12px;
+    margin-top: calc(12px * var(--ui-scale));
   }
   .onboarding-content {
-    margin-top: 20px;
+    margin-top: calc(20px * var(--ui-scale));
   }
 }
 @media (prefers-reduced-motion: reduce) {

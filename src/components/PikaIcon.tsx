@@ -1,4 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
+import { uiPx } from "../utils/uiScale";
 
 export function PikaIcon({
   icon: Icon,
@@ -10,10 +11,11 @@ export function PikaIcon({
   size?: number;
   className?: string;
 } & SVGProps<SVGSVGElement>) {
+  const scaled = uiPx(size);
   return (
     <Icon
-      width={size}
-      height={size}
+      width={scaled}
+      height={scaled}
       className={["pika-icon", className].filter(Boolean).join(" ")}
       aria-hidden
       {...rest}

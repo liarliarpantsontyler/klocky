@@ -11,6 +11,7 @@ import { LocationStep } from "./LocationStep";
 import { BrandLogo } from "../components/BrandLogo";
 import { neutralClock } from "./presets";
 import "./onboarding.css";
+import { uiPx } from "../utils/uiScale";
 export function Onboarding({
   preferences,
   onPreferences,
@@ -76,7 +77,7 @@ export function Onboarding({
             aria-label="Back"
             onClick={() => setStep(step === "choose" ? "location" : "welcome")}
           >
-            <ArrowLeft size={19} />
+            <ArrowLeft size={uiPx(19)} />
           </button>
         )}
         <BrandLogo hero />
@@ -118,13 +119,13 @@ export function Onboarding({
         ) : step === "choose" ? (
           <div className="onboarding-actions onboarding-choose-actions">
             <button className="onboarding-primary" onClick={startRandom}>
-              Start with a random clock <ArrowRight size={18} />
+              Start with a random clock <ArrowRight size={uiPx(18)} />
             </button>
             <button
               className="onboarding-secondary onboarding-secondary-button"
               onClick={buildMyOwn}
             >
-              Build my own <ArrowRight size={18} />
+              Build my own <ArrowRight size={uiPx(18)} />
             </button>
           </div>
         ) : (
@@ -133,7 +134,7 @@ export function Onboarding({
               className="onboarding-primary"
               onClick={() => setStep("location")}
             >
-              Get Started <ArrowRight size={18} />
+              Get Started <ArrowRight size={uiPx(18)} />
             </button>
           </div>
         )}

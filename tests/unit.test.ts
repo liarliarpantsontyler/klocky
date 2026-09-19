@@ -9,6 +9,11 @@ import {
   writeState,
   STORAGE_KEY,
 } from "../src/state/storage";
+import {
+  shouldPromptAfterFavoriteAdd,
+  shouldPromptAfterShareWithFavorite,
+} from "../src/account/syncPrompt";
+import { mergeSyncIntoLocal } from "../src/account/syncPayload";
 import { presets } from "../src/gallery/presets";
 import { timeParts } from "../src/hooks/useTime";
 import {
@@ -449,5 +454,49 @@ describe("location and live time", () => {
     expect(clockWords(12, 0)).toBe("twelve\no’clock");
     expect(clockWords(9, 5)).toBe("nine\noh five");
     expect(clockWords(23, 48)).toBe("twenty three\nforty eight");
+  });
+});
+
+describe("account sync prompt", () => {
+  it("opens after enough favorites, not on unfavorite", () => {
+    let state = defaults();
+    expect(shouldPromptAfterFavoriteAdd(state, true)).toBe(false);
+    state = { ...state, favorites: ["aurora", "dusk"] };
+    expect(shouldPromptAfterFavoriteAdd(state, true)).toBe(true);
+    expect(shouldPromptAfterFavoriteAdd(state, false)).toBe(false);
+  });
+
+  it("respects dismiss and auto-shown flags", () => {
+    const state = {
+      ...defaults(),
+      favorites: ["a", "b"],
+      accountSync: { dismissed: true, autoShown: false },
+    };
+    expect(shouldPromptAfterFavoriteAdd(state, true)).toBe(false);
+    expect(
+      shouldPromptAfterShareWithFavorite(
+        { ...state, accountSync: { dismissed: false, autoShown: false } },
+        true,
+      ),
+    ).toBe(true);
+  });
+
+  it("merges remote favorites without dropping local", () => {
+    const local = { ...defaults(), favorites: ["aurora"] };
+    const merged = mergeSyncIntoLocal(local, {
+      version: 1,
+      favorites: ["dusk"],
+      savedFavorites: [],
+      preferences: {
+        weatherLocation: null,
+        timezone: "Europe/London",
+        unit: "celsius",
+        hour24: false,
+        seconds: false,
+        locale: "",
+      },
+    });
+    expect(merged.favorites).toEqual(["aurora", "dusk"]);
+    expect(merged.preferences.timezone).toBe("Europe/London");
   });
 });

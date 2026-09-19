@@ -4,6 +4,10 @@ import type {
   KlockyPreset,
   BackgroundOptions,
 } from "../types";
+import {
+  defaultAccountSync,
+  sanitizeAccountSync,
+} from "../account/syncPrompt";
 import { presets } from "../gallery/presets";
 import {
   clocks,
@@ -35,6 +39,7 @@ export const defaults = (): SavedState => ({
   recent: [],
   favorites: [],
   savedFavorites: [],
+  accountSync: defaultAccountSync(),
 });
 const hex = (v: unknown): v is string =>
   typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v);
@@ -181,6 +186,7 @@ export function readState(): SavedState {
             )
             .slice(0, 100)
         : [],
+      accountSync: sanitizeAccountSync(data.accountSync),
     };
   } catch {
     return defaults();

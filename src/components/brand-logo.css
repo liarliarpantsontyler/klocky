@@ -5,7 +5,7 @@
 }
 
 .brand-logo-shell--hero {
-  width: min(100%, 360px);
+  width: min(100%, calc(360px * var(--ui-scale)));
 }
 
 .brand-logo-preview {
@@ -23,13 +23,13 @@
 }
 
 .brand-logo-shell--hero .brand-logo-art {
-  height: clamp(84px, 19.6vw, 118px);
+  height: clamp(calc(84px * var(--ui-scale)), 19.6vw, calc(118px * var(--ui-scale)));
 }
 
 .brand-logo-shell--header .brand-logo-art {
-  height: clamp(38px, 5.2vw, 54px);
+  height: clamp(calc(38px * var(--ui-scale)), 5.2vw, calc(54px * var(--ui-scale)));
 }
 
 .brand-logo-shell--compact .brand-logo-art {
-  height: 25px;
+  height: calc(25px * var(--ui-scale));
 }

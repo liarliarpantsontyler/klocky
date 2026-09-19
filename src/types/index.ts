@@ -140,6 +140,10 @@ export interface WeatherState {
   location?: string;
   updatedAt?: number;
 }
+export interface AccountSyncMeta {
+  dismissed: boolean;
+  autoShown: boolean;
+}
 export interface SavedState {
   onboardingComplete: boolean;
   version: 1;
@@ -148,4 +152,5 @@ export interface SavedState {
   recent: string[];
   favorites: string[];
   savedFavorites: KlockyPreset[];
+  accountSync: AccountSyncMeta;
 }

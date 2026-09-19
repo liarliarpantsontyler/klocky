@@ -12,6 +12,7 @@ import type {
   BackgroundOptions,
   ShaderUniformDefinition,
 } from "../types";
+import { uiPx } from "../utils/uiScale";
 
 const coreKeys = new Set<keyof BackgroundOptions>([
   "motion",
@@ -79,14 +80,14 @@ export function BackgroundFineTune({
     <div className="background-fine-tune">
       <div className="fine-tune-heading">
         <button className="fine-tune-back" onClick={onBack}>
-          <ArrowLeft size={16} />
+          <ArrowLeft size={uiPx(16)} />
           <span>
             <small>Backgrounds</small>
             Customize {background.name}
           </span>
         </button>
         <button className="fine-tune-reset" onClick={onReset}>
-          <RotateCcw size={14} /> Reset
+          <RotateCcw size={uiPx(14)} /> Reset
         </button>
       </div>
 
@@ -95,7 +96,7 @@ export function BackgroundFineTune({
           <span className="field-label">Colors</span>
           {!isSolid && (
             <button onClick={shufflePalette}>
-              <Shuffle size={14} /> Shuffle
+              <Shuffle size={uiPx(14)} /> Shuffle
             </button>
           )}
         </div>
@@ -120,7 +121,7 @@ export function BackgroundFineTune({
                     )
                   }
                 >
-                  <Minus size={10} />
+                  <Minus size={uiPx(10)} />
                 </button>
               )}
             </span>
@@ -133,7 +134,7 @@ export function BackgroundFineTune({
                 onOption("palette", [...effective.palette, "#c3c9ab"])
               }
             >
-              <Plus size={16} />
+              <Plus size={uiPx(16)} />
             </button>
           )}
         </div>
@@ -158,7 +159,7 @@ export function BackgroundFineTune({
             <span>Advanced</span>
             <span className="fine-tune-summary-end">
               <small>{advanced.length + 1} controls</small>
-              <ChevronDown size={15} />
+              <ChevronDown size={uiPx(15)} />
             </span>
           </summary>
           <div className="fine-tune-advanced-body">

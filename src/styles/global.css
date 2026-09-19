@@ -125,6 +125,8 @@
   font-display: swap;
 }
 :root {
+  /* Keep in sync with UI_SCALE in src/utils/uiScale.ts */
+  --ui-scale: 1.25;
   font-family: var(--font-ui);
   color: var(--ink);
   background: var(--paper);
@@ -200,7 +202,7 @@ input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 4px;
+  outline-offset: calc(4px * var(--ui-scale));
 }
 button {
   touch-action: manipulation;
@@ -213,8 +215,8 @@ button svg {
 }
 .icon-button {
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
   align-items: center;
   justify-content: center;
   border-radius: 50%;
@@ -224,14 +226,14 @@ button svg {
   background: #20251b0c;
 }
 .app-header {
-  height: 104px;
-  max-width: 1680px;
+  height: calc(104px * var(--ui-scale));
+  max-width: calc(1680px * var(--ui-scale));
   margin: 0 auto;
   padding: 0 5.2%;
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--line);
-  gap: 28px;
+  gap: calc(28px * var(--ui-scale));
 }
 .gallery-shell {
   --gallery-header-height: 112px;
@@ -259,7 +261,7 @@ button svg {
   pointer-events: none;
 }
 .gallery-header .wordmark {
-  min-width: clamp(120px, 18vw, 220px);
+  min-width: clamp(calc(120px * var(--ui-scale)), 18vw, calc(220px * var(--ui-scale)));
 }
 @media (prefers-reduced-motion: reduce) {
   .gallery-header {
@@ -276,7 +278,7 @@ button svg {
   border: 0;
   background: transparent;
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: calc(12px * var(--ui-scale));
   transition: opacity 0.2s var(--ease);
 }
 .wordmark:hover {
@@ -284,22 +286,22 @@ button svg {
 }
 .wordmark:focus-visible {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 4px;
+  outline-offset: calc(4px * var(--ui-scale));
 }
 .app-header nav {
   display: flex;
-  gap: 30px;
+  gap: calc(30px * var(--ui-scale));
   margin-left: auto;
   margin-right: auto;
-  padding-left: 100px;
+  padding-left: calc(100px * var(--ui-scale));
 }
 .app-header nav button {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13px;
+  gap: calc(7px * var(--ui-scale));
+  font-size: calc(13px * var(--ui-scale));
   color: var(--muted);
-  height: 44px;
+  height: calc(44px * var(--ui-scale));
   position: relative;
 }
 .gallery-header .header-end {
@@ -308,7 +310,7 @@ button svg {
 .gallery-header-actions {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: calc(2px * var(--ui-scale));
 }
 .gallery-header .icon-button {
   color: var(--muted);
@@ -337,12 +339,12 @@ button svg {
 .app-header nav .active:after {
   content: "";
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: calc(4px * var(--ui-scale));
+  height: calc(4px * var(--ui-scale));
   background: var(--ink);
   border-radius: 50%;
   bottom: 0;
-  left: calc(50% - 2px);
+  left: calc(50% - 2px * var(--ui-scale));
 }
 .gallery-header nav .active::after {
   content: none;
@@ -350,81 +352,81 @@ button svg {
 .header-end {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: calc(24px * var(--ui-scale));
 }
 .local-indicator {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   color: var(--muted);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: calc(8px * var(--ui-scale));
 }
 .local-indicator > span {
-  width: 5px;
-  height: 5px;
+  width: calc(5px * var(--ui-scale));
+  height: calc(5px * var(--ui-scale));
   border-radius: 50%;
   background: #819269;
 }
 .gallery-main {
-  max-width: 1680px;
+  max-width: calc(1680px * var(--ui-scale));
   margin: 0 auto;
   padding: 0 5.2%;
 }
 .collection-intro {
-  padding: 60px 0 49px;
+  padding: calc(60px * var(--ui-scale)) 0 calc(49px * var(--ui-scale));
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .eyebrow {
   display: block;
-  font-size: 9px;
-  letter-spacing: 1.7px;
+  font-size: calc(9px * var(--ui-scale));
+  letter-spacing: calc(1.7px * var(--ui-scale));
   font-weight: 500;
 }
 .collection-intro h1 {
   font-weight: 400;
-  font-size: 48px;
-  letter-spacing: -2.2px;
+  font-size: calc(48px * var(--ui-scale));
+  letter-spacing: calc(-2.2px * var(--ui-scale));
   line-height: 1.1;
-  margin: 18px 0 12px;
+  margin: calc(18px * var(--ui-scale)) 0 calc(12px * var(--ui-scale));
 }
 .collection-intro p {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   color: var(--muted);
   margin: 0;
 }
 .collection-note {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: calc(15px * var(--ui-scale));
   color: var(--muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   line-height: 1.6;
-  padding-top: 17px;
+  padding-top: calc(17px * var(--ui-scale));
 }
 .gallery-main > .collection-toolbar:first-child {
   border-top: 0;
-  padding-top: clamp(20px, 3vw, 32px);
+  padding-top: clamp(calc(20px * var(--ui-scale)), 3vw, calc(32px * var(--ui-scale)));
 }
 .collection-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--line);
-  padding: 15px 0 23px;
-  gap: 10px;
+  padding: calc(15px * var(--ui-scale)) 0 calc(23px * var(--ui-scale));
+  gap: calc(10px * var(--ui-scale));
 }
 .filters {
   display: flex;
-  gap: 5px;
+  gap: calc(5px * var(--ui-scale));
 }
 .filters button {
-  height: 35px;
-  padding: 0 15px;
-  font-size: 13px;
+  height: calc(35px * var(--ui-scale));
+  padding: 0 calc(15px * var(--ui-scale));
+  font-size: calc(13px * var(--ui-scale));
   color: var(--muted);
-  border-radius: 5px;
+  border-radius: calc(5px * var(--ui-scale));
   white-space: nowrap;
 }
 .filters .selected {
@@ -432,26 +434,26 @@ button svg {
   background: var(--surface-subtle);
 }
 .filters button span {
-  font-size: 11px;
-  margin-left: 8px;
+  font-size: calc(11px * var(--ui-scale));
+  margin-left: calc(8px * var(--ui-scale));
   opacity: 0.65;
 }
 .collection-count {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   color: var(--muted);
   white-space: nowrap;
   display: flex;
-  gap: 17px;
+  gap: calc(17px * var(--ui-scale));
   align-items: center;
 }
 .tiny-grid {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-scale));
 }
 .clock-gallery {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 24px;
-  row-gap: 27px;
+  column-gap: calc(24px * var(--ui-scale));
+  row-gap: calc(27px * var(--ui-scale));
 }
 .gallery-item {
   min-width: 0;
@@ -462,7 +464,7 @@ button svg {
   width: 100%;
   padding: 0;
   text-align: left;
-  border-radius: 9px;
+  border-radius: calc(9px * var(--ui-scale));
   overflow: hidden;
   position: relative;
   isolation: isolate;
@@ -479,20 +481,20 @@ button svg {
   transform: scale(1.025);
 }
 .clock-card:focus-visible {
-  outline-offset: 5px;
+  outline-offset: calc(5px * var(--ui-scale));
 }
 .card-enter {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  right: calc(16px * var(--ui-scale));
+  bottom: calc(16px * var(--ui-scale));
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff18;
   backdrop-filter: blur(8px);
-  width: 35px;
-  height: 35px;
+  width: calc(35px * var(--ui-scale));
+  height: calc(35px * var(--ui-scale));
   border-radius: 50%;
   opacity: 0;
   transform: translateY(5px);
@@ -507,47 +509,47 @@ button svg {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 13px 0 0;
+  padding: calc(13px * var(--ui-scale)) 0 0;
 }
 .card-caption h2 {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   line-height: 1.3;
   font-weight: 500;
-  margin: 0 0 4px;
+  margin: 0 0 calc(4px * var(--ui-scale));
 }
 .card-caption > div > span {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   color: var(--muted);
 }
 .caption-dot {
-  margin: 0 4px;
+  margin: 0 calc(4px * var(--ui-scale));
   opacity: 0.6;
 }
 .card-caption .icon-button {
   color: var(--muted);
-  margin-right: -12px;
+  margin-right: calc(-12px * var(--ui-scale));
 }
 .card-caption .icon-button[aria-pressed="true"] {
   color: var(--klocky-blue);
 }
 .gallery-footer {
-  margin-top: 58px;
+  margin-top: calc(58px * var(--ui-scale));
   border-top: 1px solid var(--line);
-  padding: 26px 0 34px;
+  padding: calc(26px * var(--ui-scale)) 0 calc(34px * var(--ui-scale));
   display: flex;
   justify-content: center;
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   color: var(--muted);
 }
 .gallery-footer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: calc(12px * var(--ui-scale));
   color: inherit;
   text-decoration: none;
-  border-radius: 8px;
-  padding: 4px 6px;
-  margin: -4px -6px;
+  border-radius: calc(8px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  margin: calc(-4px * var(--ui-scale)) calc(-6px * var(--ui-scale));
   transition:
     color 0.2s,
     background 0.2s;
@@ -558,16 +560,16 @@ button svg {
 }
 .gallery-footer-brand:focus-visible {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 2px;
+  outline-offset: calc(2px * var(--ui-scale));
 }
 .gallery-footer-copy {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   letter-spacing: 0.01em;
   color: var(--muted);
 }
 .gallery-footer-humin-logo {
   display: block;
-  height: 24px;
+  height: calc(24px * var(--ui-scale));
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
@@ -581,12 +583,12 @@ button svg {
   color: var(--muted);
 }
 .empty-state h2 {
-  font-size: 20px;
+  font-size: calc(20px * var(--ui-scale));
   font-weight: 400;
   color: var(--ink);
 }
 .empty-state p {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
 }
 .background {
   position: absolute;
@@ -648,7 +650,7 @@ button svg {
   justify-content: space-between;
   padding: max(24px, env(safe-area-inset-top))
     max(30px, env(safe-area-inset-right)) 0 max(30px, env(safe-area-inset-left));
-  gap: 16px;
+  gap: calc(16px * var(--ui-scale));
 }
 .display-top > * {
   pointer-events: auto;
@@ -656,19 +658,19 @@ button svg {
 .display-top-start {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: calc(12px * var(--ui-scale));
   min-width: 0;
   flex: 1;
   justify-content: flex-start;
 }
 .quiet-button {
-  min-height: 44px;
+  min-height: calc(44px * var(--ui-scale));
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 16px;
-  border-radius: 999px;
-  font-size: 12px;
+  gap: calc(9px * var(--ui-scale));
+  padding: 0 calc(16px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
 }
 .player .glass-button,
 .player .glass-panel:not(.editor) {
@@ -743,29 +745,29 @@ button svg {
   text-shadow: 0 1px 10px #0003;
 }
 .display-name > span {
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   display: block;
 }
 .display-name > small {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   opacity: 0.6;
   display: block;
-  margin-top: 5px;
+  margin-top: calc(5px * var(--ui-scale));
 }
 .display-top-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 999px;
+  gap: calc(2px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   margin-left: auto;
   flex-shrink: 0;
 }
 .display-top-actions .icon-button {
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
+  width: calc(42px * var(--ui-scale));
+  height: calc(42px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   color: #fffaf0;
   transition: background 0.18s var(--ease);
 }
@@ -780,25 +782,25 @@ button svg {
 }
 .display-bottom {
   position: absolute;
-  bottom: max(30px, env(safe-area-inset-bottom));
-  left: max(30px, env(safe-area-inset-left));
-  right: max(30px, env(safe-area-inset-right));
+  bottom: max(calc(30px * var(--ui-scale)), env(safe-area-inset-bottom));
+  left: max(calc(30px * var(--ui-scale)), env(safe-area-inset-left));
+  right: max(calc(30px * var(--ui-scale)), env(safe-area-inset-right));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: calc(20px * var(--ui-scale));
 }
 .display-hint,
 .display-shortcuts {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   opacity: 0.65;
-  width: 200px;
+  width: calc(200px * var(--ui-scale));
 }
 .display-shortcuts {
   text-align: right;
 }
 .display-shortcuts > span {
-  margin: 0 7px;
+  margin: 0 calc(7px * var(--ui-scale));
 }
 .share-fallback.glass-panel {
   background: linear-gradient(130deg, #333b31ee, #20281fef);
@@ -811,10 +813,10 @@ button svg {
 }
 .display-dock {
   --display-dock-extra-width: 48px;
-  border-radius: 999px;
+  border-radius: calc(999px * var(--ui-scale));
   display: flex;
   align-items: stretch;
-  padding: 4px;
+  padding: calc(4px * var(--ui-scale));
   pointer-events: auto;
   flex: none;
 }
@@ -822,22 +824,22 @@ button svg {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
+  gap: calc(8px * var(--ui-scale));
   margin-left: auto;
   flex-shrink: 0;
 }
 .display-dock-tools {
   display: flex;
   align-items: center;
-  padding: 4px;
-  border-radius: 999px;
+  padding: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   pointer-events: auto;
   flex: none;
 }
 .display-dock-tools .icon-button {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   color: #fffaf0;
   transition: background 0.18s var(--ease);
 }
@@ -861,11 +863,11 @@ button svg {
   align-self: stretch;
   width: 100%;
   min-width: calc(5.25rem + var(--display-dock-extra-width));
-  gap: 9px;
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
-  font-size: 12px;
+  gap: calc(9px * var(--ui-scale));
+  min-height: calc(44px * var(--ui-scale));
+  padding: 0 calc(16px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -890,11 +892,11 @@ button svg {
 }
 .is-editing .display-top,
 .is-editing .display-bottom {
-  right: 370px;
+  right: calc(370px * var(--ui-scale));
 }
 .is-editing .display-top {
-  width: calc(100% - 370px);
-  padding-right: 28px;
+  width: calc(100% - 370px * var(--ui-scale));
+  padding-right: calc(28px * var(--ui-scale));
 }
 .is-editing .display-shortcuts,
 .is-editing .display-hint {
@@ -905,11 +907,11 @@ button svg {
 }
 .editor {
   position: absolute;
-  right: max(18px, env(safe-area-inset-right));
-  top: max(18px, env(safe-area-inset-top));
-  bottom: max(18px, env(safe-area-inset-bottom));
-  width: 340px;
-  border-radius: 20px;
+  right: max(calc(18px * var(--ui-scale)), env(safe-area-inset-right));
+  top: max(calc(18px * var(--ui-scale)), env(safe-area-inset-top));
+  bottom: max(calc(18px * var(--ui-scale)), env(safe-area-inset-bottom));
+  width: calc(340px * var(--ui-scale));
+  border-radius: calc(20px * var(--ui-scale));
   display: flex;
   flex-direction: column;
   animation: panel-in 0.4s var(--ease);
@@ -927,25 +929,25 @@ button svg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 22px 22px;
-  gap: 12px;
+  padding: calc(24px * var(--ui-scale)) calc(22px * var(--ui-scale)) calc(22px * var(--ui-scale));
+  gap: calc(12px * var(--ui-scale));
 }
 .panel-heading h2 {
   font-weight: 400;
-  font-size: 24px;
-  letter-spacing: -0.8px;
-  margin: 7px 0 0;
+  font-size: calc(24px * var(--ui-scale));
+  letter-spacing: calc(-0.8px * var(--ui-scale));
+  margin: calc(7px * var(--ui-scale)) 0 0;
 }
 .panel-heading .eyebrow {
-  font-size: 8px;
+  font-size: calc(8px * var(--ui-scale));
   color: var(--muted);
-  letter-spacing: 1.2px;
+  letter-spacing: calc(1.2px * var(--ui-scale));
 }
 .editor-scroll {
   overflow-y: auto;
   overscroll-behavior: contain;
   flex: 1;
-  padding: 12px 24px 0;
+  padding: calc(12px * var(--ui-scale)) calc(24px * var(--ui-scale)) 0;
   scrollbar-width: thin;
   scrollbar-color: #252a201f transparent;
 }
@@ -960,23 +962,23 @@ button svg {
   width: auto;
   flex: 1;
   min-width: 0;
-  min-height: 72px;
+  min-height: calc(72px * var(--ui-scale));
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  font-size: 15px;
+  gap: calc(16px * var(--ui-scale));
+  font-size: calc(15px * var(--ui-scale));
   padding: 0;
 }
 .section-randomize {
-  width: 38px;
-  height: 38px;
+  width: calc(38px * var(--ui-scale));
+  height: calc(38px * var(--ui-scale));
   flex: none;
   display: grid;
   place-items: center;
-  margin-left: 8px;
+  margin-left: calc(8px * var(--ui-scale));
   border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
-  border-radius: 999px;
+  border-radius: calc(999px * var(--ui-scale));
   color: var(--ink);
   background: var(--surface-subtle);
   box-shadow: 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
@@ -1011,9 +1013,9 @@ button svg {
 }
 .section-title {
   min-width: 0;
-  gap: 13px;
+  gap: calc(13px * var(--ui-scale));
   font-weight: 560;
-  letter-spacing: -0.18px;
+  letter-spacing: calc(-0.18px * var(--ui-scale));
 }
 .section-title svg {
   color: var(--muted);
@@ -1021,9 +1023,9 @@ button svg {
 .section-selection {
   min-width: 0;
   justify-content: flex-end;
-  gap: 9px;
+  gap: calc(9px * var(--ui-scale));
   color: var(--muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
 }
 .section-selection > span {
   overflow: hidden;
@@ -1041,15 +1043,15 @@ button svg {
   transform: rotate(180deg);
 }
 .section-content {
-  padding: 2px 0 24px;
+  padding: calc(2px * var(--ui-scale)) 0 calc(24px * var(--ui-scale));
   animation: arrive 0.3s var(--ease);
 }
 .quick-background-controls {
-  min-height: 185px;
+  min-height: calc(185px * var(--ui-scale));
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: end;
-  padding: 24px 8px 10px;
+  padding: calc(24px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
   animation: arrive 0.3s var(--ease);
 }
 .quick-background-slider {
@@ -1058,7 +1060,7 @@ button svg {
   align-items: center;
   gap: 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   text-align: center;
   cursor: ns-resize;
 }
@@ -1068,16 +1070,16 @@ button svg {
 }
 .quick-slider-track {
   position: relative;
-  width: 44px;
-  height: 128px;
+  width: calc(44px * var(--ui-scale));
+  height: calc(128px * var(--ui-scale));
 }
 .quick-background-slider input {
   --range-fill: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 120px;
-  height: 36px;
+  width: calc(120px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   margin: 0;
   transform: translate(-50%, -50%) rotate(-90deg);
   transform-origin: center;
@@ -1088,8 +1090,8 @@ button svg {
   background: transparent;
 }
 .quick-background-slider input::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 999px;
+  height: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: linear-gradient(
     to right,
     var(--klocky-blue) 0,
@@ -1099,9 +1101,9 @@ button svg {
   );
 }
 .quick-background-slider input::-webkit-slider-thumb {
-  width: 19px;
-  height: 19px;
-  margin-top: -7.5px;
+  width: calc(19px * var(--ui-scale));
+  height: calc(19px * var(--ui-scale));
+  margin-top: calc(-7.5px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1109,8 +1111,8 @@ button svg {
   -webkit-appearance: none;
 }
 .quick-background-slider input::-moz-range-track {
-  height: 4px;
-  border-radius: 999px;
+  height: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: linear-gradient(
     to right,
     var(--klocky-blue) 0,
@@ -1120,8 +1122,8 @@ button svg {
   );
 }
 .quick-background-slider input::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: calc(15px * var(--ui-scale));
+  height: calc(15px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1129,7 +1131,7 @@ button svg {
 }
 .background-picker-wrap {
   position: relative;
-  max-height: 340px;
+  max-height: calc(340px * var(--ui-scale));
 }
 .background-picker-wrap::after {
   content: "";
@@ -1137,7 +1139,7 @@ button svg {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 44px;
+  height: calc(44px * var(--ui-scale));
   pointer-events: none;
   background: linear-gradient(
     to bottom,
@@ -1149,28 +1151,28 @@ button svg {
 .background-picker {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 15px 9px;
+  gap: calc(15px * var(--ui-scale)) calc(9px * var(--ui-scale));
   max-height: inherit;
   overflow: auto;
-  padding: 2px 2px 12px;
+  padding: calc(2px * var(--ui-scale)) calc(2px * var(--ui-scale)) calc(12px * var(--ui-scale));
   scrollbar-width: thin;
   scrollbar-color: #252a201f transparent;
 }
 .background-picker-summary {
   width: 100%;
-  min-height: 58px;
-  padding: 8px 12px 8px 8px;
+  min-height: calc(58px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(8px * var(--ui-scale));
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: calc(12px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: calc(14px * var(--ui-scale));
   background: var(--surface-subtle);
   color: var(--ink);
   text-align: left;
 }
 .background-picker-summary .background-swatch {
-  width: 72px;
+  width: calc(72px * var(--ui-scale));
   flex: none;
   margin-bottom: 0;
   aspect-ratio: 1.25;
@@ -1180,16 +1182,16 @@ button svg {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: calc(2px * var(--ui-scale));
 }
 .background-picker-summary-copy strong {
-  font-size: 14px;
+  font-size: calc(14px * var(--ui-scale));
   font-weight: 560;
-  letter-spacing: -0.2px;
+  letter-spacing: calc(-0.2px * var(--ui-scale));
 }
 .background-picker-summary-copy small {
   color: var(--muted);
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
 }
 .background-picker-summary > svg:last-child {
   flex: none;
@@ -1199,7 +1201,7 @@ button svg {
 .background-choice {
   padding: 0;
   text-align: left;
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   color: var(--muted);
   opacity: 0.72;
 }
@@ -1215,40 +1217,40 @@ button svg {
   justify-content: center;
   background-size: cover;
   background-position: center;
-  border-radius: 9px;
-  margin-bottom: 7px;
+  border-radius: calc(9px * var(--ui-scale));
+  margin-bottom: calc(7px * var(--ui-scale));
   border: 1px solid var(--line);
 }
 .background-choice.selected .background-swatch {
   outline: 2px solid var(--ink);
-  outline-offset: 2px;
+  outline-offset: calc(2px * var(--ui-scale));
 }
 .background-swatch svg {
   filter: drop-shadow(0 1px 2px #0005);
 }
 .fine-tune-entry {
   width: 100%;
-  min-height: 62px;
-  margin-top: 17px;
-  padding: 10px 15px 10px 17px;
+  min-height: calc(62px * var(--ui-scale));
+  margin-top: calc(17px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(15px * var(--ui-scale)) calc(10px * var(--ui-scale)) calc(17px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: calc(16px * var(--ui-scale));
   background: var(--surface-subtle);
   color: var(--ink);
   text-align: left;
 }
 .fine-tune-entry span {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   font-weight: 540;
 }
 .fine-tune-entry small {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: calc(4px * var(--ui-scale));
   color: var(--muted);
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   font-weight: 400;
   letter-spacing: 0.03em;
 }
@@ -1260,20 +1262,20 @@ button svg {
   animation: arrive 0.25s var(--ease);
 }
 .fine-tune-heading {
-  min-height: 62px;
+  min-height: calc(62px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: calc(12px * var(--ui-scale));
   border-bottom: 1px solid var(--line);
 }
 .fine-tune-back {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: calc(10px * var(--ui-scale));
   text-align: left;
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   font-weight: 550;
 }
 .fine-tune-back span {
@@ -1281,54 +1283,54 @@ button svg {
 }
 .fine-tune-back small {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: calc(3px * var(--ui-scale));
   color: var(--muted);
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   font-weight: 400;
 }
 .fine-tune-reset {
-  min-height: 38px;
+  min-height: calc(38px * var(--ui-scale));
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: calc(6px * var(--ui-scale));
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
 }
 .fine-tune-group {
-  padding: 18px 0;
+  padding: calc(18px * var(--ui-scale)) 0;
   border-bottom: 1px solid var(--line);
 }
 .fine-tune-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 13px;
+  margin-bottom: calc(13px * var(--ui-scale));
 }
 .fine-tune-label-row .field-label {
   margin: 0;
 }
 .fine-tune-label-row button {
-  min-height: 34px;
+  min-height: calc(34px * var(--ui-scale));
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: calc(6px * var(--ui-scale));
   color: var(--muted);
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
 }
 .fine-palette {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: calc(10px * var(--ui-scale));
 }
 .fine-palette-item {
-  width: 36px;
-  height: 36px;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   position: relative;
 }
 .fine-palette-item label,
 .fine-palette-add {
-  width: 36px;
-  height: 36px;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
   display: grid;
   place-items: center;
   border: 1px solid #0002;
@@ -1349,14 +1351,14 @@ button svg {
 }
 .fine-palette-item label:focus-within {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 3px;
+  outline-offset: calc(3px * var(--ui-scale));
 }
 .fine-palette-item > button {
-  width: 17px;
-  height: 17px;
+  width: calc(17px * var(--ui-scale));
+  height: calc(17px * var(--ui-scale));
   position: absolute;
-  right: -4px;
-  bottom: -4px;
+  right: calc(-4px * var(--ui-scale));
+  bottom: calc(-4px * var(--ui-scale));
   display: grid;
   place-items: center;
   border: 1px solid var(--line);
@@ -1371,19 +1373,19 @@ button svg {
 }
 .fine-tune-sliders {
   display: grid;
-  gap: 18px;
+  gap: calc(18px * var(--ui-scale));
 }
 .fine-tune-range {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px 12px;
+  gap: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
   color: #5e635a;
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
 }
 .fine-tune-range output {
   color: var(--muted);
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   font-variant-numeric: tabular-nums;
 }
 .fine-tune-range input {
@@ -1396,25 +1398,25 @@ button svg {
   border-bottom: 1px solid var(--line);
 }
 .fine-tune-advanced > summary {
-  min-height: 55px;
+  min-height: calc(55px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
   list-style: none;
   cursor: pointer;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
 }
 .fine-tune-advanced > summary::-webkit-details-marker {
   display: none;
 }
 .fine-tune-advanced > summary small {
   color: var(--muted);
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
 }
 .fine-tune-summary-end {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: calc(8px * var(--ui-scale));
 }
 .fine-tune-summary-end svg {
   color: #7e827a;
@@ -1425,8 +1427,8 @@ button svg {
 }
 .fine-tune-advanced-body {
   display: grid;
-  gap: 20px;
-  padding: 3px 0 22px;
+  gap: calc(20px * var(--ui-scale));
+  padding: calc(3px * var(--ui-scale)) 0 calc(22px * var(--ui-scale));
 }
 .fine-interpolation .field-label {
   margin-top: 0;
@@ -1434,17 +1436,17 @@ button svg {
 .fine-interpolation > div {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
+  gap: calc(4px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: calc(12px * var(--ui-scale));
   background: var(--surface-subtle);
 }
 .fine-interpolation button {
-  min-height: 36px;
+  min-height: calc(36px * var(--ui-scale));
   border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 10px;
+  border-radius: calc(8px * var(--ui-scale));
+  font-size: calc(10px * var(--ui-scale));
 }
 .fine-interpolation button[aria-pressed="true"] {
   border-color: var(--ink);
@@ -1452,32 +1454,32 @@ button svg {
   box-shadow: inset 0 0 0 1px var(--ink);
 }
 .help-text {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   line-height: 1.65;
   color: var(--muted);
-  margin: 13px 0;
+  margin: calc(13px * var(--ui-scale)) 0;
 }
 .editor-footer {
-  padding: 16px 24px 20px;
+  padding: calc(16px * var(--ui-scale)) calc(24px * var(--ui-scale)) calc(20px * var(--ui-scale));
   border-top: 1px solid var(--line);
   background: var(--paper);
   display: grid;
-  gap: 9px;
+  gap: calc(9px * var(--ui-scale));
 }
 .editor-footer > span {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   display: block;
   text-align: center;
   color: var(--muted);
-  margin-bottom: 13px;
+  margin-bottom: calc(13px * var(--ui-scale));
 }
 .primary-button {
   background: var(--ink);
   color: var(--klocky-white);
-  min-height: 50px;
-  border-radius: 999px;
-  padding: 0 20px;
-  font-size: 13px;
+  min-height: calc(50px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
+  padding: 0 calc(20px * var(--ui-scale));
+  font-size: calc(13px * var(--ui-scale));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1489,11 +1491,11 @@ button svg {
 }
 .secondary-button {
   color: var(--ink);
-  min-height: 46px;
+  min-height: calc(46px * var(--ui-scale));
   border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
-  border-radius: 999px;
-  padding: 0 20px;
-  font-size: 13px;
+  border-radius: calc(999px * var(--ui-scale));
+  padding: 0 calc(20px * var(--ui-scale));
+  font-size: calc(13px * var(--ui-scale));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1517,23 +1519,23 @@ button svg {
   box-shadow: none;
 }
 .fill-control {
-  margin: 18px 0;
+  margin: calc(18px * var(--ui-scale)) 0;
 }
 .fill-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
+  gap: calc(4px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale));
   background: var(--surface-subtle);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: calc(12px * var(--ui-scale));
 }
 .fill-options button {
-  min-height: 40px;
-  padding: 6px 4px;
+  min-height: calc(40px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(4px * var(--ui-scale));
   border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 11px;
+  border-radius: calc(8px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
   background: transparent;
 }
 .fill-options button[aria-pressed="true"] {
@@ -1549,15 +1551,15 @@ button svg {
 .layout-picker {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: calc(8px * var(--ui-scale));
 }
 .layout-picker button {
   background: var(--surface-subtle);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  min-height: 76px;
-  font-size: 9px;
-  padding: 10px 5px;
+  border-radius: calc(10px * var(--ui-scale));
+  min-height: calc(76px * var(--ui-scale));
+  font-size: calc(9px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(5px * var(--ui-scale));
 }
 .layout-picker button.selected {
   border-color: var(--ink);
@@ -1566,17 +1568,17 @@ button svg {
 }
 .editor-subsection + .editor-subsection {
   border-top: 1px solid var(--line);
-  margin-top: 24px;
-  padding-top: 22px;
+  margin-top: calc(24px * var(--ui-scale));
+  padding-top: calc(22px * var(--ui-scale));
 }
 /* Scale a full-size clock so its layout, small type and rules stay proportional. */
 .layout-preview {
   display: block;
   position: relative;
   width: 100%;
-  max-width: 112px;
+  max-width: calc(112px * var(--ui-scale));
   aspect-ratio: 8 / 5;
-  margin: 0 auto 6px;
+  margin: 0 auto calc(6px * var(--ui-scale));
   overflow: hidden;
   pointer-events: none;
 }
@@ -1584,8 +1586,8 @@ button svg {
   position: absolute;
   top: 0;
   left: 0;
-  width: 800px;
-  height: 500px;
+  width: calc(800px * var(--ui-scale));
+  height: calc(500px * var(--ui-scale));
   transform-origin: top left;
 }
 .layout-preview *,
@@ -1599,47 +1601,47 @@ button svg {
   position: relative;
   align-items: center;
   justify-content: space-between;
-  min-height: 48px;
-  gap: 18px;
-  font-size: 12px;
+  min-height: calc(48px * var(--ui-scale));
+  gap: calc(18px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
   cursor: pointer;
 }
 .toggle-row > span:first-child {
   flex: 1;
 }
 .toggle-row small {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   line-height: 1.6;
   display: block;
   opacity: 0.5;
-  margin: 5px 0;
+  margin: calc(5px * var(--ui-scale)) 0;
 }
 .toggle-row input {
   position: absolute;
   right: 0;
   opacity: 0;
-  width: 44px;
-  height: 44px;
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
   cursor: pointer;
   z-index: 1;
 }
 .switch {
-  height: 21px;
-  width: 35px;
+  height: calc(21px * var(--ui-scale));
+  width: calc(35px * var(--ui-scale));
   background: #d6d8d1;
-  border-radius: 30px;
+  border-radius: calc(30px * var(--ui-scale));
   position: relative;
   flex: none;
 }
 .switch:after {
   content: "";
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: calc(15px * var(--ui-scale));
+  height: calc(15px * var(--ui-scale));
   border-radius: 50%;
   background: #fff;
-  top: 3px;
-  left: 3px;
+  top: calc(3px * var(--ui-scale));
+  left: calc(3px * var(--ui-scale));
   transition: transform 0.2s;
 }
 .toggle-row input:checked + .switch {
@@ -1651,15 +1653,15 @@ button svg {
 }
 .toggle-row input:focus-visible + .switch {
   outline: 2px solid var(--klocky-blue);
-  outline-offset: 5px;
+  outline-offset: calc(5px * var(--ui-scale));
 }
 .select-row {
-  min-height: 50px;
+  min-height: calc(50px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  font-size: 12px;
+  gap: calc(10px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
 }
 .select-row select,
 .select-row input {
@@ -1667,36 +1669,36 @@ button svg {
   background: transparent;
   color: inherit;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 9px;
-  font-size: 11px;
-  min-height: 40px;
+  border-radius: calc(999px * var(--ui-scale));
+  padding: calc(9px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
+  min-height: calc(40px * var(--ui-scale));
 }
 .select-row select option {
   background: var(--paper);
   color: var(--ink);
 }
 .field-label {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   color: var(--muted);
   opacity: 1;
   display: block;
-  margin: 6px 0 12px;
+  margin: calc(6px * var(--ui-scale)) 0 calc(12px * var(--ui-scale));
 }
 .font-control {
   position: relative;
-  padding-bottom: 20px;
+  padding-bottom: calc(20px * var(--ui-scale));
 }
 .typeface-trigger {
   width: 100%;
-  min-height: 62px;
+  min-height: calc(62px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 9px 15px 9px 17px;
+  gap: calc(14px * var(--ui-scale));
+  padding: calc(9px * var(--ui-scale)) calc(15px * var(--ui-scale)) calc(9px * var(--ui-scale)) calc(17px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: calc(18px * var(--ui-scale));
   background: var(--surface-subtle);
   text-align: left;
 }
@@ -1706,15 +1708,15 @@ button svg {
   align-items: baseline;
   justify-content: space-between;
   flex: 1;
-  gap: 12px;
+  gap: calc(12px * var(--ui-scale));
 }
 .typeface-trigger strong {
-  font-size: 13px;
+  font-size: calc(13px * var(--ui-scale));
   font-weight: 500;
 }
 .typeface-trigger small {
   color: var(--muted);
-  font-size: 17px;
+  font-size: calc(17px * var(--ui-scale));
   font-weight: 400;
   white-space: nowrap;
 }
@@ -1727,26 +1729,26 @@ button svg {
 .typeface-menu {
   position: absolute;
   z-index: 4;
-  top: calc(100% - 14px);
+  top: calc(100% - 14px * var(--ui-scale));
   left: 0;
   right: 0;
-  max-height: 280px;
+  max-height: calc(280px * var(--ui-scale));
   overflow-y: auto;
-  padding: 6px;
+  padding: calc(6px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: calc(16px * var(--ui-scale));
   background: var(--paper);
   box-shadow: 0 18px 45px #20251b1a;
 }
 .typeface-menu button {
   width: 100%;
-  min-height: 56px;
+  min-height: calc(56px * var(--ui-scale));
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto 20px;
   align-items: center;
-  gap: 12px;
-  padding: 8px 10px 8px 12px;
-  border-radius: 11px;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-radius: calc(11px * var(--ui-scale));
   text-align: left;
 }
 .typeface-menu button:hover,
@@ -1760,11 +1762,11 @@ button svg {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   white-space: nowrap;
 }
 .typeface-menu button > strong {
-  font-size: 18px;
+  font-size: calc(18px * var(--ui-scale));
   font-weight: 400;
   white-space: nowrap;
 }
@@ -1772,24 +1774,24 @@ button svg {
   justify-self: end;
 }
 .font-weight-control {
-  padding-bottom: 8px;
+  padding-bottom: calc(8px * var(--ui-scale));
 }
 .font-weight-options {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  gap: calc(6px * var(--ui-scale));
 }
 .font-weight-options button {
   min-width: 0;
-  min-height: 76px;
+  min-height: calc(76px * var(--ui-scale));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 8px 3px;
+  gap: calc(9px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(3px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 13px;
+  border-radius: calc(13px * var(--ui-scale));
   background: var(--surface-subtle);
   transition:
     background 0.2s,
@@ -1806,7 +1808,7 @@ button svg {
   box-shadow: inset 0 0 0 1px var(--ink);
 }
 .font-weight-options strong {
-  font-size: 21px;
+  font-size: calc(21px * var(--ui-scale));
   line-height: 1;
 }
 .font-weight-options span {
@@ -1814,22 +1816,22 @@ button svg {
   overflow: hidden;
   color: #6d7168;
   font-family: var(--font-ui);
-  font-size: 8px;
+  font-size: calc(8px * var(--ui-scale));
   font-weight: 500;
   letter-spacing: -0.01em;
   text-overflow: ellipsis;
 }
 .color-options {
   display: flex;
-  gap: 7px;
+  gap: calc(7px * var(--ui-scale));
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 15px;
+  margin-bottom: calc(15px * var(--ui-scale));
 }
 .color-options > button,
 .custom-color {
-  width: 38px;
-  height: 38px;
+  width: calc(38px * var(--ui-scale));
+  height: calc(38px * var(--ui-scale));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1838,7 +1840,7 @@ button svg {
 }
 .color-options > button[aria-pressed="true"] {
   outline: 2px solid var(--ink);
-  outline-offset: 3px;
+  outline-offset: calc(3px * var(--ui-scale));
 }
 .custom-color {
   overflow: hidden;
@@ -1854,9 +1856,9 @@ button svg {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  font-size: 11px;
-  gap: 12px;
-  margin-top: 18px;
+  font-size: calc(11px * var(--ui-scale));
+  gap: calc(12px * var(--ui-scale));
+  margin-top: calc(18px * var(--ui-scale));
 }
 .range-row output {
   opacity: 0.5;
@@ -1864,7 +1866,7 @@ button svg {
 }
 .range-row input {
   width: 100%;
-  height: 20px;
+  height: calc(20px * var(--ui-scale));
   cursor: pointer;
 }
 .klocky-range {
@@ -1874,8 +1876,8 @@ button svg {
   background: transparent;
 }
 .klocky-range::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 999px;
+  height: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: linear-gradient(
     to right,
     var(--klocky-blue) 0,
@@ -1885,9 +1887,9 @@ button svg {
   );
 }
 .klocky-range::-webkit-slider-thumb {
-  width: 19px;
-  height: 19px;
-  margin-top: -7.5px;
+  width: calc(19px * var(--ui-scale));
+  height: calc(19px * var(--ui-scale));
+  margin-top: calc(-7.5px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1895,8 +1897,8 @@ button svg {
   -webkit-appearance: none;
 }
 .klocky-range::-moz-range-track {
-  height: 4px;
-  border-radius: 999px;
+  height: calc(4px * var(--ui-scale));
+  border-radius: calc(999px * var(--ui-scale));
   background: linear-gradient(
     to right,
     var(--klocky-blue) 0,
@@ -1906,8 +1908,8 @@ button svg {
   );
 }
 .klocky-range::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: calc(15px * var(--ui-scale));
+  height: calc(15px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1915,69 +1917,69 @@ button svg {
 }
 .weather-controls .search-field {
   display: flex;
-  gap: 8px;
+  gap: calc(8px * var(--ui-scale));
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding-left: 10px;
+  border-radius: calc(999px * var(--ui-scale));
+  padding-left: calc(10px * var(--ui-scale));
 }
 .search-field input {
   width: 0;
   flex: 1;
-  padding: 12px 0;
+  padding: calc(12px * var(--ui-scale)) 0;
   border: 0;
   outline: 0;
   background: none;
   color: inherit;
-  font-size: 12px;
-  min-height: 44px;
+  font-size: calc(12px * var(--ui-scale));
+  min-height: calc(44px * var(--ui-scale));
 }
 .search-field button {
-  font-size: 11px;
-  padding: 10px;
+  font-size: calc(11px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale));
 }
 .text-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  font-size: 11px;
+  gap: calc(8px * var(--ui-scale));
+  min-height: calc(44px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
 }
 .city-result {
   display: block;
-  min-height: 44px;
-  font-size: 11px;
+  min-height: calc(44px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
   text-align: left;
-  padding: 9px 0;
+  padding: calc(9px * var(--ui-scale)) 0;
   border-bottom: 1px solid var(--line);
   width: 100%;
 }
 .location-status {
-  font-size: 11px;
+  font-size: calc(11px * var(--ui-scale));
   display: flex;
-  gap: 10px;
+  gap: calc(10px * var(--ui-scale));
   align-items: center;
   justify-content: space-between;
 }
 .location-status button {
-  min-height: 44px;
-  font-size: 10px;
+  min-height: calc(44px * var(--ui-scale));
+  font-size: calc(10px * var(--ui-scale));
   text-decoration: underline;
 }
 .attribution {
-  font-size: 9px;
+  font-size: calc(9px * var(--ui-scale));
   text-decoration: underline;
   opacity: 0.6;
 }
 .setup-button {
-  min-height: 44px;
+  min-height: calc(44px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0 17px;
+  border-radius: calc(999px * var(--ui-scale));
+  padding: 0 calc(17px * var(--ui-scale));
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 12px;
+  gap: calc(9px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
   background: var(--surface-subtle);
 }
 .setup-button:hover {
@@ -1986,22 +1988,22 @@ button svg {
 .weather-summary {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 46px;
-  font-size: 12px;
+  gap: calc(10px * var(--ui-scale));
+  min-height: calc(46px * var(--ui-scale));
+  font-size: calc(12px * var(--ui-scale));
 }
 .weather-summary > span {
   flex: 1;
 }
 .weather-summary button {
-  min-height: 36px;
-  padding: 0 13px;
+  min-height: calc(36px * var(--ui-scale));
+  padding: 0 calc(13px * var(--ui-scale));
   border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 11px;
+  border-radius: calc(999px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
 }
 .weather-setup-panel {
-  padding-top: 1px;
+  padding-top: calc(1px * var(--ui-scale));
 }
 .modal-backdrop {
   position: fixed;
@@ -2012,29 +2014,29 @@ button svg {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: calc(20px * var(--ui-scale));
 }
 .modal {
   background: var(--paper);
   color: var(--ink);
-  width: 460px;
+  width: calc(460px * var(--ui-scale));
   max-width: 100%;
   max-height: 90dvh;
   border: 1px solid #ffffff80;
-  border-radius: 15px;
+  border-radius: calc(15px * var(--ui-scale));
   box-shadow: 0 30px 100px #1820102c;
   display: flex;
   flex-direction: column;
 }
 .modal .panel-heading {
-  padding-bottom: 15px;
+  padding-bottom: calc(15px * var(--ui-scale));
 }
 .modal .panel-heading h2 {
-  font-size: 25px;
+  font-size: calc(25px * var(--ui-scale));
   margin: 0;
 }
 .settings-body {
-  padding: 0 26px 25px;
+  padding: 0 calc(26px * var(--ui-scale)) calc(25px * var(--ui-scale));
   overflow: auto;
   scrollbar-width: thin;
 }
@@ -2057,48 +2059,48 @@ button svg {
 }
 .settings-body details {
   border-top: 1px solid var(--line);
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
 }
 .settings-body details summary {
-  padding: 19px 0;
+  padding: calc(19px * var(--ui-scale)) 0;
   cursor: pointer;
 }
 .settings-body .search-field {
   border-color: var(--line);
 }
 .settings-foot {
-  font-size: 10px;
+  font-size: calc(10px * var(--ui-scale));
   line-height: 1.7;
   color: var(--muted);
   text-align: center;
-  margin: 25px 0 0;
+  margin: calc(25px * var(--ui-scale)) 0 0;
 }
 .reset-row {
   display: flex;
-  gap: 10px;
+  gap: calc(10px * var(--ui-scale));
   align-items: center;
   flex-wrap: wrap;
-  font-size: 11px;
-  margin-top: 14px;
+  font-size: calc(11px * var(--ui-scale));
+  margin-top: calc(14px * var(--ui-scale));
 }
 .reset-row button {
-  min-height: 44px;
-  font-size: 11px;
+  min-height: calc(44px * var(--ui-scale));
+  font-size: calc(11px * var(--ui-scale));
   text-decoration: underline;
 }
 .toast {
   position: fixed;
-  bottom: max(24px, env(safe-area-inset-bottom));
+  bottom: max(calc(24px * var(--ui-scale)), env(safe-area-inset-bottom));
   left: 50%;
   transform: translate(-50%, 20px);
-  max-width: min(480px, 90vw);
-  padding: 15px 22px;
+  max-width: min(calc(480px * var(--ui-scale)), 90vw);
+  padding: calc(15px * var(--ui-scale)) calc(22px * var(--ui-scale));
   background: #f2f3e9;
   color: #30382c;
   border: 1px solid #ffffff80;
-  border-radius: 8px;
+  border-radius: calc(8px * var(--ui-scale));
   box-shadow: 0 8px 40px #0002;
-  font-size: 12px;
+  font-size: calc(12px * var(--ui-scale));
   line-height: 1.5;
   z-index: 100;
   opacity: 0;
@@ -2113,14 +2115,14 @@ button svg {
 }
 .share-fallback {
   position: fixed;
-  inset: auto 20px 20px;
+  inset: auto calc(20px * var(--ui-scale)) calc(20px * var(--ui-scale));
   z-index: 100;
-  padding: 20px;
-  border-radius: 12px;
+  padding: calc(20px * var(--ui-scale));
+  border-radius: calc(12px * var(--ui-scale));
 }
 .share-fallback label {
   display: flex;
-  gap: 20px;
+  gap: calc(20px * var(--ui-scale));
   align-items: center;
 }
 .share-fallback input {
@@ -2131,7 +2133,7 @@ button svg {
   height: 100dvh;
   display: grid;
   place-items: center;
-  font-size: 15px;
+  font-size: calc(15px * var(--ui-scale));
   color: var(--muted);
 }
 .share-fallback > .icon-button {
@@ -2192,15 +2194,15 @@ button svg {
 @media (min-width: 1900px) {
   .gallery-main,
   .app-header {
-    max-width: 1840px;
+    max-width: calc(1840px * var(--ui-scale));
   }
   .collection-intro {
-    padding-top: 70px;
-    padding-bottom: 60px;
+    padding-top: calc(70px * var(--ui-scale));
+    padding-bottom: calc(60px * var(--ui-scale));
   }
   .clock-gallery {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 35px;
+    gap: calc(35px * var(--ui-scale));
   }
 }
 @media (max-width: 1100px) {
@@ -2211,10 +2213,10 @@ button svg {
     padding-left: 0;
   }
   .clock-gallery {
-    gap: 20px;
+    gap: calc(20px * var(--ui-scale));
   }
   .collection-intro h1 {
-    font-size: 42px;
+    font-size: calc(42px * var(--ui-scale));
   }
   .display-hint,
   .display-shortcuts {
@@ -2226,15 +2228,15 @@ button svg {
 }
 @media (max-width: 760px) {
   .app-header {
-    height: 82px;
+    height: calc(82px * var(--ui-scale));
     padding: 0 6%;
   }
   .app-header nav {
-    gap: 17px;
+    gap: calc(17px * var(--ui-scale));
     margin-right: 0;
   }
   .app-header nav button {
-    font-size: 11px;
+    font-size: calc(11px * var(--ui-scale));
   }
   .header-end {
     gap: 0;
@@ -2243,22 +2245,22 @@ button svg {
     padding: 0 6%;
   }
   .collection-intro {
-    padding: 38px 0 31px;
+    padding: calc(38px * var(--ui-scale)) 0 calc(31px * var(--ui-scale));
   }
   .collection-intro h1 {
-    font-size: 38px;
-    letter-spacing: -1.8px;
-    margin-top: 16px;
+    font-size: calc(38px * var(--ui-scale));
+    letter-spacing: calc(-1.8px * var(--ui-scale));
+    margin-top: calc(16px * var(--ui-scale));
   }
   .collection-intro p {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-scale));
   }
   .collection-note {
     display: none;
   }
   .clock-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 16px;
+    gap: calc(24px * var(--ui-scale)) calc(16px * var(--ui-scale));
   }
   .collection-count {
     display: none;
@@ -2266,17 +2268,17 @@ button svg {
   .filters {
     overflow: auto;
     scrollbar-width: none;
-    gap: 1px;
+    gap: calc(1px * var(--ui-scale));
   }
   .filters button {
-    padding: 0 12px;
-    min-height: 44px;
+    padding: 0 calc(12px * var(--ui-scale));
+    min-height: calc(44px * var(--ui-scale));
   }
   .collection-toolbar {
-    padding: 7px 0 15px;
+    padding: calc(7px * var(--ui-scale)) 0 calc(15px * var(--ui-scale));
   }
   .gallery-footer {
-    font-size: 9px;
+    font-size: calc(9px * var(--ui-scale));
   }
   .display-hint,
   .display-shortcuts {
@@ -2284,32 +2286,32 @@ button svg {
   }
   .display-bottom {
     justify-content: center;
-    bottom: max(22px, env(safe-area-inset-bottom));
+    bottom: max(calc(22px * var(--ui-scale)), env(safe-area-inset-bottom));
   }
   .display-top {
-    padding: 18px;
-    padding-top: max(18px, env(safe-area-inset-top));
+    padding: calc(18px * var(--ui-scale));
+    padding-top: max(calc(18px * var(--ui-scale)), env(safe-area-inset-top));
   }
   .display-top-start {
-    gap: 10px;
+    gap: calc(10px * var(--ui-scale));
   }
   .display-name small {
     display: none;
   }
   .quiet-button {
-    padding: 0 12px;
+    padding: 0 calc(12px * var(--ui-scale));
   }
   .modal {
     max-height: 92dvh;
   }
   .editor .panel-heading {
-    padding: 18px 20px;
+    padding: calc(18px * var(--ui-scale)) calc(20px * var(--ui-scale));
   }
   .editor .panel-heading h2 {
-    font-size: 23px;
+    font-size: calc(23px * var(--ui-scale));
   }
   .editor-footer {
-    padding: 12px 20px;
+    padding: calc(12px * var(--ui-scale)) calc(20px * var(--ui-scale));
   }
   .editor-footer > span {
     display: none;
@@ -2320,7 +2322,7 @@ button svg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .layout-picker button {
-    padding: 6px;
+    padding: calc(6px * var(--ui-scale));
   }
   .layout-preview {
     max-width: none;
@@ -2331,48 +2333,48 @@ button svg {
   }
   .clock-gallery {
     grid-template-columns: 1fr;
-    row-gap: 24px;
+    row-gap: calc(24px * var(--ui-scale));
   }
   .app-header {
-    gap: 12px;
+    gap: calc(12px * var(--ui-scale));
   }
   .app-header nav {
-    gap: 14px;
+    gap: calc(14px * var(--ui-scale));
   }
   .header-end .icon-button {
-    width: 32px;
+    width: calc(32px * var(--ui-scale));
   }
   .collection-intro h1 {
-    font-size: 39px;
+    font-size: calc(39px * var(--ui-scale));
   }
   .eyebrow {
-    font-size: 8px;
+    font-size: calc(8px * var(--ui-scale));
   }
   .collection-intro p {
-    font-size: 12px;
+    font-size: calc(12px * var(--ui-scale));
   }
   .collection-toolbar {
-    margin-top: 5px;
+    margin-top: calc(5px * var(--ui-scale));
   }
   .filters button {
-    padding: 0 11px;
-    font-size: 12px;
+    padding: 0 calc(11px * var(--ui-scale));
+    font-size: calc(12px * var(--ui-scale));
   }
   .card-caption h2 {
-    font-size: 13px;
+    font-size: calc(13px * var(--ui-scale));
   }
   .card-caption > div > span {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-scale));
   }
   .card-caption {
-    padding-top: 10px;
+    padding-top: calc(10px * var(--ui-scale));
   }
   .card-enter {
     opacity: 0.6;
   }
   .gallery-footer {
-    margin-top: 35px;
-    padding-bottom: max(30px, env(safe-area-inset-bottom));
+    margin-top: calc(35px * var(--ui-scale));
+    padding-bottom: max(calc(30px * var(--ui-scale)), env(safe-area-inset-bottom));
   }
   .player.is-editing {
     --editor-preview-height: 39%;
@@ -2390,7 +2392,7 @@ button svg {
   .is-editing .display-top {
     right: 0;
     width: 100%;
-    padding: 12px;
+    padding: calc(12px * var(--ui-scale));
     z-index: 3;
   }
   .is-editing .display-name,
@@ -2398,8 +2400,8 @@ button svg {
     display: none;
   }
   .is-editing .quiet-button {
-    font-size: 10px;
-    min-height: 36px;
+    font-size: calc(10px * var(--ui-scale));
+    min-height: calc(36px * var(--ui-scale));
   }
   .is-editing .editor {
     z-index: 2;
@@ -2416,19 +2418,19 @@ button svg {
     padding-bottom: env(safe-area-inset-bottom);
   }
   .editor-scroll {
-    padding: 10px 24px 0;
+    padding: calc(10px * var(--ui-scale)) calc(24px * var(--ui-scale)) 0;
   }
   .background-picker-wrap {
-    max-height: 210px;
+    max-height: calc(210px * var(--ui-scale));
   }
   .background-picker {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .editor .panel-heading {
-    padding: 18px 22px;
+    padding: calc(18px * var(--ui-scale)) calc(22px * var(--ui-scale));
   }
   .editor .panel-heading h2 {
-    font-size: 24px;
+    font-size: calc(24px * var(--ui-scale));
   }
   .editor .panel-heading .eyebrow {
     display: none;
@@ -2437,35 +2439,35 @@ button svg {
     margin: 0;
   }
   .section-toggle {
-    height: 48px;
+    height: calc(48px * var(--ui-scale));
   }
   .editor-footer {
-    padding: 10px 22px 15px;
+    padding: calc(10px * var(--ui-scale)) calc(22px * var(--ui-scale)) calc(15px * var(--ui-scale));
   }
   .primary-button {
-    min-height: 44px;
+    min-height: calc(44px * var(--ui-scale));
   }
   .display-top-actions .icon-button {
-    width: 39px;
-    height: 39px;
+    width: calc(39px * var(--ui-scale));
+    height: calc(39px * var(--ui-scale));
   }
   .edit-button {
-    padding: 0 9px;
+    padding: 0 calc(9px * var(--ui-scale));
   }
   .display-name {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-scale));
   }
   .display-top-start .quiet-button {
-    font-size: 10px;
+    font-size: calc(10px * var(--ui-scale));
   }
   .display-top {
-    gap: 10px;
+    gap: calc(10px * var(--ui-scale));
   }
   .modal-backdrop {
-    padding: 12px;
+    padding: calc(12px * var(--ui-scale));
   }
   .settings-body {
-    padding: 0 22px 20px;
+    padding: 0 calc(22px * var(--ui-scale)) calc(20px * var(--ui-scale));
   }
 }
 @media (max-height: 520px) and (orientation: landscape) {
@@ -2477,45 +2479,45 @@ button svg {
     width: 39%;
     left: auto;
     right: 1%;
-    top: 10px;
-    bottom: 10px;
-    border-radius: 12px;
+    top: calc(10px * var(--ui-scale));
+    bottom: calc(10px * var(--ui-scale));
+    border-radius: calc(12px * var(--ui-scale));
     padding-bottom: 0;
   }
   .is-editing .display-top {
     right: 40%;
     width: 60%;
-    padding: 12px;
+    padding: calc(12px * var(--ui-scale));
   }
   .is-editing .display-bottom {
     display: none;
   }
   .editor .panel-heading {
-    padding: 10px 16px;
+    padding: calc(10px * var(--ui-scale)) calc(16px * var(--ui-scale));
   }
   .editor .panel-heading h2 {
-    font-size: 19px;
+    font-size: calc(19px * var(--ui-scale));
   }
   .editor .panel-heading .eyebrow {
     display: none;
   }
   .editor-scroll {
-    padding: 0 16px;
+    padding: 0 calc(16px * var(--ui-scale));
   }
   .editor-footer {
-    padding: 8px 16px;
+    padding: calc(8px * var(--ui-scale)) calc(16px * var(--ui-scale));
   }
   .section-toggle {
-    height: 44px;
+    height: calc(44px * var(--ui-scale));
   }
   .background-picker {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .display-top {
-    padding: 12px 20px;
+    padding: calc(12px * var(--ui-scale)) calc(20px * var(--ui-scale));
   }
   .display-bottom {
-    bottom: 13px;
+    bottom: calc(13px * var(--ui-scale));
   }
   .display-bottom-actions {
     transform: scale(0.9);
@@ -2525,10 +2527,10 @@ button svg {
     max-height: 94dvh;
   }
   .collection-intro {
-    padding: 25px 0;
+    padding: calc(25px * var(--ui-scale)) 0;
   }
   .app-header {
-    height: 65px;
+    height: calc(65px * var(--ui-scale));
   }
   .clock-gallery {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2558,10 +2560,10 @@ html[data-reduced="true"] *::after {
   .palette-color > button,
   .color-options > button,
   .custom-color {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: calc(44px * var(--ui-scale));
+    min-height: calc(44px * var(--ui-scale));
   }
   .header-end .icon-button {
-    width: 44px;
+    width: calc(44px * var(--ui-scale));
   }
 }

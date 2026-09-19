@@ -41,6 +41,7 @@ import { motionProfiles } from "../shaders/motion";
 import { ClockStylePreview } from "./ClockStylePreview";
 import { BackgroundFineTune } from "./BackgroundFineTune";
 import { pickDifferent, randomTypography } from "./randomize";
+import { uiPx } from "../utils/uiScale";
 
 type EditorSection = "Background" | "Layout" | "Font";
 
@@ -246,13 +247,13 @@ export function Editor({
                   }}
                 >
                   <span className="section-title">
-                    <SectionIcon size={21} strokeWidth={1.65} />
+                    <SectionIcon size={uiPx(21)} strokeWidth={1.65} />
                     {name}
                   </span>
                   <span className="section-selection">
                     <span>{summary}</span>
                     <ChevronDown
-                      size={19}
+                      size={uiPx(19)}
                       className={isOpen ? "rotated" : ""}
                     />
                   </span>
@@ -264,7 +265,7 @@ export function Editor({
                   disabled={name === "Font" && clock.allowedFonts.length < 2}
                   onClick={() => randomize(name)}
                 >
-                  <Shuffle size={16} />
+                  <Shuffle size={uiPx(16)} />
                 </button>
               </div>
 
@@ -316,7 +317,7 @@ export function Editor({
                                     style={backgroundStyle(b.id)}
                                   >
                                     {preset.backgroundId === b.id && (
-                                      <Check size={16} />
+                                      <Check size={uiPx(16)} />
                                     )}
                                   </span>
                                   <span>{b.name}</span>
@@ -335,13 +336,13 @@ export function Editor({
                               className="background-swatch"
                               style={backgroundStyle(preset.backgroundId)}
                             >
-                              <Check size={16} />
+                              <Check size={uiPx(16)} />
                             </span>
                             <span className="background-picker-summary-copy">
                               <strong>{background.name}</strong>
                               <small>Change background</small>
                             </span>
-                            <ChevronDown size={17} />
+                            <ChevronDown size={uiPx(17)} />
                           </button>
                         )}
                         {!background.staticBackground && (
@@ -428,7 +429,7 @@ export function Editor({
                               <small>Selected background</small>
                               Fine-tune {background.name}
                             </span>
-                            <ArrowUpRight size={17} />
+                            <ArrowUpRight size={uiPx(17)} />
                           </button>
                         )}
                       </>
@@ -484,7 +485,7 @@ export function Editor({
                             >
                               {o.color === color && (
                                 <Check
-                                  size={17}
+                                  size={uiPx(17)}
                                   color={
                                     color === "#272923" ? "white" : "#272923"
                                   }
@@ -609,14 +610,14 @@ export function Editor({
                             className="setup-button"
                             onClick={() => setWeatherSetup(true)}
                           >
-                            <CloudSun size={17} /> Set up weather
+                            <CloudSun size={uiPx(17)} /> Set up weather
                           </button>
                         ) : (
                           <>
                             {preferences.weatherLocation && !weatherSetup && (
                               <>
                                 <div className="weather-summary">
-                                  <CloudSun size={18} />
+                                  <CloudSun size={uiPx(18)} />
                                   <span>
                                     {preferences.weatherLocation.name}
                                   </span>
@@ -673,7 +674,7 @@ export function Editor({
                             <small>12:48 Aa</small>
                           </span>
                           <ChevronDown
-                            size={17}
+                            size={uiPx(17)}
                             className={typefaceOpen ? "rotated" : ""}
                           />
                         </button>
@@ -703,7 +704,7 @@ export function Editor({
                               >
                                 <span>{fonts[font].name}</span>
                                 <strong>12:48 Aa</strong>
-                                {o.font === font && <Check size={15} />}
+                                {o.font === font && <Check size={uiPx(15)} />}
                               </button>
                             ))}
                           </div>
@@ -778,10 +779,10 @@ export function Editor({
 
       <div className="editor-footer">
         <button className="secondary-button" onClick={randomizeAll}>
-          Randomize all <Shuffle size={17} />
+          Randomize all <Shuffle size={uiPx(17)} />
         </button>
         <button className="primary-button" onClick={onClose}>
-          Set Clock &amp; Open <ArrowUpRight size={17} />
+          Set Clock &amp; Open <ArrowUpRight size={uiPx(17)} />
         </button>
       </div>
     </aside>

@@ -27,6 +27,7 @@ import { extractPalette } from "../utils/palette";
 import { download, exportBackground } from "../state/storage";
 import "./lab.css";
 import { motionProfiles } from "../shaders/motion";
+import { uiPx } from "../utils/uiScale";
 export default function Lab({
   preferences,
   reduced,
@@ -130,13 +131,13 @@ export default function Lab({
     <div className="lab">
       <header className="lab-header">
         <a href="/" className="lab-back">
-          <ArrowLeft size={16} />
+          <ArrowLeft size={uiPx(16)} />
           <BrandLogo />
           <b>Lab</b>
         </a>
         <span className="eyebrow">EXPERIMENTS IN ATMOSPHERE</span>
         <button className="lab-save" onClick={save}>
-          <Download size={15} /> Save as preset
+          <Download size={uiPx(15)} /> Save as preset
         </button>
       </header>
       <main className="lab-workspace">
@@ -177,7 +178,7 @@ export default function Lab({
               <h1>Make room for a new mood.</h1>
             </div>
             <button className="capture-button" onClick={poster}>
-              <Camera size={17} /> Capture poster frame
+              <Camera size={uiPx(17)} /> Capture poster frame
             </button>
           </div>
           <div className="lab-preview-options">
@@ -268,7 +269,7 @@ export default function Lab({
                   className="upload-button"
                   title="Extract palette from photograph"
                 >
-                  <ImagePlus size={16} />
+                  <ImagePlus size={uiPx(16)} />
                   <input
                     type="file"
                     accept="image/*"
@@ -287,7 +288,7 @@ export default function Lab({
                     setOptions((o) => ({ ...o, palette: [...curated] }));
                   }}
                 >
-                  <Shuffle size={15} />
+                  <Shuffle size={uiPx(15)} />
                 </IconButton>
                 <IconButton
                   label="Add color"
@@ -300,7 +301,7 @@ export default function Lab({
                     else notify("A palette can contain up to eight colors.");
                   }}
                 >
-                  <Plus size={16} />
+                  <Plus size={uiPx(16)} />
                 </IconButton>
               </div>
             </div>
@@ -329,14 +330,14 @@ export default function Lab({
                     disabled={i === 0}
                     onClick={() => move(i, -1)}
                   >
-                    <ArrowUp size={13} />
+                    <ArrowUp size={uiPx(13)} />
                   </button>
                   <button
                     aria-label={`Move color ${i + 1} down`}
                     disabled={i === options.palette.length - 1}
                     onClick={() => move(i, 1)}
                   >
-                    <ArrowDown size={13} />
+                    <ArrowDown size={uiPx(13)} />
                   </button>
                   <button
                     aria-label={`Delete color ${i + 1}`}
@@ -348,7 +349,7 @@ export default function Lab({
                       }))
                     }
                   >
-                    <Minus size={13} />
+                    <Minus size={uiPx(13)} />
                   </button>
                 </div>
               ))}
@@ -425,7 +426,7 @@ export default function Lab({
                 }
               }}
             >
-              {copied ? <Check size={16} /> : <Copy size={16} />}{" "}
+              {copied ? <Check size={uiPx(16)} /> : <Copy size={uiPx(16)} />}{" "}
               {copied ? "Copied" : "Copy JSON"}
             </button>
           </div>

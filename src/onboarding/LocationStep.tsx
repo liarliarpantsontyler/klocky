@@ -3,6 +3,7 @@ import { Check, LocateFixed, Search } from "lucide-react";
 import type { UserPreferences, WeatherLocation } from "../types";
 import { searchCities } from "../weather/useWeather";
 import { timeParts, useTime } from "../hooks/useTime";
+import { uiPx } from "../utils/uiScale";
 import {
   resolveCoordinates,
   timezoneList,
@@ -155,7 +156,7 @@ export function LocationStep({
   return (
     <div className="onboarding-location">
       <button className="onboarding-locate" onClick={locate} disabled={busy}>
-        <LocateFixed size={17} />
+        <LocateFixed size={uiPx(17)} />
         {busy ? "Finding your location…" : "Use My Location"}
       </button>
       <div className="onboarding-place">
@@ -169,7 +170,7 @@ export function LocationStep({
           </div>
           {preferences.weatherLocation && (
             <small>
-              <Check size={11} /> Looks good
+              <Check size={uiPx(11)} /> Looks good
             </small>
           )}
         </div>
@@ -190,7 +191,7 @@ export function LocationStep({
       {searching && (
         <div className="onboarding-search">
           <label>
-            <Search size={16} />
+            <Search size={uiPx(16)} />
             <input
               autoFocus
               type="search"

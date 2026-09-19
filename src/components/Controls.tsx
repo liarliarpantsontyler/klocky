@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
+import { uiPx } from "../utils/uiScale";
 export function IconButton({
   label,
   onClick,
@@ -114,7 +115,7 @@ export function Modal({
         <div className="panel-heading">
           <h2>{title}</h2>
           <IconButton label="Close settings" onClick={onClose}>
-            <X size={18} />
+            <X size={uiPx(18)} />
           </IconButton>
         </div>
         {children}

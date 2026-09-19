@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { ClockPreview } from "./ClockCarousel";
 import { welcomeClocks } from "./presets";
+import { uiPx } from "../utils/uiScale";
 
 export interface ClockListSelection {
   preset: KlockyPreset;
@@ -75,7 +76,7 @@ export const ChooseClockList = forwardRef<
                 className="onboarding-clock-cta"
                 onClick={() => chooseAt(index)}
               >
-                Start with this clock <ArrowRight size={15} />
+                Start with this clock <ArrowRight size={uiPx(15)} />
               </button>
             </div>
           </article>

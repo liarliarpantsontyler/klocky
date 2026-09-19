@@ -25,6 +25,12 @@ import { Clock } from "../clock/Clock";
 import { Background } from "../backgrounds/Background";
 import { Editor } from "../editor/Editor";
 import { Settings } from "../components/Settings";
+import { AccountSyncSheet } from "../components/AccountSyncSheet";
+import {
+  shouldPromptAfterFavoriteAdd,
+  shouldPromptAfterShareWithFavorite,
+} from "../account/syncPrompt";
+import { useAccountSync } from "../hooks/useAccountSync";
 import { IconButton } from "../components/Controls";
 import {
   readState,
@@ -41,6 +47,7 @@ import { useWeather } from "../weather/useWeather";
 import { useReducedMotion, useWakeLock, fullscreen } from "../hooks/useDisplay";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { syncDocumentChrome } from "../utils/themeColor";
+import { uiPx } from "../utils/uiScale";
 const Lab = lazy(() => import("../editor/Lab"));
 export default function App() {
   const [saved, setSaved] = useState(() => {
@@ -80,7 +87,8 @@ export default function App() {
     [controls, setControls] = useState(true),
     [toast, setToast] = useState(""),
     [isFullscreen, setIsFullscreen] = useState(false),
-    [shareFallback, setShareFallback] = useState("");
+    [shareFallback, setShareFallback] = useState(""),
+    [accountSyncOpen, setAccountSyncOpen] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
       undefined,
     ),
@@ -97,17 +105,27 @@ export default function App() {
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(""), 6000);
   }, []);
+  const account = useAccountSync(saved, setSaved, notify);
   const configurationFavorited = saved.savedFavorites.some((item) =>
     presetsMatchConfiguration(item, preset),
   );
+  function applyFavoritePrompt(next: typeof saved, wasAdd: boolean) {
+    if (!shouldPromptAfterFavoriteAdd(next, wasAdd)) return next;
+    setAccountSyncOpen(true);
+    return {
+      ...next,
+      accountSync: { ...next.accountSync, autoShown: true },
+    };
+  }
   function toggleConfigurationFavorite() {
+    const wasAdd = !configurationFavorited;
     setSaved((s) => {
       const savedFavorites = configurationFavorited
         ? s.savedFavorites.filter(
             (item) => !presetsMatchConfiguration(item, preset),
           )
         : [...s.savedFavorites, snapshotFavoritePreset(preset)].slice(0, 100);
-      return { ...s, savedFavorites };
+      return applyFavoritePrompt({ ...s, savedFavorites }, wasAdd);
     });
     notify(
       configurationFavorited
@@ -336,12 +354,27 @@ export default function App() {
   }, [view, editing, settings, wake, notify]);
   async function share() {
     const url = location.origin + "/display?s=" + encodePreset(preset);
+    const favorited = configurationFavorited;
     try {
       await navigator.clipboard.writeText(url);
       notify("Link copied. A little moment to share.");
     } catch {
       setShareFallback(url);
     }
+    if (shouldPromptAfterShareWithFavorite(savedRef.current, favorited)) {
+      setAccountSyncOpen(true);
+      setSaved((s) => ({
+        ...s,
+        accountSync: { ...s.accountSync, autoShown: true },
+      }));
+    }
+  }
+  function continueWithoutAccount() {
+    setSaved((s) => ({
+      ...s,
+      accountSync: { ...s.accountSync, dismissed: true },
+    }));
+    setAccountSyncOpen(false);
   }
   const closeSettings = useCallback(() => setSettings(false), []);
   return (
@@ -365,27 +398,30 @@ export default function App() {
           favorites={saved.favorites}
           savedFavorites={saved.savedFavorites}
           onFavorite={(id) =>
-            setSaved((s) => ({
-              ...s,
-              favorites: s.favorites.includes(id)
-                ? s.favorites.filter((f) => f !== id)
-                : [...s.favorites, id],
-            }))
+            setSaved((s) => {
+              const wasAdd = !s.favorites.includes(id);
+              const favorites = wasAdd
+                ? [...s.favorites, id]
+                : s.favorites.filter((f) => f !== id);
+              return applyFavoritePrompt({ ...s, favorites }, wasAdd);
+            })
           }
           onToggleSavedFavorite={(target) =>
-            setSaved((s) => ({
-              ...s,
-              savedFavorites: s.savedFavorites.some((item) =>
+            setSaved((s) => {
+              const exists = s.savedFavorites.some((item) =>
                 presetsMatchConfiguration(item, target),
-              )
+              );
+              const wasAdd = !exists;
+              const savedFavorites = exists
                 ? s.savedFavorites.filter(
                     (item) => !presetsMatchConfiguration(item, target),
                   )
                 : [...s.savedFavorites, snapshotFavoritePreset(target)].slice(
                     0,
                     100,
-                  ),
-            }))
+                  );
+              return applyFavoritePrompt({ ...s, savedFavorites }, wasAdd);
+            })
           }
           recent={saved.recent}
         />
@@ -426,7 +462,7 @@ export default function App() {
                   onClick={chooser}
                   onBlur={wake}
                 >
-                  <ArrowLeft size={16} /> Collection
+                  <ArrowLeft size={uiPx(16)} /> Collection
                 </button>
                 <div className="display-name">
                   <span>
@@ -437,13 +473,13 @@ export default function App() {
               </div>
               <div className="display-top-actions glass-panel">
                 <IconButton label="Copy link" onClick={() => void share()}>
-                  <LinkIcon size={18} />
+                  <LinkIcon size={uiPx(18)} />
                 </IconButton>
                 <IconButton
                   label="Open settings"
                   onClick={() => setSettings(true)}
                 >
-                  <Settings2 size={18} />
+                  <Settings2 size={uiPx(18)} />
                 </IconButton>
               </div>
             </div>
@@ -455,7 +491,7 @@ export default function App() {
                     className="edit-button"
                     onClick={() => setEditing((v) => !v)}
                   >
-                    <SlidersHorizontal size={16} /> Edit clock
+                    <SlidersHorizontal size={uiPx(16)} /> Edit clock
                   </button>
                 </div>
                 <div className="display-dock-tools glass-panel">
@@ -466,9 +502,9 @@ export default function App() {
                     onClick={() => void fullscreen(notify)}
                   >
                     {isFullscreen ? (
-                      <Minimize size={18} />
+                      <Minimize size={uiPx(18)} />
                     ) : (
-                      <Maximize size={18} />
+                      <Maximize size={uiPx(18)} />
                     )}
                   </IconButton>
                   <IconButton
@@ -484,7 +520,7 @@ export default function App() {
                     onClick={toggleConfigurationFavorite}
                   >
                     <Heart
-                      size={18}
+                      size={uiPx(18)}
                       fill={configurationFavorited ? "currentColor" : "none"}
                     />
                   </IconButton>
@@ -532,7 +568,23 @@ export default function App() {
             history.pushState({}, "", "/welcome");
             notify("A fresh start. Preferences reset.");
           }}
+          onOpenAccountSync={() => {
+            setSettings(false);
+            setAccountSyncOpen(true);
+          }}
+          session={account.session}
+          syncConfigured={account.syncConfigured}
+          onSignOut={() => void account.signOut()}
           weather={weather}
+        />
+      )}
+      {accountSyncOpen && (
+        <AccountSyncSheet
+          session={account.session}
+          syncConfigured={account.syncConfigured}
+          onClose={() => setAccountSyncOpen(false)}
+          onContinueLocal={continueWithoutAccount}
+          onSendMagicLink={account.sendMagicLink}
         />
       )}
       <div className={"toast " + (toast ? "visible" : "")} role="status">
@@ -541,7 +593,7 @@ export default function App() {
       {shareFallback && (
         <div className="share-fallback glass-panel">
           <IconButton label="Close link" onClick={() => setShareFallback("")}>
-            <X size={16} />
+            <X size={uiPx(16)} />
           </IconButton>
           <label>
             Copy your clock link

@@ -11,6 +11,7 @@ import { Clock } from "../clock/Clock";
 import { BrandLogo } from "../components/BrandLogo";
 import { IconButton } from "../components/Controls";
 import type { KlockyPreset, UserPreferences } from "../types";
+import { uiPx } from "../utils/uiScale";
 export function Gallery({
   preferences,
   onSelect,
@@ -124,10 +125,10 @@ export function Gallery({
               aria-pressed={collection === "Favorites"}
               onClick={() => setCollection("Favorites")}
             >
-              <PikaIcon icon={PikaHeart} size={20} />
+              <PikaIcon icon={PikaHeart} size={uiPx(20)} />
             </IconButton>
             <IconButton label="Open settings" onClick={onSettings}>
-              <PikaIcon icon={Settings01} size={20} />
+              <PikaIcon icon={Settings01} size={uiPx(20)} />
             </IconButton>
           </div>
         </div>
@@ -185,7 +186,7 @@ export function Gallery({
                   >
                     <Clock preset={shown} preferences={preferences} thumbnail />
                     <span className="card-enter">
-                      <ArrowUpRight size={20} />
+                      <ArrowUpRight size={uiPx(20)} />
                     </span>
                   </div>
                 </button>
@@ -203,7 +204,7 @@ export function Gallery({
                     onClick={() => toggleFavorite(p)}
                     aria-pressed={isFavorited(p)}
                   >
-                    <PikaIcon icon={PikaHeart} size={20} />
+                    <PikaIcon icon={PikaHeart} size={uiPx(20)} />
                   </IconButton>
                 </div>
               </article>
@@ -212,7 +213,7 @@ export function Gallery({
         </div>
         {!items.length && (
           <div className="empty-state">
-            <PikaIcon icon={PikaHeart} size={28} className="empty-state-heart" />
+            <PikaIcon icon={PikaHeart} size={uiPx(28)} className="empty-state-heart" />
             <h2>
               {collection === "Favorites"
                 ? "Keep a little collection."

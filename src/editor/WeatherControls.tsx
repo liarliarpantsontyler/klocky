@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { LocateFixed, Search } from "lucide-react";
 import type { UserPreferences, WeatherLocation, WeatherState } from "../types";
 import { searchCities } from "../weather/useWeather";
+import { uiPx } from "../utils/uiScale";
 export function WeatherControls({
   preferences,
   onChange,
@@ -73,7 +74,7 @@ export function WeatherControls({
         and clock preferences stay on this device.
       </p>
       <form className="search-field" onSubmit={search}>
-        <Search size={16} />
+        <Search size={uiPx(16)} />
         <input
           aria-label="Search city"
           placeholder="Search for a city"
@@ -97,7 +98,7 @@ export function WeatherControls({
         </button>
       ))}
       <button className="text-button" onClick={locate}>
-        <LocateFixed size={15} /> Use my location
+        <LocateFixed size={uiPx(15)} /> Use my location
       </button>
       {preferences.weatherLocation && (
         <div className="location-status">

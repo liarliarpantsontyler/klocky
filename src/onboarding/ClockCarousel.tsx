@@ -12,6 +12,7 @@ import { backgroundStyle } from "../backgrounds/definitions";
 import { Clock } from "../clock/Clock";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { welcomeClocks } from "./presets";
+import { uiPx } from "../utils/uiScale";
 
 const AUTO_SCROLL_PX_PER_SEC = 13;
 const IDLE_BEFORE_AUTO_MS = 4500;
@@ -401,7 +402,7 @@ export const ClockCarousel = forwardRef<
                 />
                 {choosing && selected === i && (
                   <span className="onboarding-selection">
-                    <Check size={13} strokeWidth={2.5} />
+                    <Check size={uiPx(13)} strokeWidth={2.5} />
                   </span>
                 )}
               </button>
@@ -414,7 +415,7 @@ export const ClockCarousel = forwardRef<
           aria-label="Previous clock"
           onClick={() => center(active.current - 1)}
         >
-          <ChevronLeft size={15} />
+          <ChevronLeft size={uiPx(15)} />
         </button>
         <span>
           <span className="onboarding-clock-number">
@@ -426,7 +427,7 @@ export const ClockCarousel = forwardRef<
           aria-label="Next clock"
           onClick={() => center(active.current + 1)}
         >
-          <ChevronRight size={15} />
+          <ChevronRight size={uiPx(15)} />
         </button>
       </div>
     </section>

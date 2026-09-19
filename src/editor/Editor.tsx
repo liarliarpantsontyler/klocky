@@ -88,6 +88,7 @@ export function Editor({
   const [section, setSection] = useState<EditorSection | "">("");
   const [weatherSetup, setWeatherSetup] = useState(false);
   const [backgroundDetail, setBackgroundDetail] = useState(false);
+  const [backgroundPickerExpanded, setBackgroundPickerExpanded] = useState(true);
   const [typefaceOpen, setTypefaceOpen] = useState(false);
   const typefacePicker = useRef<HTMLDivElement>(null);
 
@@ -148,6 +149,7 @@ export function Editor({
       );
       const next = backgroundById(id);
       setBackgroundDetail(false);
+      setBackgroundPickerExpanded(false);
       onChange({
         ...preset,
         backgroundId: id,
@@ -187,6 +189,7 @@ export function Editor({
     );
     const nextBackground = backgroundById(backgroundId);
     setBackgroundDetail(false);
+    setBackgroundPickerExpanded(false);
 
     const availableClocks = clocks.filter((item) => entitlements.canUse(item));
     const clockId = pickDifferent(
@@ -236,7 +239,10 @@ export function Editor({
                   aria-controls={contentId}
                   onClick={() => {
                     setSection(isOpen ? "" : name);
-                    if (name === "Background") setBackgroundDetail(false);
+                    if (name === "Background") {
+                      setBackgroundDetail(false);
+                      if (!isOpen) setBackgroundPickerExpanded(true);
+                    }
                   }}
                 >
                   <span className="section-title">
@@ -277,41 +283,67 @@ export function Editor({
                       />
                     ) : (
                       <>
-                        <div className="background-picker">
-                          {backgrounds.map((b) => (
-                            <button
-                              key={b.id}
-                              disabled={!entitlements.canUse(b)}
-                              className={
-                                "background-choice " +
-                                (preset.backgroundId === b.id ? "selected" : "")
-                              }
-                              aria-label={`Background ${b.name}`}
-                              aria-pressed={preset.backgroundId === b.id}
-                              onClick={() =>
-                                onChange({
-                                  ...preset,
-                                  backgroundId: b.id,
-                                  backgroundOptions: {},
-                                  clockOptions: {
-                                    ...o,
-                                    color: b.suggestedClockColors[0],
-                                  },
-                                })
-                              }
+                        {backgroundPickerExpanded ? (
+                          <div className="background-picker-wrap">
+                            <div className="background-picker">
+                              {backgrounds.map((b) => (
+                                <button
+                                  key={b.id}
+                                  disabled={!entitlements.canUse(b)}
+                                  className={
+                                    "background-choice " +
+                                    (preset.backgroundId === b.id
+                                      ? "selected"
+                                      : "")
+                                  }
+                                  aria-label={`Background ${b.name}`}
+                                  aria-pressed={preset.backgroundId === b.id}
+                                  onClick={() => {
+                                    onChange({
+                                      ...preset,
+                                      backgroundId: b.id,
+                                      backgroundOptions: {},
+                                      clockOptions: {
+                                        ...o,
+                                        color: b.suggestedClockColors[0],
+                                      },
+                                    });
+                                    setBackgroundPickerExpanded(false);
+                                  }}
+                                >
+                                  <span
+                                    className="background-swatch"
+                                    style={backgroundStyle(b.id)}
+                                  >
+                                    {preset.backgroundId === b.id && (
+                                      <Check size={16} />
+                                    )}
+                                  </span>
+                                  <span>{b.name}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            className="background-picker-summary"
+                            aria-expanded={false}
+                            onClick={() => setBackgroundPickerExpanded(true)}
+                          >
+                            <span
+                              className="background-swatch"
+                              style={backgroundStyle(preset.backgroundId)}
                             >
-                              <span
-                                className="background-swatch"
-                                style={backgroundStyle(b.id)}
-                              >
-                                {preset.backgroundId === b.id && (
-                                  <Check size={16} />
-                                )}
-                              </span>
-                              <span>{b.name}</span>
-                            </button>
-                          ))}
-                        </div>
+                              <Check size={16} />
+                            </span>
+                            <span className="background-picker-summary-copy">
+                              <strong>{background.name}</strong>
+                              <small>Change background</small>
+                            </span>
+                            <ChevronDown size={17} />
+                          </button>
+                        )}
                         {!background.staticBackground && (
                           <div
                             className="quick-background-controls"
@@ -399,10 +431,6 @@ export function Editor({
                             <ArrowUpRight size={17} />
                           </button>
                         )}
-                        <p className="help-text">
-                          Templates work as-is. Fine-tuning is there when you
-                          want it.
-                        </p>
                       </>
                     ))}
 
@@ -619,7 +647,6 @@ export function Editor({
                                   onChange={onPreferences}
                                   weather={weather}
                                   onLocationSelected={() => {
-                                    option({ showWeather: true });
                                     setWeatherSetup(false);
                                   }}
                                 />

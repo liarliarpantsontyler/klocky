@@ -10,7 +10,9 @@ import {
   CLOCK_SIZE_MAX,
   CLOCK_SIZE_MIN,
   isFontId,
+  presetWithWeatherDefaults,
   safeClockOptions,
+  clockOptionsWithWeatherEnabled,
 } from "../clock/definitions";
 import { backgrounds, uniformControls } from "../backgrounds/definitions";
 export const STORAGE_KEY = "klocky.v1";
@@ -150,6 +152,7 @@ export function readState(): SavedState {
   try {
     const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (data?.version !== 1) return defaults();
+    const preferences = sanitizePreferences(data.preferences);
     return {
       version: 1,
       onboardingComplete:
@@ -157,8 +160,11 @@ export function readState(): SavedState {
         (data.onboardingComplete === undefined &&
           Array.isArray(data.recent) &&
           data.recent.some((id: unknown) => typeof id === "string")),
-      preset: sanitizePreset(data.preset) ?? defaults().preset,
-      preferences: sanitizePreferences(data.preferences),
+      preset: presetWithWeatherDefaults(
+        sanitizePreset(data.preset) ?? defaults().preset,
+        preferences.weatherLocation,
+      ),
+      preferences,
       recent: Array.isArray(data.recent)
         ? data.recent.filter((x: unknown) => typeof x === "string").slice(0, 8)
         : [],

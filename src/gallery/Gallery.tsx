@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Heart } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Heart as PikaHeart, Settings01 } from "pikaicons";
 import { PikaIcon } from "../components/PikaIcon";
 import { presets } from "./presets";
@@ -177,10 +177,7 @@ export function Gallery({
                     onClick={() => onFavorite(p.id)}
                     aria-pressed={favorites.includes(p.id)}
                   >
-                    <Heart
-                      size={15}
-                      fill={favorites.includes(p.id) ? "currentColor" : "none"}
-                    />
+                    <PikaIcon icon={PikaHeart} size={20} />
                   </IconButton>
                 </div>
               </article>
@@ -189,7 +186,7 @@ export function Gallery({
         </div>
         {!items.length && (
           <div className="empty-state">
-            <Heart size={25} />
+            <PikaIcon icon={PikaHeart} size={28} className="empty-state-heart" />
             <h2>
               {collection === "Favorites"
                 ? "Keep a little collection."
@@ -203,7 +200,13 @@ export function Gallery({
           </div>
         )}
         <footer className="gallery-footer">
-          <div className="gallery-footer-brand">
+          <a
+            className="gallery-footer-brand"
+            href="https://www.humin.work"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="humin — opens humin.work in a new tab"
+          >
             <span className="gallery-footer-copy">
               humin © {new Date().getFullYear()}
             </span>
@@ -214,7 +217,7 @@ export function Gallery({
               aria-hidden="true"
               draggable={false}
             />
-          </div>
+          </a>
         </footer>
       </main>
     </div>

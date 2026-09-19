@@ -317,11 +317,19 @@ button svg {
 .gallery-header .icon-button[aria-pressed="true"] {
   color: var(--ink);
 }
-.gallery-header .pika-icon path {
+.pika-icon path {
   stroke: currentColor;
 }
-.gallery-header .icon-button.gallery-header-icon--active .pika-icon path {
+.gallery-header .icon-button.gallery-header-icon--active .pika-icon path,
+.gallery-header .icon-button[aria-pressed="true"] .pika-icon path {
   fill: color-mix(in srgb, currentColor 14%, transparent);
+}
+.card-caption .icon-button[aria-pressed="true"] .pika-icon path {
+  fill: currentColor;
+}
+.empty-state .empty-state-heart path {
+  stroke: var(--muted);
+  fill: color-mix(in srgb, var(--muted) 12%, transparent);
 }
 .app-header nav .active {
   color: var(--ink);
@@ -535,6 +543,22 @@ button svg {
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.gallery-footer-brand:hover {
+  color: var(--ink);
+  background: var(--surface-subtle);
+}
+.gallery-footer-brand:focus-visible {
+  outline: 2px solid var(--klocky-blue);
+  outline-offset: 2px;
 }
 .gallery-footer-copy {
   font-size: 11px;
@@ -1067,13 +1091,74 @@ button svg {
   background: var(--ink);
   box-shadow: 0 1px 5px #1c211b30;
 }
+.background-picker-wrap {
+  position: relative;
+  max-height: 340px;
+}
+.background-picker-wrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--paper) 0%, transparent),
+    var(--paper)
+  );
+  z-index: 1;
+}
 .background-picker {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 15px 9px;
-  max-height: 340px;
+  max-height: inherit;
   overflow: auto;
-  padding: 2px;
+  padding: 2px 2px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #252a201f transparent;
+}
+.background-picker-summary {
+  width: 100%;
+  min-height: 58px;
+  padding: 8px 12px 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-subtle);
+  color: var(--ink);
+  text-align: left;
+}
+.background-picker-summary .background-swatch {
+  width: 72px;
+  flex: none;
+  margin-bottom: 0;
+  aspect-ratio: 1.25;
+}
+.background-picker-summary-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.background-picker-summary-copy strong {
+  font-size: 14px;
+  font-weight: 560;
+  letter-spacing: -0.2px;
+}
+.background-picker-summary-copy small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.background-picker-summary > svg:last-child {
+  flex: none;
+  color: var(--muted);
+  opacity: 0.72;
 }
 .background-choice {
   padding: 0;
@@ -2297,9 +2382,11 @@ button svg {
   .editor-scroll {
     padding: 10px 24px 0;
   }
+  .background-picker-wrap {
+    max-height: 210px;
+  }
   .background-picker {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    max-height: 210px;
   }
   .editor .panel-heading {
     padding: 18px 22px;

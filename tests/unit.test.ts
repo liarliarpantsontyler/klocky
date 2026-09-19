@@ -257,11 +257,25 @@ describe("onboarding persistence and curated clocks", () => {
       longitude: 85.32,
     };
     expect(writeState(saved)).toBe(true);
-    expect(readState()).toEqual(saved);
+    const restored = readState();
+    expect(restored.preset.clockOptions.showWeather).toBe(true);
+    expect(restored.preset.clockOptions.showLocation).toBe(true);
+    expect(restored).toEqual({
+      ...saved,
+      preset: {
+        ...saved.preset,
+        clockOptions: {
+          ...saved.preset.clockOptions,
+          showWeather: true,
+          showLocation: true,
+        },
+      },
+    });
     saved.onboardingComplete = false;
     writeState(saved);
     expect(readState().onboardingComplete).toBe(false);
-    expect(readState().preset).toEqual(saved.preset);
+    expect(readState().preset.clockOptions.showWeather).toBe(true);
+    expect(readState().preset.clockOptions.showLocation).toBe(true);
   });
   it("welcomes new users, migrates returning users and respects replay", () => {
     const data = storage();

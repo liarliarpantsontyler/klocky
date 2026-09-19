@@ -1,4 +1,11 @@
-import type { ClockDefinition, ClockId, ClockOptions, FontId } from "../types";
+import type {
+  ClockDefinition,
+  ClockId,
+  ClockOptions,
+  FontId,
+  KlockyPreset,
+  UserPreferences,
+} from "../types";
 
 export const CLOCK_SIZE_MIN = 14;
 export const CLOCK_SIZE_DEFAULT = 100;
@@ -224,5 +231,35 @@ export function safeClockOptions(
       : c.allowedFills[0],
     showSeconds: c.supportsSeconds && options.showSeconds,
     showWeather: c.supportsWeather && options.showWeather,
+    showLocation: c.supportsWeather && options.showLocation,
+  };
+}
+
+export function clockOptionsWithWeatherEnabled(
+  clockId: string,
+  options: ClockOptions,
+): ClockOptions {
+  const clock = clockById(clockId);
+  if (!clock.supportsWeather) return options;
+  return safeClockOptions(clockId, {
+    ...options,
+    showWeather: true,
+    showLocation: true,
+  });
+}
+
+export function presetWithWeatherDefaults(
+  preset: KlockyPreset,
+  weatherLocation: UserPreferences["weatherLocation"],
+): KlockyPreset {
+  if (!weatherLocation) return preset;
+  const { showWeather, showLocation } = preset.clockOptions;
+  if (showWeather || showLocation) return preset;
+  return {
+    ...preset,
+    clockOptions: clockOptionsWithWeatherEnabled(
+      preset.clockId,
+      preset.clockOptions,
+    ),
   };
 }

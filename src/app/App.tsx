@@ -32,7 +32,7 @@ import {
   defaults,
   encodePreset,
 } from "../state/storage";
-import { clocks, safeClockOptions } from "../clock/definitions";
+import { clocks, safeClockOptions, clockOptionsWithWeatherEnabled, presetWithWeatherDefaults } from "../clock/definitions";
 import { backgrounds, backgroundById } from "../backgrounds/definitions";
 import { useWeather } from "../weather/useWeather";
 import { useReducedMotion, useWakeLock, fullscreen } from "../hooks/useDisplay";
@@ -161,15 +161,23 @@ export default function App() {
   }, [wake]);
   function changePreferences(p: Partial<UserPreferences>) {
     setSaved((s) => ({ ...s, preferences: { ...s.preferences, ...p } }));
-    if (p.hour24 !== undefined || p.seconds !== undefined)
-      setPreset((s) => ({
+    setPreset((s) => {
+      let clockOptions = { ...s.clockOptions };
+      if (p.hour24 !== undefined) clockOptions.hour24 = p.hour24;
+      if (p.seconds !== undefined) clockOptions.showSeconds = p.seconds;
+      if (p.weatherLocation)
+        clockOptions = clockOptionsWithWeatherEnabled(s.clockId, clockOptions);
+      if (
+        p.hour24 === undefined &&
+        p.seconds === undefined &&
+        !p.weatherLocation
+      )
+        return s;
+      return {
         ...s,
-        clockOptions: {
-          ...s.clockOptions,
-          ...(p.hour24 !== undefined ? { hour24: p.hour24 } : {}),
-          ...(p.seconds !== undefined ? { showSeconds: p.seconds } : {}),
-        },
-      }));
+        clockOptions: safeClockOptions(s.clockId, clockOptions),
+      };
+    });
   }
   function chooser() {
     setEditing(false);
@@ -185,8 +193,12 @@ export default function App() {
   ) {
     const rect = element.getBoundingClientRect();
     const run = () => {
+      const withWeather = presetWithWeatherDefaults(
+        p,
+        savedRef.current.preferences.weatherLocation,
+      );
       flushSync(() => {
-        setPreset(p);
+        setPreset(withWeather);
         setView("display");
         setEditing(edit);
         setControls(edit);

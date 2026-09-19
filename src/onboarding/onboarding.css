@@ -1,6 +1,6 @@
 .onboarding {
   --onboarding-ink: #242522;
-  --onboarding-paper: #fafaf8;
+  --onboarding-paper: #ffffff;
   min-height: 100svh;
   min-height: 100dvh;
   display: flex;
@@ -104,7 +104,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: #fafaf8;
+  background: var(--onboarding-paper);
   color: #242522;
   box-shadow: 0 1px 8px #0002;
 }

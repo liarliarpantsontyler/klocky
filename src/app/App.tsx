@@ -3,6 +3,7 @@ import {
   Suspense,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -36,6 +37,7 @@ import { backgrounds, backgroundById } from "../backgrounds/definitions";
 import { useWeather } from "../weather/useWeather";
 import { useReducedMotion, useWakeLock, fullscreen } from "../hooks/useDisplay";
 import type { KlockyPreset, UserPreferences } from "../types";
+import { syncDocumentChrome } from "../utils/themeColor";
 const Lab = lazy(() => import("../editor/Lab"));
 export default function App() {
   const [saved, setSaved] = useState(() => {
@@ -98,6 +100,9 @@ export default function App() {
     preferences.unit,
   );
   useWakeLock(view === "display" && preferences.keepAwake, notify);
+  useLayoutEffect(() => {
+    syncDocumentChrome(view);
+  }, [view]);
   useEffect(() => {
     document.documentElement.dataset.reduced = String(reduced);
   }, [reduced]);

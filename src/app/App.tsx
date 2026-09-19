@@ -371,20 +371,30 @@ export default function App() {
             inert={!controls && !editing && !settings}
           >
             <div className="display-top">
-              <button
-                className="quiet-button glass-button"
-                onClick={chooser}
-                onBlur={wake}
-              >
-                <ArrowLeft size={16} /> Collection
-              </button>
-              <div className="display-name">
-                <span>{clocks.find((c) => c.id === preset.clockId)?.name}</span>
-                <small>{backgroundById(preset.backgroundId).name}</small>
+              <div className="display-top-start">
+                <button
+                  className="quiet-button glass-button"
+                  onClick={chooser}
+                  onBlur={wake}
+                >
+                  <ArrowLeft size={16} /> Collection
+                </button>
+                <div className="display-name">
+                  <span>
+                    {clocks.find((c) => c.id === preset.clockId)?.name}
+                  </span>
+                  <small>{backgroundById(preset.backgroundId).name}</small>
+                </div>
               </div>
               <div className="display-top-actions glass-panel">
                 <IconButton label="Copy link" onClick={() => void share()}>
                   <LinkIcon size={18} />
+                </IconButton>
+                <IconButton
+                  label="Open settings"
+                  onClick={() => setSettings(true)}
+                >
+                  <Settings2 size={18} />
                 </IconButton>
                 <IconButton
                   label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
@@ -395,12 +405,6 @@ export default function App() {
                   ) : (
                     <Maximize size={18} />
                   )}
-                </IconButton>
-                <IconButton
-                  label="Open settings"
-                  onClick={() => setSettings(true)}
-                >
-                  <Settings2 size={18} />
                 </IconButton>
               </div>
             </div>

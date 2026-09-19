@@ -40,6 +40,11 @@ export const ChooseClockList = forwardRef<
     random: () => selectionAt(randomClockIndex(welcomeClocks.length)),
   }));
 
+  function chooseAt(index: number) {
+    const selection = selectionAt(index);
+    if (selection) onChoose(selection);
+  }
+
   return (
     <section className="onboarding-clock-list" aria-label="Choose a clock">
       <div ref={list} className="onboarding-clock-list-inner">
@@ -49,11 +54,18 @@ export const ChooseClockList = forwardRef<
             data-clock-index={index}
             key={preset.id}
           >
-            <ClockPreview
-              preset={preset}
-              preferences={preferences}
-              reduced={reduced}
-            />
+            <button
+              type="button"
+              className="onboarding-clock-list-surface-hit"
+              aria-label={`Start with ${preset.name} clock`}
+              onClick={() => chooseAt(index)}
+            >
+              <ClockPreview
+                preset={preset}
+                preferences={preferences}
+                reduced={reduced}
+              />
+            </button>
             <div className="onboarding-clock-list-meta">
               <div>
                 <span>{String(index + 1).padStart(2, "0")}</span>
@@ -61,10 +73,7 @@ export const ChooseClockList = forwardRef<
               </div>
               <button
                 className="onboarding-clock-cta"
-                onClick={() => {
-                  const selection = selectionAt(index);
-                  if (selection) onChoose(selection);
-                }}
+                onClick={() => chooseAt(index)}
               >
                 Start with this clock <ArrowRight size={15} />
               </button>

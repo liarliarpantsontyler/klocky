@@ -26,6 +26,10 @@
   height: clamp(84px, 19.6vw, 118px);
 }
 
+.brand-logo-shell--header .brand-logo-art {
+  height: clamp(38px, 5.2vw, 54px);
+}
+
 .brand-logo-shell--compact .brand-logo-art {
   height: 25px;
 }

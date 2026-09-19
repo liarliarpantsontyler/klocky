@@ -233,12 +233,58 @@ button svg {
   border-bottom: 1px solid var(--line);
   gap: 28px;
 }
+.gallery-shell {
+  --gallery-header-height: 112px;
+}
+.gallery-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--gallery-header-height);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  border-bottom-color: color-mix(in srgb, var(--line) 88%, transparent);
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.62s var(--ease),
+    box-shadow 0.62s var(--ease),
+    border-color 0.62s var(--ease);
+  will-change: transform;
+}
+.gallery-header--hidden {
+  transform: translate3d(0, calc(-100% - 1px), 0);
+  box-shadow: none;
+  border-bottom-color: transparent;
+  pointer-events: none;
+}
+.gallery-header .wordmark {
+  min-width: clamp(120px, 18vw, 220px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-header {
+    transition-duration: 0.01ms;
+  }
+}
 .wordmark {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
   color: inherit;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: opacity 0.2s var(--ease);
+}
+.wordmark:hover {
+  opacity: 0.88;
+}
+.wordmark:focus-visible {
+  outline: 2px solid var(--klocky-blue);
+  outline-offset: 4px;
 }
 .app-header nav {
   display: flex;
@@ -248,10 +294,34 @@ button svg {
   padding-left: 100px;
 }
 .app-header nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-size: 13px;
   color: var(--muted);
   height: 44px;
   position: relative;
+}
+.gallery-header .header-end {
+  margin-left: auto;
+}
+.gallery-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.gallery-header .icon-button {
+  color: var(--muted);
+}
+.gallery-header .icon-button.gallery-header-icon--active,
+.gallery-header .icon-button[aria-pressed="true"] {
+  color: var(--ink);
+}
+.gallery-header .pika-icon path {
+  stroke: currentColor;
+}
+.gallery-header .icon-button.gallery-header-icon--active .pika-icon path {
+  fill: color-mix(in srgb, currentColor 14%, transparent);
 }
 .app-header nav .active {
   color: var(--ink);
@@ -265,6 +335,9 @@ button svg {
   border-radius: 50%;
   bottom: 0;
   left: calc(50% - 2px);
+}
+.gallery-header nav .active::after {
+  content: none;
 }
 .header-end {
   display: flex;
@@ -322,6 +395,10 @@ button svg {
   line-height: 1.6;
   padding-top: 17px;
 }
+.gallery-main > .collection-toolbar:first-child {
+  border-top: 0;
+  padding-top: clamp(20px, 3vw, 32px);
+}
 .collection-toolbar {
   display: flex;
   align-items: center;
@@ -337,7 +414,7 @@ button svg {
 .filters button {
   height: 35px;
   padding: 0 15px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
   border-radius: 5px;
   white-space: nowrap;
@@ -347,7 +424,7 @@ button svg {
   background: var(--surface-subtle);
 }
 .filters button span {
-  font-size: 9px;
+  font-size: 11px;
   margin-left: 8px;
   opacity: 0.65;
 }
@@ -450,17 +527,26 @@ button svg {
   border-top: 1px solid var(--line);
   padding: 26px 0 34px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   font-size: 10px;
   color: var(--muted);
 }
-.gallery-footer i {
-  font-style: normal;
-  margin: 0 8px;
-  opacity: 0.4;
+.gallery-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
-.footer-mark {
-  margin-left: 8px;
+.gallery-footer-copy {
+  font-size: 11px;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+.gallery-footer-humin-logo {
+  display: block;
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .empty-state {
   min-height: 35vh;
@@ -509,6 +595,14 @@ button svg {
   background: #24352e;
   color: #fffaf0;
   user-select: none;
+  --liquid-glass-blur: 72px;
+  --liquid-glass-saturate: 2.15;
+  --liquid-glass-brightness: 1.14;
+  --liquid-glass-fill: rgba(255, 255, 255, 0.04);
+  --liquid-glass-border: rgba(255, 255, 255, 0.44);
+  --liquid-glass-highlight: rgba(255, 255, 255, 0.62);
+  --liquid-glass-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .display-stage {
   position: absolute;
@@ -526,14 +620,22 @@ button svg {
 }
 .display-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: max(24px, env(safe-area-inset-top))
     max(30px, env(safe-area-inset-right)) 0 max(30px, env(safe-area-inset-left));
-  gap: 20px;
+  gap: 16px;
 }
 .display-top > * {
   pointer-events: auto;
+}
+.display-top-start {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+  justify-content: flex-start;
 }
 .quiet-button {
   min-height: 44px;
@@ -544,18 +646,76 @@ button svg {
   border-radius: 999px;
   font-size: 12px;
 }
-.glass-button {
-  background: #20251c30;
-  backdrop-filter: blur(20px);
-  border: 1px solid #ffffff16;
+.player .glass-button,
+.player .glass-panel:not(.editor) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   color: #fffaf0;
+  border: 0.5px solid var(--liquid-glass-border);
+  background: var(--liquid-glass-fill);
+  backdrop-filter: blur(var(--liquid-glass-blur))
+    saturate(var(--liquid-glass-saturate))
+    brightness(var(--liquid-glass-brightness));
+  -webkit-backdrop-filter: blur(var(--liquid-glass-blur))
+    saturate(var(--liquid-glass-saturate))
+    brightness(var(--liquid-glass-brightness));
+  box-shadow:
+    inset 0 1px 0 var(--liquid-glass-highlight),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.12),
+    var(--liquid-glass-shadow);
+  transition:
+    background 0.22s var(--ease),
+    box-shadow 0.22s var(--ease),
+    border-color 0.22s var(--ease);
 }
-.glass-button:hover {
-  background: #20251c60;
+.player .glass-button::before,
+.player .glass-panel:not(.editor)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    148deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.06) 42%,
+    rgba(255, 255, 255, 0) 68%
+  );
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: soft-light;
+}
+.player .glass-button::after,
+.player .glass-panel:not(.editor)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    130% 100% at 8% -30%,
+    rgba(255, 255, 255, 0.35),
+    transparent 52%
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+.player .glass-button > *,
+.player .glass-panel:not(.editor) > * {
+  position: relative;
+  z-index: 1;
+}
+.player .glass-button:hover,
+.player .glass-panel:not(.editor):hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.52);
+}
+.player .glass-button:active {
+  background: rgba(255, 255, 255, 0.1);
 }
 .display-name {
-  text-align: center;
-  margin-left: -50px;
+  text-align: left;
+  min-width: 0;
   text-shadow: 0 1px 10px #0003;
 }
 .display-name > span {
@@ -570,13 +730,29 @@ button svg {
 }
 .display-top-actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1px;
-  padding: 3px;
+  gap: 2px;
+  padding: 4px;
   border-radius: 999px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.display-top-actions .icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  color: #fffaf0;
+  transition: background 0.18s var(--ease);
+}
+.display-top-actions .icon-button + .icon-button {
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
 }
 .display-top-actions .icon-button:hover {
-  background: #ffffff13;
+  background: rgba(255, 255, 255, 0.14);
+}
+.display-top-actions .icon-button:active {
+  background: rgba(255, 255, 255, 0.24);
 }
 .display-bottom {
   position: absolute;
@@ -600,7 +776,7 @@ button svg {
 .display-shortcuts > span {
   margin: 0 7px;
 }
-.glass-panel {
+.share-fallback.glass-panel {
   background: linear-gradient(130deg, #333b31ee, #20281fef);
   border: 1px solid #ffffff26;
   box-shadow:
@@ -610,22 +786,38 @@ button svg {
   backdrop-filter: blur(34px) saturate(1.15);
 }
 .display-dock {
+  --display-dock-extra-width: 120px;
   border-radius: 999px;
   display: flex;
-  align-items: center;
-  padding: 5px 8px;
+  align-items: stretch;
+  padding: 4px;
   pointer-events: auto;
-  gap: 2px;
 }
 .edit-button {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-width: calc(5.25rem + var(--display-dock-extra-width));
   gap: 9px;
   min-height: 44px;
-  padding: 0 15px;
+  padding: 0 16px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   white-space: nowrap;
+  color: #fffaf0;
+  background: transparent;
+  transition: background 0.18s var(--ease);
+}
+.edit-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.edit-button:active {
+  background: rgba(255, 255, 255, 0.2);
 }
 .is-ambient {
   cursor: none;
@@ -723,21 +915,34 @@ button svg {
   display: grid;
   place-items: center;
   margin-left: 8px;
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
   border-radius: 999px;
-  color: var(--muted);
+  color: var(--ink);
+  background: var(--surface-subtle);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
   transition:
     color 0.2s,
     background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
     transform 0.2s;
 }
 .section-randomize:hover:not(:disabled) {
-  color: var(--ink);
-  background: var(--surface-subtle);
+  background: var(--paper);
+  border-color: var(--klocky-gray-mid);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
   transform: rotate(9deg);
 }
+.section-randomize:active:not(:disabled) {
+  transform: rotate(9deg) scale(0.96);
+  box-shadow: none;
+}
 .section-randomize:disabled {
-  opacity: 0.28;
+  color: var(--muted);
+  background: transparent;
+  border-color: var(--line);
+  box-shadow: none;
+  opacity: 0.35;
 }
 .section-title,
 .section-selection {
@@ -1162,9 +1367,9 @@ button svg {
   background: color-mix(in srgb, var(--ink) 72%, var(--klocky-white));
 }
 .secondary-button {
-  color: var(--muted);
+  color: var(--ink);
   min-height: 46px;
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
   border-radius: 999px;
   padding: 0 20px;
   font-size: 13px;
@@ -1172,15 +1377,23 @@ button svg {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  background: var(--surface-subtle);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
   transition:
     color 0.2s,
     background 0.2s,
-    border-color 0.2s;
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 .secondary-button:hover {
-  color: var(--ink);
-  background: var(--surface-subtle);
+  background: var(--paper);
   border-color: var(--klocky-gray-mid);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.secondary-button:active {
+  transform: scale(0.99);
+  box-shadow: none;
 }
 .fill-control {
   margin: 18px 0;
@@ -1804,11 +2017,20 @@ button svg {
   float: right;
 }
 @supports not (backdrop-filter: blur(10px)) {
-  .glass-panel {
+  .share-fallback.glass-panel {
     background: #283323;
   }
-  .glass-button {
-    background: #26351fdd;
+  .player .glass-panel:not(.editor),
+  .player .glass-button {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .player .glass-panel:not(.editor),
+  .player .glass-button {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.16);
   }
 }
 @keyframes arrive {
@@ -1935,9 +2157,6 @@ button svg {
   .gallery-footer {
     font-size: 9px;
   }
-  .gallery-footer > span:nth-child(2) {
-    display: none;
-  }
   .display-hint,
   .display-shortcuts {
     display: none;
@@ -1950,8 +2169,8 @@ button svg {
     padding: 18px;
     padding-top: max(18px, env(safe-area-inset-top));
   }
-  .display-name {
-    margin-left: 0;
+  .display-top-start {
+    gap: 10px;
   }
   .display-name small {
     display: none;
@@ -2016,7 +2235,7 @@ button svg {
   }
   .filters button {
     padding: 0 11px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .card-caption h2 {
     font-size: 13px;
@@ -2034,14 +2253,24 @@ button svg {
     margin-top: 35px;
     padding-bottom: max(30px, env(safe-area-inset-bottom));
   }
+  .player.is-editing {
+    --editor-preview-height: 39%;
+    --editor-sheet-radius: 22px;
+    --editor-preview-bleed: 12px;
+  }
   .is-editing .display-stage {
     width: 100%;
-    height: 39%;
+    height: calc(
+      var(--editor-preview-height) + var(--editor-sheet-radius) +
+        var(--editor-preview-bleed)
+    );
+    z-index: 1;
   }
   .is-editing .display-top {
     right: 0;
     width: 100%;
     padding: 12px;
+    z-index: 3;
   }
   .is-editing .display-name,
   .is-editing .display-bottom {
@@ -2050,16 +2279,18 @@ button svg {
   .is-editing .quiet-button {
     font-size: 10px;
     min-height: 36px;
-    background: #0002;
-    border: 0;
+  }
+  .is-editing .editor {
+    z-index: 2;
   }
   .editor {
     width: auto;
     left: 0;
     right: 0;
-    top: 39%;
+    top: var(--editor-preview-height, 39%);
     bottom: 0;
-    border-radius: 22px 22px 0 0;
+    border-radius: var(--editor-sheet-radius, 22px)
+      var(--editor-sheet-radius, 22px) 0 0;
     border-bottom: 0;
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -2091,9 +2322,6 @@ button svg {
   .primary-button {
     min-height: 44px;
   }
-  .display-dock {
-    padding: 4px;
-  }
   .display-top-actions .icon-button {
     width: 39px;
     height: 39px;
@@ -2104,7 +2332,7 @@ button svg {
   .display-name {
     font-size: 10px;
   }
-  .display-top > .quiet-button {
+  .display-top-start .quiet-button {
     font-size: 10px;
   }
   .display-top {

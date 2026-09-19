@@ -8,9 +8,7 @@ test("collection → display → live editor → persistence → share", async (
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
-  await expect(
-    page.getByRole("heading", { name: "Time, well spent." }),
-  ).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Collection" })).toBeVisible();
   await expect(page.getByRole("button", { name: /^Display / })).toHaveCount(13);
   await page
     .getByRole("button", { name: "Display Meridian", exact: true })
@@ -80,9 +78,9 @@ test("favorites, filtering and recent clocks", async ({ page }) => {
   await page
     .getByRole("button", { name: "Favorite Meridian", exact: true })
     .click();
-  await page.getByRole("button", { name: /^Favorites/ }).click();
+  await page.getByRole("button", { name: /^My favorites/ }).click();
   await expect(page.getByRole("button", { name: /^Display / })).toHaveCount(1);
-  await page.getByRole("button", { name: "Collection", exact: true }).click();
+  await page.getByRole("button", { name: "Klocky collection" }).click();
   await page.getByRole("button", { name: "Analog", exact: true }).click();
   await expect(page.getByRole("button", { name: /^Display / })).toHaveCount(2);
   await page

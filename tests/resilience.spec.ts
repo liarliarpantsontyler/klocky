@@ -81,7 +81,7 @@ test("wake lock is released on exit", async ({ page }) => {
     )
     .toBe(1);
   await page.getByRole("button", { name: "Close settings" }).click();
-  await page.getByRole("button", { name: "Collection", exact: true }).click();
+  await page.getByRole("button", { name: "Klocky collection" }).click();
   await expect
     .poll(() =>
       page.evaluate(

@@ -84,7 +84,7 @@ export function Onboarding({
             <ArrowLeft size={19} />
           </button>
         )}
-        <BrandLogo compareFonts />
+        <BrandLogo hero />
       </header>
       {step !== "choose" && (
         <ClockCarousel

@@ -4,7 +4,7 @@
   align-items: center;
 }
 
-.brand-logo-shell--compare {
+.brand-logo-shell--hero {
   width: min(100%, 360px);
 }
 
@@ -22,52 +22,10 @@
   object-fit: contain;
 }
 
-.brand-logo-shell--compare .brand-logo-art {
-  height: clamp(120px, 28vw, 168px);
-}
-
-.brand-logo-shell--compare .brand-logo-art--inline {
+.brand-logo-shell--hero .brand-logo-art {
   height: clamp(84px, 19.6vw, 118px);
 }
 
 .brand-logo-shell--compact .brand-logo-art {
-  height: 36px;
-}
-
-.brand-logo-shell--compact .brand-logo-art--inline {
   height: 25px;
-}
-
-.brand-logo-toggle {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
-  margin-top: 16px;
-  width: 100%;
-  padding: 4px;
-  border-radius: 999px;
-  background: #eeeee9;
-}
-
-.brand-logo-toggle button {
-  min-height: 34px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #6f736c;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.brand-logo-toggle button[aria-selected="true"] {
-  background: #fafaf8;
-  color: #242522;
-  box-shadow: 0 1px 4px #24252214;
-}
-
-.brand-logo-toggle button:hover {
-  color: #242522;
 }

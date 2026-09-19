@@ -7,8 +7,10 @@ test("collection → display → live editor → persistence → share", async (
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
-  await expect(page.getByRole("navigation", { name: "Collection" })).toBeVisible();
+  await page.goto("/collection");
+  await expect(
+    page.getByRole("button", { name: "Klocky collection" }),
+  ).toBeVisible();
   await expect(page.getByRole("button", { name: /^Display / })).toHaveCount(13);
   await page
     .getByRole("button", { name: "Display Meridian", exact: true })
@@ -22,7 +24,7 @@ test("collection → display → live editor → persistence → share", async (
     }),
   ).toBeVisible();
   await expect(
-    page.locator(".display-top-actions").getByRole("button", {
+    page.locator(".display-dock-tools").getByRole("button", {
       name: "Enter fullscreen",
     }),
   ).toBeVisible();
@@ -74,7 +76,7 @@ test("collection → display → live editor → persistence → share", async (
   expect(errors).toEqual([]);
 });
 test("favorites, filtering and recent clocks", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/collection");
   await page
     .getByRole("button", { name: "Favorite Meridian", exact: true })
     .click();
@@ -119,6 +121,7 @@ test.describe("weather with deterministic API responses", () => {
     });
     await page.goto("/display?preset=meridian");
     expect(calls).toBe(0);
+    await page.getByRole("button", { name: "Edit clock", exact: true }).click();
     await expect(page.getByLabel("Customize clock")).toBeVisible();
     await page.getByRole("button", { name: /^Layout / }).click();
     await page.getByRole("button", { name: "Set up weather" }).click();
@@ -137,6 +140,7 @@ test.describe("weather with deterministic API responses", () => {
 test("shortcuts, fullscreen and idle chrome", async ({ page, browserName }) => {
   await page.goto("/display?preset=meridian");
   await expect(page.getByTestId("clock")).toBeVisible();
+  await page.getByRole("button", { name: "Edit clock", exact: true }).click();
   await expect(page.getByLabel("Customize clock")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByLabel("Customize clock")).toHaveCount(0);
@@ -161,7 +165,7 @@ test("shortcuts, fullscreen and idle chrome", async ({ page, browserName }) => {
   await expect(page.locator(".player")).not.toHaveClass(/is-ambient/);
 });
 test("settings validation, reset and restore-last launch", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/collection");
   await page.getByRole("button", { name: "Open settings" }).click();
   await page.getByRole("switch", { name: "Restore last clock" }).check();
   await page.getByRole("switch", { name: "24-hour time", exact: true }).check();
@@ -171,7 +175,7 @@ test("settings validation, reset and restore-last launch", async ({ page }) => {
   await page.getByLabel("Time zone", { exact: true }).fill("Asia/Tokyo");
   await page.getByRole("heading", { name: "A few preferences." }).click();
   await page.getByRole("button", { name: "Close settings" }).click();
-  await page.reload();
+  await page.goto("/");
   await expect(page.getByTestId("display-stage")).toBeVisible();
   await page.getByRole("button", { name: "Open settings" }).click();
   await page

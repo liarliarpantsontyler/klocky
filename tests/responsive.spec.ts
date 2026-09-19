@@ -18,7 +18,7 @@ for (const [width, height] of sizes)
   }, testInfo) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/");
+    await page.goto("/collection");
     await expect(
       page.getByRole("button", { name: "Display Meridian", exact: true }),
     ).toBeVisible();

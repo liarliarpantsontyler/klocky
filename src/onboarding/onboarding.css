@@ -53,19 +53,24 @@
   flex: none;
   margin: clamp(48px, 8vh, 100px) 0 0;
   transition: margin 0.45s var(--ease);
+  overscroll-behavior-x: contain;
 }
 .onboarding-carousel-viewport {
   width: 100%;
-  overflow: hidden;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding: 16px 0;
-  cursor: grab;
-  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
   user-select: none;
   -webkit-user-select: none;
 }
-.onboarding-carousel-viewport[data-dragging="true"],
-.onboarding-carousel-viewport[data-dragging="true"] button {
-  cursor: grabbing;
+.onboarding-carousel-viewport::-webkit-scrollbar {
+  display: none;
 }
 .onboarding-carousel-viewport:focus-visible {
   outline-offset: -5px;
@@ -75,12 +80,14 @@
   display: flex;
   gap: 22px;
   width: max-content;
-  will-change: transform;
+  min-width: 100%;
+  padding-inline: var(--carousel-edge, 0px);
 }
 .onboarding-clock-card {
   position: relative;
   display: block;
   flex: 0 0 auto;
+  scroll-snap-align: center;
   padding: 0;
   width: clamp(270px, 28vw, 440px);
   aspect-ratio: 11 / 5;

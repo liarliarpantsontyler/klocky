@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -11,10 +12,15 @@ import { backgroundStyle } from "../backgrounds/definitions";
 import { Clock } from "../clock/Clock";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { welcomeClocks } from "./presets";
-import { CarouselMotion } from "./physics";
+
+const AUTO_SCROLL_PX_PER_SEC = 13;
+const IDLE_BEFORE_AUTO_MS = 4500;
+const SCROLL_SETTLE_MS = 150;
+
 export interface CarouselHandle {
   selected: () => { preset: KlockyPreset; element: HTMLElement } | null;
 }
+
 export function ClockPreview({
   preset,
   preferences,
@@ -63,6 +69,34 @@ export function ClockPreview({
     </div>
   );
 }
+
+function cardStride(rail: HTMLElement) {
+  const card = rail.querySelector<HTMLElement>(".onboarding-clock-card");
+  if (!card) return 0;
+  const gap = parseFloat(getComputedStyle(rail).columnGap || getComputedStyle(rail).gap) || 0;
+  return card.offsetWidth + gap;
+}
+
+function nearestCard(
+  viewport: HTMLElement,
+  rail: HTMLElement,
+): HTMLElement | null {
+  const viewportCenter =
+    viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+  let nearest: HTMLElement | null = null;
+  let nearestDistance = Infinity;
+  for (const card of rail.querySelectorAll<HTMLElement>(".onboarding-clock-card")) {
+    const cardCenter =
+      card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2;
+    const distance = Math.abs(cardCenter - viewportCenter);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearest = card;
+    }
+  }
+  return nearest;
+}
+
 export const ClockCarousel = forwardRef<
   CarouselHandle,
   {
@@ -74,25 +108,96 @@ export const ClockCarousel = forwardRef<
 >(function ClockCarousel({ preferences, reduced, choosing, onClockTap }, handle) {
   const viewport = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  const motion = useRef(new CarouselMotion());
-  const geometry = useRef({ stride: 0, offset: 0 });
   const focused = useRef(false);
   const hover = useRef(false);
   const manualSelection = useRef(false);
-  const pendingSelection = useRef<number | null>(null);
   const active = useRef(0);
   const [selected, setSelected] = useState(0);
   const count = welcomeClocks.length;
   const latest = useRef({ reduced, choosing });
   latest.current = { reduced, choosing };
+
+  const interaction = useRef({
+    pausedUntil: 0,
+    scrolling: false,
+    programmatic: false,
+    scrollLeftAtPointer: 0,
+    settleTimer: 0 as ReturnType<typeof setTimeout> | 0,
+  });
+
+  const pauseInteraction = useCallback((ms = IDLE_BEFORE_AUTO_MS) => {
+    interaction.current.pausedUntil = performance.now() + ms;
+  }, []);
+
+  const syncSelectedFromScroll = useCallback(() => {
+    const root = viewport.current;
+    const rail = track.current;
+    if (!root || !rail) return;
+    const card = nearestCard(root, rail);
+    if (!card) return;
+    const index = Number(card.dataset.clockIndex);
+    if (!Number.isNaN(index) && index !== active.current) {
+      active.current = index;
+      setSelected(index);
+    }
+  }, []);
+
+  const normalizeInfiniteScroll = useCallback(() => {
+    const root = viewport.current;
+    const rail = track.current;
+    if (!root || !rail) return;
+    const stride = cardStride(rail);
+    if (!stride) return;
+    const card = nearestCard(root, rail);
+    if (!card) return;
+    const copy = Number(card.dataset.clockCopy);
+    const setWidth = stride * count;
+    if (copy === 0) {
+      interaction.current.programmatic = true;
+      root.scrollLeft += setWidth;
+      interaction.current.programmatic = false;
+    } else if (copy === 2) {
+      interaction.current.programmatic = true;
+      root.scrollLeft -= setWidth;
+      interaction.current.programmatic = false;
+    }
+  }, [count]);
+
+  const center = useCallback(
+    (index: number, explicit = true) => {
+      const root = viewport.current;
+      const rail = track.current;
+      if (!root || !rail) return;
+      index = (index + count) % count;
+      const target = rail.querySelector<HTMLElement>(
+        `[data-clock-copy="1"][data-clock-index="${index}"]`,
+      );
+      if (!target) return;
+      pauseInteraction();
+      if (explicit && latest.current.choosing) manualSelection.current = true;
+      active.current = index;
+      setSelected(index);
+      interaction.current.programmatic = true;
+      target.scrollIntoView({
+        behavior: latest.current.reduced ? "auto" : "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+      interaction.current.programmatic = false;
+    },
+    [count, pauseInteraction],
+  );
+
   useImperativeHandle(
     handle,
     () => ({
       selected: () => {
-        const elements = track.current?.querySelectorAll<HTMLElement>(
+        const rail = track.current;
+        if (!rail) return null;
+        const elements = rail.querySelectorAll<HTMLElement>(
           `[data-clock-index="${active.current}"] .onboarding-clock-surface`,
         );
-        if (!elements?.length) return null;
+        if (!elements.length) return null;
         const element = [...elements].sort(
           (a, b) =>
             Math.abs(
@@ -111,183 +216,128 @@ export const ClockCarousel = forwardRef<
     }),
     [],
   );
-  function center(index: number, explicit = true) {
-    const { stride, offset } = geometry.current;
-    const m = motion.current;
-    if (!stride) return;
-    index = (index + count) % count;
-    const candidates = [index, index + count, index + count * 2].map(
-      (i) => i * stride - offset,
-    );
-    m.interact(performance.now());
-    m.target = candidates.sort(
-      (a, b) => Math.abs(a - m.position) - Math.abs(b - m.position),
-    )[0];
-    m.velocity = 0;
-    if (latest.current.reduced) {
-      m.position = m.target;
-      m.target = null;
-    }
-    manualSelection.current = explicit;
-    pendingSelection.current = index;
-    active.current = index;
-    setSelected(index);
-  }
+
   useEffect(() => {
-    const root = viewport.current!,
-      rail = track.current!,
-      m = motion.current;
-    let frame = 0,
-      previous = performance.now(),
-      pointer: number | null = null;
-    let lastX = 0,
-      lastAt = 0,
-      moved = false,
-      startX = 0,
-      startY = 0;
-    const measure = () => {
-      const card = rail.firstElementChild as HTMLElement;
-      const width = card.offsetWidth;
-      geometry.current = {
-        stride: width + parseFloat(getComputedStyle(rail).gap),
-        offset: (root.clientWidth - width) / 2,
-      };
-      m.position =
-        (count + active.current) * geometry.current.stride -
-        geometry.current.offset;
-      m.velocity = 0;
-      m.target = null;
-      rail.style.transform = `translate3d(${-m.position}px,0,0)`;
+    const root = viewport.current!;
+    const rail = track.current!;
+    const state = interaction.current;
+
+    const updateEdgePadding = () => {
+      const card = rail.querySelector<HTMLElement>(".onboarding-clock-card");
+      if (!card) return;
+      const edge = Math.max(0, (root.clientWidth - card.offsetWidth) / 2);
+      root.style.setProperty("--carousel-edge", `${edge}px`);
     };
-    const observer = new ResizeObserver(measure);
+
+    const scrollToMiddleCopy = (index = active.current) => {
+      const target = rail.querySelector<HTMLElement>(
+        `[data-clock-copy="1"][data-clock-index="${index}"]`,
+      );
+      target?.scrollIntoView({ inline: "center", block: "nearest" });
+      syncSelectedFromScroll();
+    };
+
+    updateEdgePadding();
+    scrollToMiddleCopy(0);
+
+    const observer = new ResizeObserver(() => {
+      updateEdgePadding();
+    });
     observer.observe(root);
-    observer.observe(rail.firstElementChild!);
-    measure();
-    const animate = (now: number) => {
-      const { stride, offset } = geometry.current;
-      const auto =
-        !latest.current.reduced &&
-        !focused.current &&
-        !hover.current &&
-        !(latest.current.choosing && manualSelection.current) &&
-        !document.hidden;
-      if (!document.hidden)
-        m.advance((now - previous) / 1000, now, stride, offset, auto);
-      previous = now;
-      m.wrap(stride * count, offset);
-      rail.style.transform = `translate3d(${-m.position}px,0,0)`;
-      if (m.target === null) pendingSelection.current = null;
-      const index =
-        pendingSelection.current ??
-        ((Math.round((m.position + offset) / stride) % count) + count) % count;
-      if (index !== active.current) {
-        active.current = index;
-        setSelected(index);
+    const firstCard = rail.querySelector(".onboarding-clock-card");
+    if (firstCard) observer.observe(firstCard);
+
+    const markScrolling = () => {
+      if (!state.programmatic) {
+        state.scrolling = true;
+        if (state.settleTimer) clearTimeout(state.settleTimer);
+        state.settleTimer = setTimeout(() => {
+          state.scrolling = false;
+          normalizeInfiniteScroll();
+        }, SCROLL_SETTLE_MS);
+        pauseInteraction();
       }
-      frame = requestAnimationFrame(animate);
+      syncSelectedFromScroll();
     };
-    const down = (e: PointerEvent) => {
-      if (!e.isPrimary || e.button !== 0) return;
-      pointer = e.pointerId;
-      moved = false;
-      pendingSelection.current = null;
-      if (latest.current.choosing) manualSelection.current = true;
-      startX = lastX = e.clientX;
-      startY = e.clientY;
-      lastAt = performance.now();
-      m.dragging = true;
-      m.velocity = 0;
-      m.interact(lastAt);
+
+    const onScrollEnd = () => {
+      state.scrolling = false;
+      if (state.settleTimer) clearTimeout(state.settleTimer);
+      normalizeInfiniteScroll();
+      syncSelectedFromScroll();
     };
-    const move = (e: PointerEvent) => {
-      if (pointer !== e.pointerId) return;
-      const now = performance.now(),
-        dx = e.clientX - lastX;
-      if (
-        !moved &&
-        Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX) + 8
-      ) {
-        up(e);
-        return;
-      }
-      if (Math.abs(e.clientX - startX) > 5) {
-        moved = true;
-        if (!root.hasPointerCapture(e.pointerId))
-          root.setPointerCapture(e.pointerId);
-        root.dataset.dragging = "true";
-      }
-      if (moved) {
-        m.position -= dx;
-        m.velocity =
-          0.35 * m.velocity +
-          0.65 *
-            Math.max(
-              -4500,
-              Math.min(4500, (-dx / Math.max(8, now - lastAt)) * 1000),
-            );
-        m.lastInput = now;
-      }
-      lastX = e.clientX;
-      lastAt = now;
-    };
-    const up = (e: PointerEvent) => {
-      if (pointer !== e.pointerId) return;
-      if (performance.now() - lastAt > 100 || e.type === "pointercancel")
-        m.velocity = 0;
-      m.dragging = false;
-      m.lastInput = performance.now();
-      pointer = null;
-      root.dataset.dragging = "false";
-      if (root.hasPointerCapture(e.pointerId))
-        root.releasePointerCapture(e.pointerId);
-    };
-    const click = (e: MouseEvent) => {
-      if (moved) {
-        e.preventDefault();
-        e.stopPropagation();
-        moved = false;
-      }
-    };
-    const wheel = (e: WheelEvent) => {
+
+    const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return;
-      // Vertical wheels scroll the carousel only when the page itself has no overflow.
       if (
         Math.abs(e.deltaY) > Math.abs(e.deltaX) &&
         document.documentElement.scrollHeight > innerHeight + 2
       )
         return;
       e.preventDefault();
-      pendingSelection.current = null;
+      pauseInteraction();
       if (latest.current.choosing) manualSelection.current = true;
-      m.interact(performance.now());
-      m.velocity = 0;
       const delta =
         Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      m.position +=
+      root.scrollLeft +=
         delta *
         (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? root.clientWidth : 1);
     };
-    root.addEventListener("pointerdown", down);
-    root.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    window.addEventListener("pointercancel", up);
-    root.addEventListener("lostpointercapture", up);
-    root.addEventListener("click", click, true);
-    root.addEventListener("wheel", wheel, { passive: false });
-    frame = requestAnimationFrame(animate);
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (!e.isPrimary) return;
+      state.scrollLeftAtPointer = root.scrollLeft;
+      pauseInteraction();
+      if (latest.current.choosing) manualSelection.current = true;
+    };
+
+    const onClickCapture = (e: MouseEvent) => {
+      if (Math.abs(root.scrollLeft - state.scrollLeftAtPointer) > 3) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    root.addEventListener("scroll", markScrolling, { passive: true });
+    root.addEventListener("scrollend", onScrollEnd);
+    root.addEventListener("wheel", onWheel, { passive: false });
+    root.addEventListener("pointerdown", onPointerDown);
+    root.addEventListener("click", onClickCapture, true);
+
+    let frame = 0;
+    let previous = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min((now - previous) / 1000, 0.032);
+      previous = now;
+      const auto =
+        !latest.current.reduced &&
+        !focused.current &&
+        !hover.current &&
+        !(latest.current.choosing && manualSelection.current) &&
+        !document.hidden;
+      const idle =
+        now >= state.pausedUntil && !state.scrolling && !state.programmatic;
+      if (auto && idle) {
+        state.programmatic = true;
+        root.scrollLeft += AUTO_SCROLL_PX_PER_SEC * dt;
+        state.programmatic = false;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
-      m.dragging = false;
-      root.removeEventListener("pointerdown", down);
-      root.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-      window.removeEventListener("pointercancel", up);
-      root.removeEventListener("lostpointercapture", up);
-      root.removeEventListener("click", click, true);
-      root.removeEventListener("wheel", wheel);
+      if (state.settleTimer) clearTimeout(state.settleTimer);
+      root.removeEventListener("scroll", markScrolling);
+      root.removeEventListener("scrollend", onScrollEnd);
+      root.removeEventListener("wheel", onWheel);
+      root.removeEventListener("pointerdown", onPointerDown);
+      root.removeEventListener("click", onClickCapture, true);
     };
-  }, []);
+  }, [normalizeInfiniteScroll, pauseInteraction, syncSelectedFromScroll]);
+
   return (
     <section className="onboarding-carousel" aria-label="Explore clock designs">
       <div
@@ -302,7 +352,7 @@ export const ClockCarousel = forwardRef<
         }}
         onPointerLeave={() => {
           hover.current = false;
-          motion.current.lastInput = performance.now();
+          pauseInteraction();
         }}
         onFocus={(e) => {
           focused.current = e.target.matches(":focus-visible");
@@ -310,7 +360,7 @@ export const ClockCarousel = forwardRef<
         onBlur={(e) => {
           if (!e.currentTarget.contains(e.relatedTarget)) {
             focused.current = false;
-            motion.current.lastInput = performance.now();
+            pauseInteraction();
           }
         }}
         onKeyDown={(e) => {
@@ -334,6 +384,7 @@ export const ClockCarousel = forwardRef<
                 type="button"
                 tabIndex={-1}
                 data-clock-index={i}
+                data-clock-copy={copy}
                 className={`onboarding-clock-card ${selected === i ? "is-selected" : ""}`}
                 aria-label={
                   onClockTap

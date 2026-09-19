@@ -31,6 +31,8 @@ export function Clock({
   useLayoutEffect(() => {
     const clock = ref.current;
     if (!clock || thumbnail || decorative) return;
+    const composition = clock.querySelector<HTMLElement>(".clock-composition");
+    if (!composition) return;
     const primarySelectors: Record<string, string> = {
       fold: ".flip-pair",
       orbit: ".analog-face",
@@ -47,11 +49,22 @@ export function Clock({
       words: ".word-clock strong",
       world: ".world-row strong",
     };
+    let measuring = false;
+    let observer: ResizeObserver;
     const measure = () => {
+      if (measuring) return;
+      measuring = true;
+
+      // Always measure the designed layout at 100%. Measuring only the main
+      // numerals misses dates, seconds, rules, and intentionally offset pieces.
+      clock.style.setProperty("--clock-size-scale", "1");
       const primary = clock.querySelector<HTMLElement>(
         primarySelectors[preset.clockId] ?? ".time-text",
       );
-      if (!primary) return;
+      if (!primary) {
+        measuring = false;
+        return;
+      }
       const primaryWidth = primary.offsetWidth;
       const primaryHeight = primary.offsetHeight;
       const designedSize = ["orbit", "swiss"].includes(preset.clockId)
@@ -62,8 +75,10 @@ export function Clock({
         designedSize <= 0 ||
         primaryWidth <= 0 ||
         primaryHeight <= 0
-      )
+      ) {
+        measuring = false;
         return;
+      }
 
       const value = Math.max(
         CLOCK_SIZE_MIN,
@@ -71,12 +86,57 @@ export function Clock({
       );
       let scale = value / CLOCK_SIZE_DEFAULT;
       if (value > CLOCK_SIZE_DEFAULT) {
-        const widthScale = (clock.clientWidth * 0.94) / primaryWidth;
-        const heightScale = (clock.clientHeight * 0.78) / primaryHeight;
-        const fullViewportScale = Math.max(
-          2.25,
-          Math.min(4.5, widthScale, heightScale),
+        const clockBounds = clock.getBoundingClientRect();
+        const visibleParts = Array.from(composition.children).filter(
+          (element): element is HTMLElement => {
+            if (!(element instanceof HTMLElement)) return false;
+            const bounds = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return (
+              bounds.width > 0 &&
+              bounds.height > 0 &&
+              style.display !== "none" &&
+              style.visibility !== "hidden"
+            );
+          },
         );
+
+        for (const part of visibleParts) observer?.observe(part);
+
+        const contentBounds = visibleParts.reduce(
+          (bounds, element) => {
+            const part = element.getBoundingClientRect();
+            return {
+              left: Math.min(bounds.left, part.left),
+              right: Math.max(bounds.right, part.right),
+              top: Math.min(bounds.top, part.top),
+              bottom: Math.max(bounds.bottom, part.bottom),
+            };
+          },
+          {
+            left: Number.POSITIVE_INFINITY,
+            right: Number.NEGATIVE_INFINITY,
+            top: Number.POSITIVE_INFINITY,
+            bottom: Number.NEGATIVE_INFINITY,
+          },
+        );
+        const centerX = clockBounds.left + clockBounds.width / 2;
+        const centerY = clockBounds.top + clockBounds.height / 2;
+        const gutter = Math.max(
+          4,
+          Math.min(clockBounds.width, clockBounds.height) * 0.015,
+        );
+        const fitCandidates = [
+          (centerX - clockBounds.left - gutter) /
+            Math.max(1, centerX - contentBounds.left),
+          (clockBounds.right - centerX - gutter) /
+            Math.max(1, contentBounds.right - centerX),
+          (centerY - clockBounds.top - gutter) /
+            Math.max(1, centerY - contentBounds.top),
+          (clockBounds.bottom - centerY - gutter) /
+            Math.max(1, contentBounds.bottom - centerY),
+        ];
+        const fullViewportScale = Math.max(1, Math.min(4.5, ...fitCandidates));
         const progress =
           (value - CLOCK_SIZE_DEFAULT) / (CLOCK_SIZE_MAX - CLOCK_SIZE_DEFAULT);
         scale = 1 + (fullViewportScale - 1) * progress;
@@ -84,13 +144,22 @@ export function Clock({
       const visibleSize = designedSize * scale;
       clock.style.setProperty("--clock-size-scale", String(scale));
       clock.dataset.visibleFontSize = String(Math.round(visibleSize));
+      measuring = false;
     };
-    measure();
-    const observer = new ResizeObserver(measure);
+    observer = new ResizeObserver(() => measure());
     observer.observe(clock);
+    observer.observe(composition);
+    const mutations = new MutationObserver(measure);
+    mutations.observe(composition, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    measure();
     document.fonts?.addEventListener("loadingdone", measure);
     return () => {
       observer.disconnect();
+      mutations.disconnect();
       document.fonts?.removeEventListener("loadingdone", measure);
     };
   }, [decorative, o.font, o.fontSize, preset.clockId, ref, thumbnail]);

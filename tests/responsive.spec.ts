@@ -68,7 +68,8 @@ for (const [width, height] of sizes)
       .evaluate((c) => ({ width: c.width, height: c.height }));
     expect(canvas.width * canvas.height).toBeLessThanOrEqual(2210000);
     await expect(page.getByLabel("Customize clock")).toBeVisible();
-    await page.getByRole("button", { name: "Set Clock & Open" }).click();
+    await page.getByTestId("display-stage").click();
+    await expect(page.getByLabel("Customize clock")).toHaveCount(0);
     await page.screenshot({
       path: `case-study-captures/qa/${testInfo.project.name}-${width}x${height}-display.png`,
     });
@@ -82,7 +83,8 @@ for (const [width, height] of sizes)
     await page.screenshot({
       path: `case-study-captures/qa/${testInfo.project.name}-${width}x${height}-editor.png`,
     });
-    await page.getByRole("button", { name: "Set Clock & Open" }).click();
+    await page.getByTestId("display-stage").click();
+    await expect(page.getByLabel("Customize clock")).toHaveCount(0);
     await page.setViewportSize({ width: height, height: width });
     await expect(page.getByTestId("clock")).toHaveAttribute(
       "data-aspect",

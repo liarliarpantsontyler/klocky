@@ -889,6 +889,13 @@ button svg {
 }
 .is-editing .display-stage {
   width: calc(100% - 370px);
+  cursor: pointer;
+}
+.is-editing .display-stage .background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 .is-editing .display-top,
 .is-editing .display-bottom {
@@ -950,6 +957,9 @@ button svg {
   padding: calc(12px * var(--ui-scale)) calc(24px * var(--ui-scale)) 0;
   scrollbar-width: thin;
   scrollbar-color: #252a201f transparent;
+}
+.editor-actions {
+  padding: calc(18px * var(--ui-scale)) 0 calc(24px * var(--ui-scale));
 }
 .editor-section {
   border-bottom: 1px solid var(--line);

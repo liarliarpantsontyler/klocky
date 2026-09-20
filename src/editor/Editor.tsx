@@ -76,14 +76,12 @@ export function Editor({
   preferences,
   onPreferences,
   weather,
-  onClose,
 }: {
   preset: KlockyPreset;
   onChange: (p: KlockyPreset) => void;
   preferences: UserPreferences;
   onPreferences: (p: Partial<UserPreferences>) => void;
   weather: WeatherState;
-  onClose: () => void;
 }) {
   const panel = useRef<HTMLElement>(null);
   const [section, setSection] = useState<EditorSection | "">("");
@@ -775,15 +773,15 @@ export function Editor({
             </section>
           );
         })}
-      </div>
-
-      <div className="editor-footer">
-        <button className="secondary-button" onClick={randomizeAll}>
-          Randomize all <Shuffle size={uiPx(17)} />
-        </button>
-        <button className="primary-button" onClick={onClose}>
-          Set Clock &amp; Open <ArrowUpRight size={uiPx(17)} />
-        </button>
+        <div className="editor-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={randomizeAll}
+          >
+            Randomize all <Shuffle size={uiPx(17)} />
+          </button>
+        </div>
       </div>
     </aside>
   );

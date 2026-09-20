@@ -13,7 +13,8 @@ test("touch selection, live editor and rotation in mobile WebKit", async ({
   await page
     .getByRole("button", { name: "Background Haze", exact: true })
     .tap();
-  await page.getByRole("button", { name: "Set Clock & Open" }).tap();
+  await page.getByTestId("display-stage").tap();
+  await expect(page.getByLabel("Customize clock")).toHaveCount(0);
   await expect(page.getByTestId("clock")).toHaveAttribute(
     "data-aspect",
     "portrait",

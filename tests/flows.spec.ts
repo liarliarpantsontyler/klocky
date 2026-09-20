@@ -54,7 +54,8 @@ test("collection → display → live editor → persistence → share", async (
     .click();
   await page.getByRole("switch", { name: "24-hour time", exact: true }).check();
   await page.getByRole("switch", { name: "Show seconds" }).check();
-  await page.getByRole("button", { name: "Set Clock & Open" }).click();
+  await page.getByTestId("display-stage").click();
+  await expect(page.getByLabel("Customize clock")).toHaveCount(0);
   await page.reload();
   await expect(page.locator(".clock-glass")).toBeVisible();
   expect(

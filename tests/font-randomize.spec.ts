@@ -111,16 +111,10 @@ test("randomize all changes background, layout, and typography together", async 
     name: "Randomize all",
     exact: true,
   });
-  const primary = page.getByRole("button", {
-    name: "Set Clock & Open",
-    exact: true,
-  });
-  await expect(primary).toBeVisible();
-  const [randomizeBox, primaryBox] = await Promise.all([
-    randomize.boundingBox(),
-    primary.boundingBox(),
-  ]);
-  expect(randomizeBox).toBeTruthy();
-  expect(primaryBox).toBeTruthy();
-  expect(randomizeBox!.y + randomizeBox!.height).toBeLessThan(primaryBox!.y);
+  await expect(
+    page.getByRole("button", { name: "Set Clock & Open", exact: true }),
+  ).toHaveCount(0);
+  await expect(randomize).toBeVisible();
+  await expect(page.locator(".editor-scroll")).toContain(randomize);
+  await expect(page.locator(".editor-footer")).toHaveCount(0);
 });

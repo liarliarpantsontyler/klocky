@@ -436,8 +436,26 @@ export default function App() {
         >
           <div
             className="display-stage"
-            onClick={wake}
+            onClick={() => {
+              if (editing) setEditing(false);
+              wake();
+            }}
             data-testid="display-stage"
+            role={editing ? "button" : undefined}
+            tabIndex={editing ? 0 : undefined}
+            aria-label={
+              editing ? "Close editor and view clock" : undefined
+            }
+            onKeyDown={
+              editing
+                ? (e) => {
+                    if (e.key !== "Enter" && e.key !== " ") return;
+                    e.preventDefault();
+                    setEditing(false);
+                    wake();
+                  }
+                : undefined
+            }
           >
             <Background
               id={preset.backgroundId}
@@ -538,10 +556,6 @@ export default function App() {
               preferences={preferences}
               onPreferences={changePreferences}
               weather={weather}
-              onClose={() => {
-                setEditing(false);
-                wake();
-              }}
             />
           )}
         </main>

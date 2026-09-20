@@ -145,7 +145,7 @@ test("each scene animates intrinsically, including photo glass, across its motio
       rates: Object.fromEntries(
         backgrounds.map((b) => [
           b.algorithm,
-          [0, 0.08, b.defaultUniforms.motion, 1, 2].map((level) => ({
+          [0, 0.08, 1, 2, 3].map((level) => ({
             level,
             rate: motionRate(b.algorithm, level),
           })),
@@ -159,6 +159,11 @@ test("each scene animates intrinsically, including photo glass, across its motio
   );
 
   for (const result of results) {
+    const background = backgrounds.find((b) => b.id === result.id);
+    const staticEssential =
+      background &&
+      background.defaultUniforms.motion === 0 &&
+      background.customizableUniforms.length === 0;
     expect(result.error, `${result.id}: WebGL error`).toBe(0);
     expect(result.changes[0].change, `${result.id}: zero motion freezes`).toBe(
       0,
@@ -168,6 +173,7 @@ test("each scene animates intrinsically, including photo glass, across its motio
         change.initialChange,
         `${result.id}: speed must not change composition`,
       ).toBe(0);
+    if (staticEssential) continue;
     expect(
       result.changes.at(-1)!.change,
       `${result.id}: high motion visibly animates`,

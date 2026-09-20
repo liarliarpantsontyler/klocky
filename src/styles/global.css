@@ -1169,7 +1169,7 @@ html:has(.player) body {
 }
 .quick-slider-track {
   position: relative;
-  width: calc(44px * var(--ui-scale));
+  width: calc(56px * var(--ui-scale));
   height: calc(128px * var(--ui-scale));
 }
 .quick-background-slider input {
@@ -1178,7 +1178,7 @@ html:has(.player) body {
   top: 50%;
   left: 50%;
   width: calc(120px * var(--ui-scale));
-  height: calc(36px * var(--ui-scale));
+  height: calc(52px * var(--ui-scale));
   margin: 0;
   transform: translate(-50%, -50%) rotate(-90deg);
   transform-origin: center;
@@ -1200,9 +1200,9 @@ html:has(.player) body {
   );
 }
 .quick-background-slider input::-webkit-slider-thumb {
-  width: calc(19px * var(--ui-scale));
-  height: calc(19px * var(--ui-scale));
-  margin-top: calc(-7.5px * var(--ui-scale));
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  margin-top: calc(-10px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1221,8 +1221,8 @@ html:has(.player) body {
   );
 }
 .quick-background-slider input::-moz-range-thumb {
-  width: calc(15px * var(--ui-scale));
-  height: calc(15px * var(--ui-scale));
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -1510,6 +1510,7 @@ html:has(.player) body {
   width: 100%;
   grid-column: 1 / -1;
   margin: 0;
+  min-height: calc(28px * var(--ui-scale));
   accent-color: var(--klocky-blue);
 }
 .fine-tune-advanced {
@@ -1984,7 +1985,8 @@ html:has(.player) body {
 }
 .range-row input {
   width: 100%;
-  height: calc(20px * var(--ui-scale));
+  min-height: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
   cursor: pointer;
 }
 .klocky-range {
@@ -2005,9 +2007,9 @@ html:has(.player) body {
   );
 }
 .klocky-range::-webkit-slider-thumb {
-  width: calc(19px * var(--ui-scale));
-  height: calc(19px * var(--ui-scale));
-  margin-top: calc(-7.5px * var(--ui-scale));
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  margin-top: calc(-10px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
@@ -2026,8 +2028,8 @@ html:has(.player) body {
   );
 }
 .klocky-range::-moz-range-thumb {
-  width: calc(15px * var(--ui-scale));
-  height: calc(15px * var(--ui-scale));
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);

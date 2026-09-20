@@ -82,14 +82,24 @@ export const motionProfiles: Record<string, MotionProfile> = {
   paint: profile("Wet pigment flows along textured brush strokes.", 3.4),
 };
 
-export function motionRate(algorithm: string, value: number) {
+const MOTION_HEADROOM = 1.45;
+
+function motionRateLegacy(algorithm: string, level: number) {
   const { neutral, maxRate } = motionProfiles[algorithm] ?? motionProfiles.mesh;
-  const level = Math.max(0, Math.min(2, value));
+  const clamped = Math.max(0, Math.min(2, level));
   const neutralRate = 0.04 + 2.02 * neutral * neutral;
-  return level <= neutral
-    ? neutralRate * Math.pow(level / neutral, 1.3)
+  return clamped <= neutral
+    ? neutralRate * Math.pow(clamped / neutral, 1.3)
     : neutralRate +
-        (maxRate - neutralRate) * ((level - neutral) / (2 - neutral));
+        (maxRate - neutralRate) * ((clamped - neutral) / (2 - neutral));
+}
+
+export function motionRate(algorithm: string, value: number) {
+  const { maxRate } = motionProfiles[algorithm] ?? motionProfiles.mesh;
+  const level = Math.max(0, Math.min(3, value));
+  if (level <= 2) return motionRateLegacy(algorithm, level);
+  const top = maxRate * MOTION_HEADROOM;
+  return maxRate + (top - maxRate) * (level - 2);
 }
 
 // Integrate speed changes instead of multiplying the entire elapsed lifetime by

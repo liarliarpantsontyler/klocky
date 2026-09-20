@@ -4,7 +4,7 @@ import type {
   ShaderUniformDefinition,
 } from "../types";
 export const uniformControls: ShaderUniformDefinition[] = [
-  { key: "motion", label: "Motion", min: 0, max: 2, step: 0.01 },
+  { key: "motion", label: "Motion", min: 0, max: 3, step: 0.01 },
   { key: "scale", label: "Scale", min: 0.4, max: 3, step: 0.01 },
   { key: "warp", label: "Warp", min: 0, max: 2, step: 0.01 },
   { key: "warpScale", label: "Warp scale", min: 0.3, max: 5, step: 0.01 },
@@ -22,7 +22,7 @@ export const uniformControls: ShaderUniformDefinition[] = [
 ];
 export const baseUniforms: BackgroundOptions = {
   palette: ["#1b333b", "#d38a6c", "#f1c29b", "#ddd8b9", "#a9b49e"],
-  motion: 0.45,
+  motion: 2,
   scale: 1,
   noise: 0.15,
   grain: 0.035,
@@ -66,7 +66,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Soft",
     "chroma",
     ["#7859f4", "#ff86ef", "#ebacff", "#ff68ca"],
-    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0, motion: 0.45 },
+    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "relay",
@@ -74,7 +74,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Graphic",
     "relay",
     ["#ff315c", "#fc86b5", "#2241f2", "#7388ff", "#271337"],
-    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0, motion: 0.35 },
+    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "corona",
@@ -97,7 +97,6 @@ export const backgrounds: BackgroundDefinition[] = [
       noise: 0,
       warp: 0,
       distortion: 0,
-      motion: 0.25,
       softness: 0.4,
     },
   ),
@@ -116,7 +115,7 @@ export const backgrounds: BackgroundDefinition[] = [
       "#ff6711",
       "#bb331d",
     ],
-    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0, motion: 0.35 },
+    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "flux",
@@ -132,7 +131,7 @@ export const backgrounds: BackgroundDefinition[] = [
       "#06bfee",
       "#ff631d",
     ],
-    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0, motion: 0.35 },
+    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "cobalt",
@@ -140,7 +139,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Soft",
     "cobalt",
     ["#10129d", "#f1a692", "#c65fba", "#2559df"],
-    { seed: 0, grain: 0.045, noise: 0, warp: 0, distortion: 0, motion: 0.4 },
+    { seed: 0, grain: 0.045, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "abyss",
@@ -148,7 +147,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Atmospheric",
     "abyss",
     ["#060a24", "#096087", "#aec2c3", "#103154"],
-    { seed: 0, grain: 0.01, noise: 0, warp: 0, distortion: 0, motion: 0.4 },
+    { seed: 0, grain: 0.01, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "sundial",
@@ -156,7 +155,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Graphic",
     "sundial",
     ["#fafcff", "#3279ff", "#abc8ff", "#dfeaff"],
-    { seed: 0, grain: 0.003, noise: 0, warp: 0, distortion: 0, motion: 0.2 },
+    { seed: 0, grain: 0.003, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "isoline",
@@ -164,7 +163,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Quiet",
     "isoline",
     ["#030404", "#939093", "#ffffff", "#111111"],
-    { seed: 0, grain: 0, noise: 0, warp: 0, distortion: 0, motion: 0.3 },
+    { seed: 0, grain: 0, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "terrace",
@@ -172,7 +171,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Graphic",
     "terrace",
     ["#034438", "#065247", "#0862ab", "#215ca4", "#9d625e", "#ff6900"],
-    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0, motion: 0.3 },
+    { seed: 0, grain: 0.004, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "lilt",
@@ -188,7 +187,7 @@ export const backgrounds: BackgroundDefinition[] = [
       "#f4d9e4",
       "#fdf9f1",
     ],
-    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0, motion: 0.3 },
+    { seed: 0, grain: 0.006, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground(
     "weave",
@@ -196,7 +195,7 @@ export const backgrounds: BackgroundDefinition[] = [
     "Sculptural",
     "weave",
     ["#074d67", "#4b96b1", "#aed4d9", "#598eab", "#c9dce2"],
-    { seed: 0, grain: 0.009, noise: 0, warp: 0, distortion: 0, motion: 0.3 },
+    { seed: 0, grain: 0.009, noise: 0, warp: 0, distortion: 0 },
   ),
   makeBackground("apricity", "Apricity", "Soft", "mesh", [
     "#233d48",

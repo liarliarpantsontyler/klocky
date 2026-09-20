@@ -44,7 +44,12 @@ import {
 import { clocks, safeClockOptions, clockOptionsWithWeatherEnabled, presetWithWeatherDefaults } from "../clock/definitions";
 import { backgrounds, backgroundById } from "../backgrounds/definitions";
 import { useWeather } from "../weather/useWeather";
-import { useReducedMotion, useWakeLock, fullscreen } from "../hooks/useDisplay";
+import {
+  useReducedMotion,
+  useWakeLock,
+  fullscreen,
+  shouldShowFullscreenControl,
+} from "../hooks/useDisplay";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { syncDocumentChrome } from "../utils/themeColor";
 import { uiPx } from "../utils/uiScale";
@@ -513,18 +518,20 @@ export default function App() {
                   </button>
                 </div>
                 <div className="display-dock-tools glass-panel">
-                  <IconButton
-                    label={
-                      isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
-                    }
-                    onClick={() => void fullscreen(notify)}
-                  >
-                    {isFullscreen ? (
-                      <Minimize size={uiPx(18)} />
-                    ) : (
-                      <Maximize size={uiPx(18)} />
-                    )}
-                  </IconButton>
+                  {shouldShowFullscreenControl() && (
+                    <IconButton
+                      label={
+                        isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                      }
+                      onClick={() => void fullscreen(notify)}
+                    >
+                      {isFullscreen ? (
+                        <Minimize size={uiPx(18)} />
+                      ) : (
+                        <Maximize size={uiPx(18)} />
+                      )}
+                    </IconButton>
+                  )}
                   <IconButton
                     label={
                       configurationFavorited

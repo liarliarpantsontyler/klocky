@@ -11,17 +11,39 @@ export function useReducedMotion(extra: boolean) {
   }, []);
   return extra || system;
 }
+/** Home-screen / installed PWA — immersive without the Fullscreen API (typical on iOS). */
+export function isStandaloneDisplay() {
+  if (typeof matchMedia !== "function") return false;
+  if (matchMedia("(display-mode: standalone)").matches) return true;
+  if (matchMedia("(display-mode: minimal-ui)").matches) return true;
+  return (
+    typeof navigator !== "undefined" &&
+    !!(navigator as Navigator & { standalone?: boolean }).standalone
+  );
+}
+export function supportsDocumentFullscreen() {
+  return (
+    typeof document !== "undefined" &&
+    !!document.documentElement.requestFullscreen
+  );
+}
+/** Show enter/exit fullscreen when the API works or the user can still install. */
+export function shouldShowFullscreenControl() {
+  return supportsDocumentFullscreen() || !isStandaloneDisplay();
+}
 export async function fullscreen(notify: (text: string) => void) {
+  if (isStandaloneDisplay() && !supportsDocumentFullscreen()) return;
   try {
     if (document.fullscreenElement) {
       await document.exitFullscreen();
-    } else if (document.documentElement.requestFullscreen) {
+    } else if (supportsDocumentFullscreen()) {
       await document.documentElement.requestFullscreen();
     } else
       notify(
         "Fullscreen isn’t available here. Add Klocky to your Home Screen for an immersive display.",
       );
   } catch {
+    if (isStandaloneDisplay()) return;
     notify(
       "This browser couldn’t enter fullscreen. Try its fullscreen menu or install Klocky.",
     );

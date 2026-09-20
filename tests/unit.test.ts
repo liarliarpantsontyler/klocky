@@ -31,6 +31,11 @@ import {
   motionProfiles,
   motionRate,
 } from "../src/shaders/motion";
+import {
+  decideChromeTone,
+  luminanceFromHex,
+  relativeLuminance,
+} from "../src/utils/displayChromeTone";
 
 describe("scene motion", () => {
   it("covers the catalogue with increasing rates and a true standstill", () => {
@@ -549,5 +554,23 @@ describe("display fullscreen", () => {
     expect(notify).toHaveBeenCalledWith(
       "Fullscreen isn’t available here. Add Klocky to your Home Screen for an immersive display.",
     );
+  });
+});
+
+describe("display chrome tone", () => {
+  it("treats Corona pale fields as light backdrops", () => {
+    expect(luminanceFromHex("#fafaff")).toBeGreaterThan(0.62);
+  });
+
+  it("keeps hysteresis between light and dark thresholds", () => {
+    expect(decideChromeTone(0.7, "on-dark")).toBe("on-light");
+    expect(decideChromeTone(0.4, "on-light")).toBe("on-dark");
+    expect(decideChromeTone(0.57, "on-dark")).toBe("on-dark");
+    expect(decideChromeTone(0.57, "on-light")).toBe("on-light");
+  });
+
+  it("uses sRGB relative luminance", () => {
+    expect(relativeLuminance(255, 255, 255)).toBeCloseTo(1, 5);
+    expect(relativeLuminance(0, 0, 0)).toBe(0);
   });
 });

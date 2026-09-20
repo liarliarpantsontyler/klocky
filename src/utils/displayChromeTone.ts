@@ -1,11 +1,5 @@
 export type DisplayChromeTone = "on-light" | "on-dark";
 
-export const CHROME_SAMPLE_POINTS: ReadonlyArray<readonly [number, number]> = [
-  [0.12, 0.06],
-  [0.92, 0.06],
-  [0.5, 0.06],
-];
-
 const LIGHT_THRESHOLD = 0.62;
 const DARK_THRESHOLD = 0.52;
 
@@ -54,4 +48,20 @@ export function luminanceFromHex(hex: string, fallback = 0): number {
   const rgb = parseHexColor(hex);
   if (!rgb) return fallback;
   return relativeLuminance(...rgb);
+}
+
+export function normalizedPointUnderElement(
+  element: HTMLElement,
+  canvas: HTMLCanvasElement,
+): readonly [number, number] | null {
+  const canvasRect = canvas.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
+  if (canvasRect.width <= 0 || canvasRect.height <= 0) return null;
+  const nx = (rect.left + rect.width / 2 - canvasRect.left) / canvasRect.width;
+  const ny = (rect.top + rect.height / 2 - canvasRect.top) / canvasRect.height;
+  if (!Number.isFinite(nx) || !Number.isFinite(ny)) return null;
+  return [
+    Math.min(1, Math.max(0, nx)),
+    Math.min(1, Math.max(0, ny)),
+  ];
 }

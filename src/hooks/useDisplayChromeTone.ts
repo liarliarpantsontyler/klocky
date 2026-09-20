@@ -1,19 +1,26 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, type RefObject } from "react";
 import type { BackgroundOptions } from "../types";
 import {
-  CHROME_SAMPLE_POINTS,
-  averageLuminance,
   decideChromeTone,
   luminanceFromHex,
+  normalizedPointUnderElement,
+  relativeLuminance,
   type DisplayChromeTone,
 } from "../utils/displayChromeTone";
 
 export type DisplayChromeSampler = {
-  sampleMeanLuminance: () => number | null;
+  sampleAt: (nx: number, ny: number) => number | null;
+  getSampleCanvas: () => HTMLCanvasElement | null;
 };
 
 const SAMPLE_INTERVAL_MS = 500;
 const BACKGROUND_SETTLE_MS = 800;
+const CHROME_TARGET_SELECTOR = "[data-display-chrome-target]";
+
+function readTone(element: HTMLElement): DisplayChromeTone {
+  const value = element.getAttribute("data-display-chrome");
+  return value === "on-light" ? "on-light" : "on-dark";
+}
 
 export function useDisplayChromeTone(
   playerRef: RefObject<HTMLElement | null>,
@@ -28,13 +35,14 @@ export function useDisplayChromeTone(
     samplerRef: RefObject<DisplayChromeSampler | null>;
   },
 ) {
-  const toneRef = useRef<DisplayChromeTone>("on-dark");
-
   useEffect(() => {
     const player = playerRef.current;
     if (!enabled || !player) return;
-    toneRef.current = "on-dark";
-    player.setAttribute("data-display-chrome", "on-dark");
+    for (const element of player.querySelectorAll<HTMLElement>(
+      CHROME_TARGET_SELECTOR,
+    )) {
+      element.setAttribute("data-display-chrome", "on-dark");
+    }
   }, [enabled, backgroundId, playerRef]);
 
   useEffect(() => {
@@ -43,29 +51,39 @@ export function useDisplayChromeTone(
     let lastSample = 0;
     let cancelled = false;
 
-    const applyTone = (next: DisplayChromeTone) => {
-      if (next === toneRef.current) return;
-      toneRef.current = next;
-      playerRef.current?.setAttribute("data-display-chrome", next);
-    };
-
-    const sample = () => {
-      const mean = samplerRef.current?.sampleMeanLuminance() ?? null;
-      if (mean === null) return;
-      applyTone(decideChromeTone(mean, toneRef.current));
+    const sampleTargets = () => {
+      const player = playerRef.current;
+      const sampler = samplerRef.current;
+      if (!player || !sampler) return;
+      const canvas = sampler.getSampleCanvas();
+      const targets = player.querySelectorAll<HTMLElement>(
+        CHROME_TARGET_SELECTOR,
+      );
+      for (const element of targets) {
+        let mean: number | null = null;
+        if (canvas) {
+          const point = normalizedPointUnderElement(element, canvas);
+          if (point) mean = sampler.sampleAt(point[0], point[1]);
+        } else {
+          mean = sampler.sampleAt(0, 0);
+        }
+        if (mean === null) continue;
+        const next = decideChromeTone(mean, readTone(element));
+        element.setAttribute("data-display-chrome", next);
+      }
     };
 
     const tick = (now: number) => {
       if (cancelled) return;
       if (!document.hidden && now - lastSample >= SAMPLE_INTERVAL_MS) {
         lastSample = now;
-        sample();
+        sampleTargets();
       }
       frame = requestAnimationFrame(tick);
     };
 
     const boot = window.setTimeout(() => {
-      sample();
+      sampleTargets();
       frame = requestAnimationFrame(tick);
     }, BACKGROUND_SETTLE_MS);
 
@@ -81,23 +99,20 @@ export function createShaderChromeSampler(
   getRenderer: () => {
     readPixel: (nx: number, ny: number) => [number, number, number] | null;
   } | null,
+  getCanvas: () => HTMLCanvasElement | null,
   fallbackHex: string,
   isFailed: () => boolean,
 ): DisplayChromeSampler {
+  const fallback = () => luminanceFromHex(fallbackHex);
   return {
-    sampleMeanLuminance: () => {
-      if (isFailed()) {
-        return luminanceFromHex(fallbackHex);
-      }
+    getSampleCanvas: getCanvas,
+    sampleAt: (nx, ny) => {
+      if (isFailed()) return fallback();
       const renderer = getRenderer();
-      if (!renderer) return luminanceFromHex(fallbackHex);
-      const samples: [number, number, number][] = [];
-      for (const [nx, ny] of CHROME_SAMPLE_POINTS) {
-        const pixel = renderer.readPixel(nx, ny);
-        if (pixel) samples.push(pixel);
-      }
-      if (!samples.length) return null;
-      return averageLuminance(samples);
+      if (!renderer) return fallback();
+      const pixel = renderer.readPixel(nx, ny);
+      if (!pixel) return fallback();
+      return relativeLuminance(...pixel);
     },
   };
 }

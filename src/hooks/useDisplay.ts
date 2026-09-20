@@ -49,41 +49,6 @@ export async function fullscreen(notify: (text: string) => void) {
     );
   }
 }
-/** Keep fixed display backgrounds aligned with iOS Safari’s visual viewport. */
-export function useDisplayViewportBleed(active: boolean) {
-  useEffect(() => {
-    if (!active) {
-      document.documentElement.style.removeProperty("--viewport-offset-top");
-      document.documentElement.style.removeProperty("--viewport-height");
-      return;
-    }
-    const sync = () => {
-      const vv = window.visualViewport;
-      const top = vv ? Math.max(0, vv.offsetTop) : 0;
-      const height = vv ? vv.height + top : window.innerHeight;
-      document.documentElement.style.setProperty(
-        "--viewport-offset-top",
-        `${-top}px`,
-      );
-      document.documentElement.style.setProperty(
-        "--viewport-height",
-        `${height}px`,
-      );
-    };
-    sync();
-    window.visualViewport?.addEventListener("resize", sync);
-    window.visualViewport?.addEventListener("scroll", sync);
-    window.addEventListener("resize", sync);
-    return () => {
-      window.visualViewport?.removeEventListener("resize", sync);
-      window.visualViewport?.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
-      document.documentElement.style.removeProperty("--viewport-offset-top");
-      document.documentElement.style.removeProperty("--viewport-height");
-    };
-  }, [active]);
-}
-
 export function useWakeLock(enabled: boolean, notify: (t: string) => void) {
   useEffect(() => {
     if (!enabled) return;

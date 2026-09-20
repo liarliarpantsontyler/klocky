@@ -46,12 +46,11 @@ import { backgrounds, backgroundById } from "../backgrounds/definitions";
 import { useWeather } from "../weather/useWeather";
 import {
   useReducedMotion,
-  useDisplayViewportBleed,
   useWakeLock,
   fullscreen,
   shouldShowFullscreenControl,
 } from "../hooks/useDisplay";
-import { backgroundStyleForPreset } from "../backgrounds/definitions";
+import { useDisplaySafariChromeSync } from "../hooks/useDisplaySafariChromeSync";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { syncDocumentChrome } from "../utils/themeColor";
 import { uiPx } from "../utils/uiScale";
@@ -151,7 +150,11 @@ export default function App() {
     preferences.unit,
   );
   useWakeLock(view === "display" && preferences.keepAwake, notify);
-  useDisplayViewportBleed(view === "display");
+  useDisplaySafariChromeSync(
+    view === "display",
+    preset,
+    chromeSamplerRef,
+  );
   useDisplayChromeTone(enterFocus, {
     enabled: view === "display",
     backgroundId: preset.backgroundId,
@@ -396,17 +399,8 @@ export default function App() {
     setAccountSyncOpen(false);
   }
   const closeSettings = useCallback(() => setSettings(false), []);
-  const displayBackdropStyle =
-    view === "display" ? backgroundStyleForPreset(preset) : undefined;
   return (
     <>
-      {displayBackdropStyle && (
-        <div
-          className="display-document-backdrop"
-          style={displayBackdropStyle}
-          aria-hidden
-        />
-      )}
       {view === "welcome" ? (
         <Onboarding
           preferences={preferences}
@@ -458,7 +452,6 @@ export default function App() {
           ref={enterFocus}
           tabIndex={-1}
           className={`player ${editing ? "is-editing" : ""} ${controls || editing || settings ? "" : "is-ambient"}`}
-          data-display-chrome="on-dark"
           onPointerMove={wake}
           onPointerDown={wake}
           onKeyDown={wake}
@@ -492,6 +485,7 @@ export default function App() {
               reduced={reduced}
               chromeSamplerRef={chromeSamplerRef}
             />
+            <div className="display-edge-veil display-edge-veil--top" aria-hidden />
             <Clock
               preset={preset}
               preferences={preferences}
@@ -504,7 +498,11 @@ export default function App() {
             inert={!controls && !editing && !settings}
           >
             <div className="display-top">
-              <div className="display-top-start">
+              <div
+                className="display-top-start"
+                data-display-chrome-target
+                data-display-chrome="on-dark"
+              >
                 <button
                   className="quiet-button glass-button"
                   onClick={chooser}
@@ -519,7 +517,11 @@ export default function App() {
                   <small>{backgroundById(preset.backgroundId).name}</small>
                 </div>
               </div>
-              <div className="display-top-actions glass-panel">
+              <div
+                className="display-top-actions glass-panel"
+                data-display-chrome-target
+                data-display-chrome="on-dark"
+              >
                 <IconButton label="Copy link" onClick={() => void share()}>
                   <LinkIcon size={uiPx(18)} />
                 </IconButton>
@@ -532,9 +534,19 @@ export default function App() {
               </div>
             </div>
             <div className="display-bottom">
-              <span className="display-hint">A moment, just for you.</span>
+              <span
+                className="display-hint"
+                data-display-chrome-target
+                data-display-chrome="on-dark"
+              >
+                A moment, just for you.
+              </span>
               <div className="display-bottom-actions">
-                <div className="display-dock glass-panel">
+                <div
+                  className="display-dock glass-panel"
+                  data-display-chrome-target
+                  data-display-chrome="on-dark"
+                >
                   <button
                     className="edit-button"
                     onClick={() => setEditing((v) => !v)}
@@ -542,7 +554,11 @@ export default function App() {
                     <SlidersHorizontal size={uiPx(16)} /> Edit clock
                   </button>
                 </div>
-                <div className="display-dock-tools glass-panel">
+                <div
+                  className="display-dock-tools glass-panel"
+                  data-display-chrome-target
+                  data-display-chrome="on-dark"
+                >
                   {shouldShowFullscreenControl() && (
                     <IconButton
                       label={

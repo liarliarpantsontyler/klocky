@@ -620,31 +620,15 @@ html:has(.player) body {
   overflow: hidden;
   overscroll-behavior: none;
 }
-.display-document-backdrop {
-  position: fixed;
-  z-index: 0;
-  pointer-events: none;
-  left: 0;
-  right: 0;
-  top: var(
-    --viewport-offset-top,
-    calc(-1 * env(safe-area-inset-top, 0px))
-  );
-  height: var(
-    --viewport-height,
-    calc(100lvh + env(safe-area-inset-top, 0px))
-  );
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
 .player {
   position: fixed;
   inset: 0;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
   user-select: none;
+}
+[data-display-chrome-target] {
   --display-chrome-ink: #fffaf0;
   --display-chrome-muted: rgba(255, 250, 240, 0.65);
   --display-chrome-name-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
@@ -667,8 +651,10 @@ html:has(.player) body {
   --liquid-glass-highlight: rgba(255, 255, 255, 0.62);
   --liquid-glass-shadow:
     0 10px 36px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: var(--display-chrome-ink);
+  transition: color 0.35s var(--ease);
 }
-.player[data-display-chrome="on-light"] {
+[data-display-chrome-target][data-display-chrome="on-light"] {
   --display-chrome-ink: #272923;
   --display-chrome-muted: rgba(39, 41, 35, 0.65);
   --display-chrome-name-shadow: 0 1px 8px rgba(255, 255, 255, 0.35);
@@ -699,26 +685,59 @@ html:has(.player) body {
 }
 .player .display-stage .background {
   position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.display-edge-veil {
+  position: fixed;
   left: 0;
   right: 0;
-  top: var(
-    --viewport-offset-top,
-    calc(-1 * env(safe-area-inset-top, 0px))
+  z-index: 1;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(52px) saturate(1.7) brightness(1.08);
+  backdrop-filter: blur(52px) saturate(1.7) brightness(1.08);
+}
+.display-edge-veil--top {
+  top: 0;
+  height: calc(env(safe-area-inset-top, 0px) + 64px);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.11) 0%,
+    rgba(255, 255, 255, 0.045) 38%,
+    rgba(255, 255, 255, 0) 100%
   );
-  height: var(
-    --viewport-height,
-    calc(100lvh + env(safe-area-inset-top, 0px))
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 12%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
   );
-  width: 100%;
+  mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 12%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+}
+@media (prefers-reduced-transparency: reduce) {
+  .display-edge-veil {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 100%
+    );
+  }
 }
 .display-controls {
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
-  color: var(--display-chrome-ink);
-  transition:
-    opacity 0.6s,
-    color 0.35s var(--ease);
+  transition: opacity 0.6s;
 }
 .display-top {
   display: flex;
@@ -2376,8 +2395,8 @@ html:has(.player) body {
   .player .glass-button {
     background: rgba(255, 255, 255, 0.14);
   }
-  .player[data-display-chrome="on-light"] .glass-panel:not(.editor),
-  .player[data-display-chrome="on-light"] .glass-button {
+  [data-display-chrome-target][data-display-chrome="on-light"] .glass-panel:not(.editor),
+  [data-display-chrome-target][data-display-chrome="on-light"] .glass-button {
     background: rgba(0, 0, 0, 0.42);
   }
 }
@@ -2388,8 +2407,8 @@ html:has(.player) body {
     -webkit-backdrop-filter: none;
     background: rgba(255, 255, 255, 0.16);
   }
-  .player[data-display-chrome="on-light"] .glass-panel:not(.editor),
-  .player[data-display-chrome="on-light"] .glass-button {
+  [data-display-chrome-target][data-display-chrome="on-light"] .glass-panel:not(.editor),
+  [data-display-chrome-target][data-display-chrome="on-light"] .glass-button {
     background: rgba(0, 0, 0, 0.45);
   }
 }

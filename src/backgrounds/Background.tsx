@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import type { BackgroundOptions } from "../types";
 import { backgroundById, backgroundStyle } from "./definitions";
 import type { ShaderRenderer } from "../shaders/renderer";
@@ -10,7 +16,7 @@ import { luminanceFromHex } from "../utils/displayChromeTone";
 
 export function Background(
   props: Parameters<typeof ShaderBackground>[0] & {
-    chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
+    chromeSamplerRef?: RefObject<DisplayChromeSampler | null>;
   },
 ) {
   const def = backgroundById(props.id);
@@ -27,7 +33,7 @@ function StaticBackground({
 }: {
   id: string;
   options?: Partial<BackgroundOptions>;
-  chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
+  chromeSamplerRef?: RefObject<DisplayChromeSampler | null>;
 }) {
   const def = backgroundById(id);
   const customColor = options?.palette?.[0];
@@ -38,8 +44,10 @@ function StaticBackground({
       customColor && canReplaceWithColor
         ? customColor
         : (def.defaultUniforms.palette?.[0] ?? "#000000");
+    const lum = luminanceFromHex(hex);
     chromeSamplerRef.current = {
-      sampleMeanLuminance: () => luminanceFromHex(hex),
+      getSampleCanvas: () => null,
+      sampleAt: () => lum,
     };
     return () => {
       chromeSamplerRef.current = null;
@@ -69,9 +77,9 @@ function ShaderBackground({
   id: string;
   options?: Partial<BackgroundOptions>;
   reduced?: boolean;
-  captureRef?: React.RefObject<(() => string) | null>;
+  captureRef?: RefObject<(() => string) | null>;
   photoSource?: string;
-  chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
+  chromeSamplerRef?: RefObject<DisplayChromeSampler | null>;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null),
     renderer = useRef<ShaderRenderer | null>(null);
@@ -89,6 +97,7 @@ function ShaderBackground({
     const fallback = latest.current.def.defaultUniforms.palette?.[0] ?? "#000000";
     chromeSamplerRef.current = createShaderChromeSampler(
       () => renderer.current,
+      () => canvas.current,
       fallback,
       () => failedRef.current,
     );

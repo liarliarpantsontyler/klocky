@@ -38,34 +38,45 @@ function themeColorForPreset(preset: KlockyPreset): string {
   return palette[0];
 }
 
-function applyBackgroundLayers(el: HTMLElement, style: CSSProperties) {
-  if ("background" in style && style.background) {
-    el.style.background = String(style.background);
-  } else {
-    el.style.background = "";
-    el.style.backgroundColor = String(style.backgroundColor ?? "");
-    el.style.backgroundImage = String(style.backgroundImage ?? "");
-  }
-  el.style.backgroundSize = "cover";
-  el.style.backgroundPosition = "center";
-  el.style.backgroundAttachment = "fixed";
-  el.style.backgroundRepeat = "no-repeat";
-}
+type ChromeBackgroundOptions = {
+  /** Skip flat underlay so Safari does not paint a solid band above the shader. */
+  omitColorUnderlay?: boolean;
+  /** Live canvas capture — use scroll attachment so it aligns with the fixed shader. */
+  liveCapture?: boolean;
+};
 
-function clearBackgroundLayers(el: HTMLElement) {
-  el.style.background = "";
-  el.style.backgroundColor = "";
-  el.style.backgroundImage = "";
-  el.style.backgroundSize = "";
-  el.style.backgroundPosition = "";
-  el.style.backgroundAttachment = "";
-  el.style.backgroundRepeat = "";
-}
-
-function syncRootBackground(style: CSSProperties | null) {
+export function applyDocumentChromeBackground(
+  style: CSSProperties,
+  options: ChromeBackgroundOptions = {},
+) {
+  const attachment = options.liveCapture ? "scroll" : "scroll";
   for (const el of [document.documentElement, document.body]) {
-    if (style) applyBackgroundLayers(el, style);
-    else clearBackgroundLayers(el);
+    if ("background" in style && style.background) {
+      el.style.background = String(style.background);
+    } else {
+      el.style.background = "";
+      el.style.backgroundColor =
+        options.omitColorUnderlay || options.liveCapture
+          ? "transparent"
+          : String(style.backgroundColor ?? "");
+      el.style.backgroundImage = String(style.backgroundImage ?? "");
+    }
+    el.style.backgroundSize = "cover";
+    el.style.backgroundPosition = "center top";
+    el.style.backgroundAttachment = attachment;
+    el.style.backgroundRepeat = "no-repeat";
+  }
+}
+
+export function clearDocumentChromeBackground() {
+  for (const el of [document.documentElement, document.body]) {
+    el.style.background = "";
+    el.style.backgroundColor = "";
+    el.style.backgroundImage = "";
+    el.style.backgroundSize = "";
+    el.style.backgroundPosition = "";
+    el.style.backgroundAttachment = "";
+    el.style.backgroundRepeat = "";
   }
 }
 
@@ -76,13 +87,13 @@ export function syncDocumentChrome(
   if (view === "display" && preset) {
     const style = backgroundStyleForPreset(preset);
     setThemeColor(themeColorForPreset(preset));
-    syncRootBackground(style);
+    applyDocumentChromeBackground(style, { omitColorUnderlay: true });
     document.documentElement.dataset.displayBackground = preset.backgroundId;
     return;
   }
 
   delete document.documentElement.dataset.displayBackground;
-  syncRootBackground(null);
+  clearDocumentChromeBackground();
   const color = themeColorForView(view);
   setThemeColor(color);
   if (view === "welcome") {

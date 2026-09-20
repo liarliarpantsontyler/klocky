@@ -48,7 +48,7 @@ const quickBackgroundControls: Array<{
   min: number;
   max: number;
 }> = [
-  { key: "motion", label: "Motion", min: 0, max: 3 },
+  { key: "motion", label: "Motion", min: 0, max: 4 },
   { key: "scale", label: "Scale", min: 0.4, max: 3 },
   { key: "intensity", label: "Intensity", min: 0, max: 2 },
 ];

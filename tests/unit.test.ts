@@ -42,7 +42,7 @@ describe("scene motion", () => {
     for (const background of backgrounds) {
       expect(motionProfiles[background.algorithm]).toBeDefined();
       expect(motionRate(background.algorithm, 0)).toBe(0);
-      const rates = [0.02, 0.1, 0.5, 1, 2, 3].map((value) =>
+      const rates = [0.02, 0.1, 0.5, 1, 2, 3, 4].map((value) =>
         motionRate(background.algorithm, value),
       );
       rates
@@ -99,7 +99,7 @@ describe("share boundary", () => {
     expect(p.clockOptions.opacity).toBe(0.5);
     expect(p.clockOptions.fontSize).toBe(100);
     expect(p.clockOptions.color).toBe("#fffaf0");
-    expect(p.backgroundOptions.motion).toBe(3);
+    expect(p.backgroundOptions.motion).toBe(4);
     expect(p.backgroundOptions.palette).toBeUndefined();
   });
   it("clamps saved clock font sizes to the responsive control range", () => {

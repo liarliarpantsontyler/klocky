@@ -82,7 +82,9 @@ export const motionProfiles: Record<string, MotionProfile> = {
   paint: profile("Wet pigment flows along textured brush strokes.", 3.4),
 };
 
-const MOTION_HEADROOM = 1.45;
+/** Slider stops at 4; level 2 stays the tuned default, 4 reaches this × profile maxRate. */
+export const MOTION_SLIDER_MAX = 4;
+const MOTION_PEAK_MULTIPLIER = 6;
 
 function motionRateLegacy(algorithm: string, level: number) {
   const { neutral, maxRate } = motionProfiles[algorithm] ?? motionProfiles.mesh;
@@ -96,10 +98,11 @@ function motionRateLegacy(algorithm: string, level: number) {
 
 export function motionRate(algorithm: string, value: number) {
   const { maxRate } = motionProfiles[algorithm] ?? motionProfiles.mesh;
-  const level = Math.max(0, Math.min(3, value));
+  const level = Math.max(0, Math.min(MOTION_SLIDER_MAX, value));
   if (level <= 2) return motionRateLegacy(algorithm, level);
-  const top = maxRate * MOTION_HEADROOM;
-  return maxRate + (top - maxRate) * (level - 2);
+  const peak = maxRate * MOTION_PEAK_MULTIPLIER;
+  const t = (level - 2) / (MOTION_SLIDER_MAX - 2);
+  return maxRate + (peak - maxRate) * t;
 }
 
 // Integrate speed changes instead of multiplying the entire elapsed lifetime by

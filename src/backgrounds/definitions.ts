@@ -4,7 +4,7 @@ import type {
   ShaderUniformDefinition,
 } from "../types";
 export const uniformControls: ShaderUniformDefinition[] = [
-  { key: "motion", label: "Motion", min: 0, max: 3, step: 0.01 },
+  { key: "motion", label: "Motion", min: 0, max: 4, step: 0.01 },
   { key: "scale", label: "Scale", min: 0.4, max: 3, step: 0.01 },
   { key: "warp", label: "Warp", min: 0, max: 2, step: 0.01 },
   { key: "warpScale", label: "Warp scale", min: 0.3, max: 5, step: 0.01 },

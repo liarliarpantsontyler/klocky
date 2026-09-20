@@ -145,7 +145,7 @@ test("each scene animates intrinsically, including photo glass, across its motio
       rates: Object.fromEntries(
         backgrounds.map((b) => [
           b.algorithm,
-          [0, 0.08, 1, 2, 3].map((level) => ({
+          [0, 0.08, 1, 2, 3, 4].map((level) => ({
             level,
             rate: motionRate(b.algorithm, level),
           })),

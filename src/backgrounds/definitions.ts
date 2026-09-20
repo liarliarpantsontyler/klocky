@@ -447,12 +447,24 @@ for (const b of backgrounds)
     b.suggestedClockColors = ["#272923", "#fffaf0"];
 export const backgroundById = (id: string) =>
   backgrounds.find((b) => b.id === id) ?? backgrounds[0];
+const shaderBackgroundStyle = (id: string, palette: string[]) => ({
+  backgroundColor: palette[0],
+  backgroundImage: `url(/posters/${id}.webp), radial-gradient(ellipse at 62% 15%, ${palette[3]} 0%, transparent 67%), radial-gradient(ellipse at 80% 95%, ${palette[1]} 0%, transparent 65%), linear-gradient(125deg, ${palette[0]}, ${palette[2]})`,
+});
+
 export const backgroundStyle = (id: string) => {
   const def = backgroundById(id);
   if (def.staticBackground) return { background: def.staticBackground };
-  const p = def.defaultUniforms.palette;
-  return {
-    backgroundColor: p[0],
-    backgroundImage: `url(/posters/${id}.webp), radial-gradient(ellipse at 62% 15%, ${p[3]} 0%, transparent 67%), radial-gradient(ellipse at 80% 95%, ${p[1]} 0%, transparent 65%), linear-gradient(125deg, ${p[0]}, ${p[2]})`,
-  };
+  return shaderBackgroundStyle(id, def.defaultUniforms.palette);
+};
+
+export const backgroundStyleForPreset = (preset: {
+  backgroundId: string;
+  backgroundOptions?: Partial<BackgroundOptions>;
+}) => {
+  const def = backgroundById(preset.backgroundId);
+  if (def.staticBackground) return backgroundStyle(preset.backgroundId);
+  const palette =
+    preset.backgroundOptions?.palette ?? def.defaultUniforms.palette;
+  return shaderBackgroundStyle(preset.backgroundId, palette);
 };

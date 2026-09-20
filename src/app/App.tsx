@@ -46,13 +46,19 @@ import { backgrounds, backgroundById } from "../backgrounds/definitions";
 import { useWeather } from "../weather/useWeather";
 import {
   useReducedMotion,
+  useDisplayViewportBleed,
   useWakeLock,
   fullscreen,
   shouldShowFullscreenControl,
 } from "../hooks/useDisplay";
+import { backgroundStyleForPreset } from "../backgrounds/definitions";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { syncDocumentChrome } from "../utils/themeColor";
 import { uiPx } from "../utils/uiScale";
+import {
+  useDisplayChromeTone,
+  type DisplayChromeSampler,
+} from "../hooks/useDisplayChromeTone";
 const Lab = lazy(() => import("../editor/Lab"));
 export default function App() {
   const [saved, setSaved] = useState(() => {
@@ -99,6 +105,7 @@ export default function App() {
     ),
     idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const enterFocus = useRef<HTMLElement>(null);
+  const chromeSamplerRef = useRef<DisplayChromeSampler | null>(null);
   const savedRef = useRef(saved);
   savedRef.current = saved;
   const preferences = saved.preferences;
@@ -144,9 +151,16 @@ export default function App() {
     preferences.unit,
   );
   useWakeLock(view === "display" && preferences.keepAwake, notify);
+  useDisplayViewportBleed(view === "display");
+  useDisplayChromeTone(enterFocus, {
+    enabled: view === "display",
+    backgroundId: preset.backgroundId,
+    backgroundOptions: preset.backgroundOptions,
+    samplerRef: chromeSamplerRef,
+  });
   useLayoutEffect(() => {
-    syncDocumentChrome(view);
-  }, [view]);
+    syncDocumentChrome(view, view === "display" ? preset : undefined);
+  }, [view, preset]);
   useEffect(() => {
     document.documentElement.dataset.reduced = String(reduced);
   }, [reduced]);
@@ -382,8 +396,17 @@ export default function App() {
     setAccountSyncOpen(false);
   }
   const closeSettings = useCallback(() => setSettings(false), []);
+  const displayBackdropStyle =
+    view === "display" ? backgroundStyleForPreset(preset) : undefined;
   return (
     <>
+      {displayBackdropStyle && (
+        <div
+          className="display-document-backdrop"
+          style={displayBackdropStyle}
+          aria-hidden
+        />
+      )}
       {view === "welcome" ? (
         <Onboarding
           preferences={preferences}
@@ -435,6 +458,7 @@ export default function App() {
           ref={enterFocus}
           tabIndex={-1}
           className={`player ${editing ? "is-editing" : ""} ${controls || editing || settings ? "" : "is-ambient"}`}
+          data-display-chrome="on-dark"
           onPointerMove={wake}
           onPointerDown={wake}
           onKeyDown={wake}
@@ -466,6 +490,7 @@ export default function App() {
               id={preset.backgroundId}
               options={preset.backgroundOptions}
               reduced={reduced}
+              chromeSamplerRef={chromeSamplerRef}
             />
             <Clock
               preset={preset}

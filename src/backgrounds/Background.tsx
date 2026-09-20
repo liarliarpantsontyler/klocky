@@ -1,38 +1,77 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { BackgroundOptions } from "../types";
 import { backgroundById, backgroundStyle } from "./definitions";
 import type { ShaderRenderer } from "../shaders/renderer";
-export function Background(props: Parameters<typeof ShaderBackground>[0]) {
+import {
+  createShaderChromeSampler,
+  type DisplayChromeSampler,
+} from "../hooks/useDisplayChromeTone";
+import { luminanceFromHex } from "../utils/displayChromeTone";
+
+export function Background(
+  props: Parameters<typeof ShaderBackground>[0] & {
+    chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
+  },
+) {
   const def = backgroundById(props.id);
   if (def.staticBackground) {
-    const customColor = props.options?.palette?.[0];
-    const canReplaceWithColor = !def.staticBackground.includes("url(");
-    return (
-      <div
-        className="background"
-        style={
-          customColor && canReplaceWithColor
-            ? { background: customColor }
-            : backgroundStyle(props.id)
-        }
-        aria-hidden="true"
-      />
-    );
+    return <StaticBackground {...props} />;
   }
   return <ShaderBackground {...props} />;
 }
+
+function StaticBackground({
+  id,
+  options = {},
+  chromeSamplerRef,
+}: {
+  id: string;
+  options?: Partial<BackgroundOptions>;
+  chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
+}) {
+  const def = backgroundById(id);
+  const customColor = options?.palette?.[0];
+  const canReplaceWithColor = !def.staticBackground!.includes("url(");
+  useLayoutEffect(() => {
+    if (!chromeSamplerRef) return;
+    const hex =
+      customColor && canReplaceWithColor
+        ? customColor
+        : (def.defaultUniforms.palette?.[0] ?? "#000000");
+    chromeSamplerRef.current = {
+      sampleMeanLuminance: () => luminanceFromHex(hex),
+    };
+    return () => {
+      chromeSamplerRef.current = null;
+    };
+  }, [chromeSamplerRef, id, customColor, canReplaceWithColor, def]);
+  return (
+    <div
+      className="background"
+      style={
+        customColor && canReplaceWithColor
+          ? { background: customColor }
+          : backgroundStyle(id)
+      }
+      aria-hidden="true"
+    />
+  );
+}
+
 function ShaderBackground({
   id,
   options = {},
   reduced = false,
   captureRef,
   photoSource,
+  chromeSamplerRef,
 }: {
   id: string;
   options?: Partial<BackgroundOptions>;
   reduced?: boolean;
   captureRef?: React.RefObject<(() => string) | null>;
   photoSource?: string;
+  chromeSamplerRef?: React.RefObject<DisplayChromeSampler | null>;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null),
     renderer = useRef<ShaderRenderer | null>(null);
@@ -42,6 +81,19 @@ function ShaderBackground({
   const def = backgroundById(id);
   const latest = useRef({ def, options, reduced });
   latest.current = { def, options, reduced };
+  const failedRef = useRef(failed);
+  failedRef.current = failed;
+
+  const bindChromeSampler = () => {
+    if (!chromeSamplerRef) return;
+    const fallback = latest.current.def.defaultUniforms.palette?.[0] ?? "#000000";
+    chromeSamplerRef.current = createShaderChromeSampler(
+      () => renderer.current,
+      fallback,
+      () => failedRef.current,
+    );
+  };
+
   useEffect(() => {
     let cancelled = false;
     let detachPointer = () => {};
@@ -65,6 +117,7 @@ function ShaderBackground({
         r.set(def.algorithm, { ...def.defaultUniforms, ...options });
         r.setReducedMotion(reduced);
         if (captureRef) captureRef.current = () => r.capture();
+        bindChromeSampler();
         setReady(true);
       } catch {
         setFailed(true);
@@ -76,8 +129,12 @@ function ShaderBackground({
       renderer.current?.dispose();
       renderer.current = null;
       if (captureRef) captureRef.current = null;
+      if (chromeSamplerRef) chromeSamplerRef.current = null;
     };
-  }, [captureRef]);
+  }, [captureRef, chromeSamplerRef]);
+  useEffect(() => {
+    bindChromeSampler();
+  }, [ready, failed, id]);
   useEffect(() => {
     const r = renderer.current;
     if (!r) return;

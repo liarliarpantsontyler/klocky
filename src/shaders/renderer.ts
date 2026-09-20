@@ -70,7 +70,7 @@ export class ShaderRenderer {
       this.height = r.height;
       this.resize();
     });
-    this.observer.observe(canvas);
+    this.observer.observe(canvas.parentElement ?? canvas);
     document.addEventListener("visibilitychange", this.visibility);
     canvas.addEventListener("webglcontextlost", this.lost);
     canvas.addEventListener("webglcontextrestored", this.restored);
@@ -278,6 +278,22 @@ export class ShaderRenderer {
   capture() {
     this.draw(performance.now());
     return this.canvas.toDataURL("image/webp", 0.9);
+  }
+  /** Normalized coords: x left→right, y top→bottom (screen space). */
+  readPixel(nx: number, ny: number): [number, number, number] | null {
+    if (this.disposed || this.gl.isContextLost() || !this.program) return null;
+    this.draw(performance.now());
+    const x = Math.min(
+      this.canvas.width - 1,
+      Math.max(0, Math.round(nx * this.canvas.width)),
+    );
+    const y = Math.min(
+      this.canvas.height - 1,
+      Math.max(0, Math.round((1 - ny) * this.canvas.height)),
+    );
+    const out = new Uint8Array(4);
+    this.gl.readPixels(x, y, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, out);
+    return [out[0], out[1], out[2]];
   }
   dispose() {
     this.disposed = true;

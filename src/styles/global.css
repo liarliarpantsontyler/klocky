@@ -614,16 +614,51 @@ button svg {
   object-fit: cover;
   animation: fadeout 0.7s var(--ease) forwards;
 }
-html:has(.player) {
-  background: #000;
+html:has(.player),
+html:has(.player) body {
+  min-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.display-document-backdrop {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+  top: var(
+    --viewport-offset-top,
+    calc(-1 * env(safe-area-inset-top, 0px))
+  );
+  height: var(
+    --viewport-height,
+    calc(100lvh + env(safe-area-inset-top, 0px))
+  );
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .player {
   position: fixed;
   inset: 0;
+  z-index: 1;
   overflow: hidden;
-  background: #000;
-  color: #fffaf0;
+  background: transparent;
   user-select: none;
+  --display-chrome-ink: #fffaf0;
+  --display-chrome-muted: rgba(255, 250, 240, 0.65);
+  --display-chrome-name-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  --display-chrome-icon-hover: rgba(255, 255, 255, 0.14);
+  --display-chrome-icon-active: rgba(255, 255, 255, 0.24);
+  --display-chrome-icon-divider: rgba(255, 255, 255, 0.1);
+  --display-chrome-edit-hover: rgba(255, 255, 255, 0.12);
+  --display-chrome-edit-active: rgba(255, 255, 255, 0.2);
+  --display-chrome-glass-hover: rgba(255, 255, 255, 0.07);
+  --display-chrome-glass-hover-border: rgba(255, 255, 255, 0.52);
+  --display-chrome-glass-active: rgba(255, 255, 255, 0.1);
+  --display-chrome-glass-sheen-top: rgba(255, 255, 255, 0.26);
+  --display-chrome-glass-sheen-mid: rgba(255, 255, 255, 0.06);
+  --display-chrome-glass-inset-bottom: rgba(255, 255, 255, 0.12);
   --liquid-glass-blur: 72px;
   --liquid-glass-saturate: 2.15;
   --liquid-glass-brightness: 1.14;
@@ -632,6 +667,27 @@ html:has(.player) {
   --liquid-glass-highlight: rgba(255, 255, 255, 0.62);
   --liquid-glass-shadow:
     0 10px 36px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.player[data-display-chrome="on-light"] {
+  --display-chrome-ink: #272923;
+  --display-chrome-muted: rgba(39, 41, 35, 0.65);
+  --display-chrome-name-shadow: 0 1px 8px rgba(255, 255, 255, 0.35);
+  --display-chrome-icon-hover: rgba(0, 0, 0, 0.08);
+  --display-chrome-icon-active: rgba(0, 0, 0, 0.14);
+  --display-chrome-icon-divider: rgba(0, 0, 0, 0.08);
+  --display-chrome-edit-hover: rgba(0, 0, 0, 0.06);
+  --display-chrome-edit-active: rgba(0, 0, 0, 0.1);
+  --display-chrome-glass-hover: rgba(0, 0, 0, 0.12);
+  --display-chrome-glass-hover-border: rgba(0, 0, 0, 0.28);
+  --display-chrome-glass-active: rgba(0, 0, 0, 0.16);
+  --display-chrome-glass-sheen-top: rgba(255, 255, 255, 0.18);
+  --display-chrome-glass-sheen-mid: rgba(255, 255, 255, 0.04);
+  --display-chrome-glass-inset-bottom: rgba(0, 0, 0, 0.08);
+  --liquid-glass-fill: rgba(0, 0, 0, 0.35);
+  --liquid-glass-border: rgba(0, 0, 0, 0.22);
+  --liquid-glass-highlight: rgba(255, 255, 255, 0.35);
+  --liquid-glass-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 .display-stage {
   position: absolute;
@@ -643,18 +699,26 @@ html:has(.player) {
 }
 .player .display-stage .background {
   position: fixed;
-  top: calc(-1 * env(safe-area-inset-top, 0px));
-  right: calc(-1 * env(safe-area-inset-right, 0px));
-  bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
-  left: calc(-1 * env(safe-area-inset-left, 0px));
-  width: auto;
-  height: auto;
+  left: 0;
+  right: 0;
+  top: var(
+    --viewport-offset-top,
+    calc(-1 * env(safe-area-inset-top, 0px))
+  );
+  height: var(
+    --viewport-height,
+    calc(100lvh + env(safe-area-inset-top, 0px))
+  );
+  width: 100%;
 }
 .display-controls {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  transition: opacity 0.6s;
+  color: var(--display-chrome-ink);
+  transition:
+    opacity 0.6s,
+    color 0.35s var(--ease);
 }
 .display-top {
   display: flex;
@@ -689,7 +753,7 @@ html:has(.player) {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #fffaf0;
+  color: var(--display-chrome-ink);
   border: 0.5px solid var(--liquid-glass-border);
   background: var(--liquid-glass-fill);
   backdrop-filter: blur(var(--liquid-glass-blur))
@@ -700,7 +764,7 @@ html:has(.player) {
     brightness(var(--liquid-glass-brightness));
   box-shadow:
     inset 0 1px 0 var(--liquid-glass-highlight),
-    inset 0 -0.5px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -0.5px 0 var(--display-chrome-glass-inset-bottom),
     var(--liquid-glass-shadow);
   transition:
     background 0.22s var(--ease),
@@ -715,8 +779,8 @@ html:has(.player) {
   border-radius: inherit;
   background: linear-gradient(
     148deg,
-    rgba(255, 255, 255, 0.26) 0%,
-    rgba(255, 255, 255, 0.06) 42%,
+    var(--display-chrome-glass-sheen-top) 0%,
+    var(--display-chrome-glass-sheen-mid) 42%,
     rgba(255, 255, 255, 0) 68%
   );
   pointer-events: none;
@@ -745,16 +809,16 @@ html:has(.player) {
 }
 .player .glass-button:hover,
 .player .glass-panel:not(.editor):hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.52);
+  background: var(--display-chrome-glass-hover);
+  border-color: var(--display-chrome-glass-hover-border);
 }
 .player .glass-button:active {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--display-chrome-glass-active);
 }
 .display-name {
   text-align: left;
   min-width: 0;
-  text-shadow: 0 1px 10px #0003;
+  text-shadow: var(--display-chrome-name-shadow);
 }
 .display-name > span {
   font-size: calc(12px * var(--ui-scale));
@@ -780,17 +844,17 @@ html:has(.player) {
   width: calc(42px * var(--ui-scale));
   height: calc(42px * var(--ui-scale));
   border-radius: calc(999px * var(--ui-scale));
-  color: #fffaf0;
+  color: var(--display-chrome-ink);
   transition: background 0.18s var(--ease);
 }
 .display-top-actions .icon-button + .icon-button {
-  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -1px 0 var(--display-chrome-icon-divider);
 }
 .display-top-actions .icon-button:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--display-chrome-icon-hover);
 }
 .display-top-actions .icon-button:active {
-  background: rgba(255, 255, 255, 0.24);
+  background: var(--display-chrome-icon-active);
 }
 .display-bottom {
   position: absolute;
@@ -852,17 +916,17 @@ html:has(.player) {
   width: calc(44px * var(--ui-scale));
   height: calc(44px * var(--ui-scale));
   border-radius: calc(999px * var(--ui-scale));
-  color: #fffaf0;
+  color: var(--display-chrome-ink);
   transition: background 0.18s var(--ease);
 }
 .display-dock-tools .icon-button + .icon-button {
-  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -1px 0 var(--display-chrome-icon-divider);
 }
 .display-dock-tools .icon-button:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--display-chrome-icon-hover);
 }
 .display-dock-tools .icon-button:active {
-  background: rgba(255, 255, 255, 0.24);
+  background: var(--display-chrome-icon-active);
 }
 .display-dock-tools .icon-button--active {
   color: #ffb4bc;
@@ -883,15 +947,15 @@ html:has(.player) {
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  color: #fffaf0;
+  color: var(--display-chrome-ink);
   background: transparent;
   transition: background 0.18s var(--ease);
 }
 .edit-button:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--display-chrome-edit-hover);
 }
 .edit-button:active {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--display-chrome-edit-active);
 }
 .is-ambient {
   cursor: none;
@@ -2312,6 +2376,10 @@ html:has(.player) {
   .player .glass-button {
     background: rgba(255, 255, 255, 0.14);
   }
+  .player[data-display-chrome="on-light"] .glass-panel:not(.editor),
+  .player[data-display-chrome="on-light"] .glass-button {
+    background: rgba(0, 0, 0, 0.42);
+  }
 }
 @media (prefers-reduced-transparency: reduce) {
   .player .glass-panel:not(.editor),
@@ -2319,6 +2387,10 @@ html:has(.player) {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: rgba(255, 255, 255, 0.16);
+  }
+  .player[data-display-chrome="on-light"] .glass-panel:not(.editor),
+  .player[data-display-chrome="on-light"] .glass-button {
+    background: rgba(0, 0, 0, 0.45);
   }
 }
 @keyframes arrive {

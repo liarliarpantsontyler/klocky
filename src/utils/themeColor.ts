@@ -14,6 +14,8 @@ export function themeColorForView(
   view: "welcome" | "gallery" | "display" | "lab",
 ): string {
   switch (view) {
+    case "display":
+      return "#000000";
     case "welcome":
       return "#ffffff";
     case "lab":
@@ -29,6 +31,8 @@ export function syncDocumentChrome(
   const color = themeColorForView(view);
   setThemeColor(color);
   if (view === "welcome") {
+    document.documentElement.style.backgroundColor = color;
+  } else if (view === "display") {
     document.documentElement.style.backgroundColor = color;
   } else {
     document.documentElement.style.backgroundColor = "";

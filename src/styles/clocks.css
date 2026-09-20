@@ -759,6 +759,10 @@
   width: 100%;
   text-align: left;
 }
+.clock-words:not(.thumbnail) .clock-composition {
+  padding-left: calc(7cqw + 60px * var(--ui-scale, 1));
+  align-items: stretch;
+}
 .word-clock > span,
 .word-clock > small {
   display: block;

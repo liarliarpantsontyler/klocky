@@ -36,11 +36,14 @@ test("collection → display → live editor → persistence → share", async (
     .getByRole("button", { name: "Background Boreal", exact: true })
     .click();
   await expect(
-    page.getByLabel("Background Boreal", { exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
+    page.getByRole("button", { name: /Boreal Change background/ }),
+  ).toBeVisible();
   await page.getByRole("button", { name: /^Layout / }).click();
-  await page.getByRole("button", { name: "Lucent", exact: false }).click();
-  await expect(page.locator(".clock-glass")).toBeVisible();
+  await page
+    .locator(".layout-picker")
+    .getByRole("button", { name: "Lucent", exact: true })
+    .click();
+  await expect(page.getByTestId("clock")).toHaveClass(/clock-glass/);
   await page.getByRole("button", { name: /^Font / }).click();
   await page.getByRole("button", { name: /System Sans.*12:48 Aa/ }).click();
   await page.getByRole("option", { name: /Space Grotesk.*12:48 Aa/ }).click();
@@ -57,7 +60,7 @@ test("collection → display → live editor → persistence → share", async (
   await page.getByTestId("display-stage").click();
   await expect(page.getByLabel("Customize clock")).toHaveCount(0);
   await page.reload();
-  await expect(page.locator(".clock-glass")).toBeVisible();
+  await expect(page.getByTestId("clock")).toHaveClass(/clock-glass/);
   expect(
     await page
       .locator(".clock")

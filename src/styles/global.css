@@ -1268,6 +1268,25 @@ button svg {
   background: var(--surface-subtle);
   border-color: var(--klocky-gray-mid);
 }
+.editor-step-continue {
+  width: 100%;
+  min-height: calc(50px * var(--ui-scale));
+  margin-top: calc(18px * var(--ui-scale));
+  padding: 0 calc(18px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--ink);
+  border-radius: calc(999px * var(--ui-scale));
+  background: var(--ink);
+  color: var(--klocky-white);
+  font-size: calc(13px * var(--ui-scale));
+  transition: background 0.2s, border-color 0.2s;
+}
+.editor-step-continue:hover {
+  background: #3a4038;
+  border-color: #3a4038;
+}
 .background-fine-tune {
   animation: arrive 0.25s var(--ease);
 }

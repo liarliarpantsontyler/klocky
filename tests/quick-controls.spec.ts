@@ -11,7 +11,9 @@ test("quick background sliders use value fill without a center tick", async ({
   );
   await page.goto("/display?preset=meridian");
   await page.getByRole("button", { name: "Edit clock", exact: true }).click();
-  await page.getByRole("button", { name: /^Background / }).click();
+  await page
+    .getByRole("button", { name: "Background Haze", exact: true })
+    .click();
 
   const backgroundPanel = page.locator("#editor-background-content");
   const controls = backgroundPanel.getByRole("group", {

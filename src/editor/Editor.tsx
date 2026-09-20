@@ -4,7 +4,6 @@ import {
   Check,
   ChevronDown,
   Clock3,
-  CloudSun,
   ImageIcon,
   Shuffle,
   Type,
@@ -34,9 +33,7 @@ import type {
   UserPreferences,
   WeatherState,
 } from "../types";
-import { Toggle } from "../components/Controls";
 import { entitlements } from "../state/entitlements";
-import { WeatherControls } from "./WeatherControls";
 import { motionProfiles } from "../shaders/motion";
 import { ClockStylePreview } from "./ClockStylePreview";
 import { BackgroundFineTune } from "./BackgroundFineTune";
@@ -74,20 +71,18 @@ export function Editor({
   preset,
   onChange,
   preferences,
-  onPreferences,
   weather,
 }: {
   preset: KlockyPreset;
   onChange: (p: KlockyPreset) => void;
   preferences: UserPreferences;
-  onPreferences: (p: Partial<UserPreferences>) => void;
   weather: WeatherState;
 }) {
   const panel = useRef<HTMLElement>(null);
-  const [section, setSection] = useState<EditorSection | "">("");
-  const [weatherSetup, setWeatherSetup] = useState(false);
+  const [section, setSection] = useState<EditorSection | "">("Background");
   const [backgroundDetail, setBackgroundDetail] = useState(false);
   const [backgroundPickerExpanded, setBackgroundPickerExpanded] = useState(true);
+  const [backgroundPicked, setBackgroundPicked] = useState(false);
   const [typefaceOpen, setTypefaceOpen] = useState(false);
   const typefacePicker = useRef<HTMLDivElement>(null);
 
@@ -149,6 +144,7 @@ export function Editor({
       const next = backgroundById(id);
       setBackgroundDetail(false);
       setBackgroundPickerExpanded(false);
+      setBackgroundPicked(true);
       onChange({
         ...preset,
         backgroundId: id,
@@ -189,6 +185,7 @@ export function Editor({
     const nextBackground = backgroundById(backgroundId);
     setBackgroundDetail(false);
     setBackgroundPickerExpanded(false);
+    setBackgroundPicked(true);
 
     const availableClocks = clocks.filter((item) => entitlements.canUse(item));
     const clockId = pickDifferent(
@@ -218,6 +215,25 @@ export function Editor({
     });
   }
 
+  function selectBackground(id: string) {
+    const b = backgroundById(id);
+    const changed = id !== preset.backgroundId;
+    onChange({
+      ...preset,
+      backgroundId: id,
+      backgroundOptions: changed ? {} : preset.backgroundOptions,
+      clockOptions: changed
+        ? { ...o, color: b.suggestedClockColors[0] }
+        : o,
+    });
+    setBackgroundPicked(true);
+    setBackgroundPickerExpanded(false);
+    setBackgroundDetail(false);
+  }
+
+  const showBackgroundTuning =
+    backgroundPicked && !backgroundPickerExpanded && !backgroundDetail;
+
   return (
     <aside
       ref={panel}
@@ -240,7 +256,9 @@ export function Editor({
                     setSection(isOpen ? "" : name);
                     if (name === "Background") {
                       setBackgroundDetail(false);
-                      if (!isOpen) setBackgroundPickerExpanded(true);
+                      if (!isOpen) {
+                        setBackgroundPickerExpanded(!backgroundPicked);
+                      }
                     }
                   }}
                 >
@@ -297,18 +315,7 @@ export function Editor({
                                   }
                                   aria-label={`Background ${b.name}`}
                                   aria-pressed={preset.backgroundId === b.id}
-                                  onClick={() => {
-                                    onChange({
-                                      ...preset,
-                                      backgroundId: b.id,
-                                      backgroundOptions: {},
-                                      clockOptions: {
-                                        ...o,
-                                        color: b.suggestedClockColors[0],
-                                      },
-                                    });
-                                    setBackgroundPickerExpanded(false);
-                                  }}
+                                  onClick={() => selectBackground(b.id)}
                                 >
                                   <span
                                     className="background-swatch"
@@ -328,7 +335,10 @@ export function Editor({
                             type="button"
                             className="background-picker-summary"
                             aria-expanded={false}
-                            onClick={() => setBackgroundPickerExpanded(true)}
+                            onClick={() => {
+                              setBackgroundPickerExpanded(true);
+                              setBackgroundDetail(false);
+                            }}
                           >
                             <span
                               className="background-swatch"
@@ -343,7 +353,7 @@ export function Editor({
                             <ChevronDown size={uiPx(17)} />
                           </button>
                         )}
-                        {!background.staticBackground && (
+                        {showBackgroundTuning && !background.staticBackground && (
                           <div
                             className="quick-background-controls"
                             role="group"
@@ -416,18 +426,30 @@ export function Editor({
                             })}
                           </div>
                         )}
-                        {(background.customizableUniforms.length > 0 ||
-                          (background.staticBackground &&
-                            !background.staticBackground.includes("url("))) && (
+                        {showBackgroundTuning &&
+                          (background.customizableUniforms.length > 0 ||
+                            (background.staticBackground &&
+                              !background.staticBackground.includes(
+                                "url(",
+                              ))) && (
+                            <button
+                              className="fine-tune-entry"
+                              onClick={() => setBackgroundDetail(true)}
+                            >
+                              <span>
+                                <small>Selected background</small>
+                                Fine-tune {background.name}
+                              </span>
+                              <ArrowUpRight size={uiPx(17)} />
+                            </button>
+                          )}
+                        {showBackgroundTuning && (
                           <button
-                            className="fine-tune-entry"
-                            onClick={() => setBackgroundDetail(true)}
+                            type="button"
+                            className="editor-step-continue"
+                            onClick={() => setSection("Layout")}
                           >
-                            <span>
-                              <small>Selected background</small>
-                              Fine-tune {background.name}
-                            </span>
-                            <ArrowUpRight size={uiPx(17)} />
+                            Next: Layout <ArrowUpRight size={uiPx(17)} />
                           </button>
                         )}
                       </>
@@ -569,91 +591,13 @@ export function Editor({
                           />
                         </label>
                       </div>
-
-                      <div className="editor-subsection">
-                        <span className="field-label">Time & display</span>
-                        <Toggle
-                          label="24-hour time"
-                          checked={o.hour24}
-                          onChange={(value) => option({ hour24: value })}
-                        />
-                        {clock.supportsSeconds && (
-                          <Toggle
-                            label="Show seconds"
-                            checked={o.showSeconds}
-                            onChange={(value) => option({ showSeconds: value })}
-                          />
-                        )}
-                        <Toggle
-                          label="Show date"
-                          checked={o.showDate}
-                          onChange={(value) => option({ showDate: value })}
-                        />
-                        <Toggle
-                          label="Still background"
-                          checked={preset.displayOptions.reduceMotion}
-                          onChange={(value) =>
-                            onChange({
-                              ...preset,
-                              displayOptions: { reduceMotion: value },
-                            })
-                          }
-                        />
-                      </div>
-
-                      <div className="editor-subsection weather-setup-section">
-                        <span className="field-label">Weather</span>
-                        {!preferences.weatherLocation && !weatherSetup ? (
-                          <button
-                            className="setup-button"
-                            onClick={() => setWeatherSetup(true)}
-                          >
-                            <CloudSun size={uiPx(17)} /> Set up weather
-                          </button>
-                        ) : (
-                          <>
-                            {preferences.weatherLocation && !weatherSetup && (
-                              <>
-                                <div className="weather-summary">
-                                  <CloudSun size={uiPx(18)} />
-                                  <span>
-                                    {preferences.weatherLocation.name}
-                                  </span>
-                                  <button onClick={() => setWeatherSetup(true)}>
-                                    Change
-                                  </button>
-                                </div>
-                                <Toggle
-                                  label="Show weather"
-                                  checked={o.showWeather}
-                                  onChange={(value) =>
-                                    option({ showWeather: value })
-                                  }
-                                />
-                                <Toggle
-                                  label="Show location"
-                                  checked={o.showLocation}
-                                  onChange={(value) =>
-                                    option({ showLocation: value })
-                                  }
-                                />
-                              </>
-                            )}
-                            {weatherSetup && (
-                              <div className="weather-setup-panel">
-                                <WeatherControls
-                                  preferences={preferences}
-                                  onChange={onPreferences}
-                                  weather={weather}
-                                  onLocationSelected={() => {
-                                    setWeatherSetup(false);
-                                  }}
-                                />
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
+                      <button
+                        type="button"
+                        className="editor-step-continue"
+                        onClick={() => setSection("Font")}
+                      >
+                        Next: Font <ArrowUpRight size={uiPx(17)} />
+                      </button>
                     </>
                   )}
 

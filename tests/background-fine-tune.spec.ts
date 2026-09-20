@@ -12,8 +12,6 @@ test("background templates progressively reveal full fine-tuning controls", asyn
   );
   await page.goto("/display?preset=meridian");
   await page.getByRole("button", { name: "Edit clock", exact: true }).click();
-  await page.getByRole("button", { name: /^Background / }).click();
-
   await page
     .getByRole("button", { name: "Background Haze", exact: true })
     .click();
@@ -65,6 +63,7 @@ test("background templates progressively reveal full fine-tuning controls", asyn
     )
     .toEqual({});
   await page.getByRole("button", { name: "Backgrounds", exact: false }).click();
+  await page.getByRole("button", { name: /Change background/ }).click();
   await expect(
     page
       .locator(".background-picker")

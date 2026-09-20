@@ -9,7 +9,6 @@ test("touch selection, live editor and rotation in mobile WebKit", async ({
     "landscape",
   );
   await expect(page.getByLabel("Customize clock")).toBeVisible();
-  await page.getByRole("button", { name: /^Background / }).tap();
   await page
     .getByRole("button", { name: "Background Haze", exact: true })
     .tap();

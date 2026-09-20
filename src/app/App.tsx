@@ -561,7 +561,6 @@ export default function App() {
               preset={preset}
               onChange={setPreset}
               preferences={preferences}
-              onPreferences={changePreferences}
               weather={weather}
             />
           )}

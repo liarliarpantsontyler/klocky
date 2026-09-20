@@ -31,7 +31,6 @@ test("collection → display → live editor → persistence → share", async (
   await expect(
     page.getByRole("button", { name: "Keep screen awake" }),
   ).toHaveCount(0);
-  await page.getByRole("button", { name: /^Background / }).click();
   await page
     .getByRole("button", { name: "Background Boreal", exact: true })
     .click();
@@ -55,8 +54,10 @@ test("collection → display → live editor → persistence → share", async (
   await page
     .getByRole("button", { name: "Clock color #d7ff85", exact: true })
     .click();
+  await page.getByRole("button", { name: "Open settings" }).click();
   await page.getByRole("switch", { name: "24-hour time", exact: true }).check();
-  await page.getByRole("switch", { name: "Show seconds" }).check();
+  await page.getByRole("switch", { name: "Seconds by default" }).check();
+  await page.getByRole("button", { name: "Close dialog" }).click();
   await page.getByTestId("display-stage").click();
   await expect(page.getByLabel("Customize clock")).toHaveCount(0);
   await page.reload();
@@ -125,10 +126,8 @@ test.describe("weather with deterministic API responses", () => {
     });
     await page.goto("/display?preset=meridian");
     expect(calls).toBe(0);
-    await page.getByRole("button", { name: "Edit clock", exact: true }).click();
-    await expect(page.getByLabel("Customize clock")).toBeVisible();
-    await page.getByRole("button", { name: /^Layout / }).click();
-    await page.getByRole("button", { name: "Set up weather" }).click();
+    await page.getByRole("button", { name: "Open settings" }).click();
+    await page.getByText("Weather & location").click();
     expect(calls).toBe(0);
     await page.getByLabel("Search city").fill("Chicago");
     await page.getByRole("button", { name: "Find", exact: true }).click();
@@ -139,6 +138,7 @@ test.describe("weather with deterministic API responses", () => {
     await page.getByRole("button", { name: "Change", exact: true }).click();
     await page.getByLabel("Temperature unit").selectOption("fahrenheit");
     await expect.poll(() => calls).toBe(2);
+    await page.getByRole("button", { name: "Close dialog" }).click();
   });
 });
 test("shortcuts, fullscreen and idle chrome", async ({ page, browserName }) => {

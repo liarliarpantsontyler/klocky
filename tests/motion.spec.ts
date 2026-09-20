@@ -208,6 +208,11 @@ test("motion slider pauses, resumes, persists zero, and respects reduced motion"
   page,
 }) => {
   await page.goto("/display?preset=meridian");
+  await page.getByRole("button", { name: "Edit clock", exact: true }).click();
+  await page
+    .locator(".background-picker")
+    .getByRole("button", { name: "Background Haze", exact: true })
+    .click();
   const canvas = page.locator("canvas[data-status=ready]");
   await expect(canvas).toBeVisible();
   const phase = () =>
@@ -231,6 +236,11 @@ test("motion slider pauses, resumes, persists zero, and respects reduced motion"
   await page.mouse.move(100, 180);
   expect(await canvas.evaluate((c) => c.toDataURL())).toBe(frame);
   await page.reload();
+  await page.getByRole("button", { name: "Edit clock", exact: true }).click();
+  await page
+    .locator(".background-picker")
+    .getByRole("button", { name: "Background Haze", exact: true })
+    .click();
   await expect(motion).toHaveValue("-100");
   await expect(canvas).toBeVisible();
   expect(await phase()).toBe(0);

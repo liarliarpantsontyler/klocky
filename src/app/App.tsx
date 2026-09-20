@@ -12,6 +12,7 @@ import {
   ArrowLeft,
   Maximize,
   Minimize,
+  SquarePlus,
   SlidersHorizontal,
   Link as LinkIcon,
   Settings2,
@@ -25,6 +26,7 @@ import { Clock } from "../clock/Clock";
 import { Background } from "../backgrounds/Background";
 import { Editor } from "../editor/Editor";
 import { Settings } from "../components/Settings";
+import { InstallSheet } from "../components/InstallSheet";
 import { AccountSyncSheet } from "../components/AccountSyncSheet";
 import {
   shouldPromptAfterFavoriteAdd,
@@ -40,6 +42,7 @@ import {
   encodePreset,
   presetsMatchConfiguration,
   snapshotFavoritePreset,
+  isInstallHintDismissed,
 } from "../state/storage";
 import { clocks, safeClockOptions, clockOptionsWithWeatherEnabled, presetWithWeatherDefaults } from "../clock/definitions";
 import { backgrounds, backgroundById } from "../backgrounds/definitions";
@@ -48,8 +51,10 @@ import {
   useReducedMotion,
   useWakeLock,
   fullscreen,
+  shouldOfferInstall,
   shouldShowFullscreenControl,
 } from "../hooks/useDisplay";
+import { usePwaInstall } from "../hooks/usePwaInstall";
 import { useDisplaySafariChromeSync } from "../hooks/useDisplaySafariChromeSync";
 import type { KlockyPreset, UserPreferences } from "../types";
 import { syncDocumentChrome } from "../utils/themeColor";
@@ -98,11 +103,15 @@ export default function App() {
     [toast, setToast] = useState(""),
     [isFullscreen, setIsFullscreen] = useState(false),
     [shareFallback, setShareFallback] = useState(""),
-    [accountSyncOpen, setAccountSyncOpen] = useState(false);
+    [accountSyncOpen, setAccountSyncOpen] = useState(false),
+    [installOpen, setInstallOpen] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
       undefined,
     ),
-    idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined),
+    installAutoShown = useRef(false);
+  const offerInstall = shouldOfferInstall();
+  const pwaInstall = usePwaInstall();
   const enterFocus = useRef<HTMLElement>(null);
   const chromeSamplerRef = useRef<DisplayChromeSampler | null>(null);
   const savedRef = useRef(saved);
@@ -116,6 +125,11 @@ export default function App() {
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(""), 6000);
   }, []);
+  const runImmersiveAction = useCallback(async () => {
+    const result = await fullscreen(notify);
+    if (result === "install-needed") setInstallOpen(true);
+  }, [notify]);
+  const openInstallSheet = useCallback(() => setInstallOpen(true), []);
   const account = useAccountSync(saved, setSaved, notify);
   const configurationFavorited = saved.savedFavorites.some((item) =>
     presetsMatchConfiguration(item, preset),
@@ -302,11 +316,21 @@ export default function App() {
           { duration: 700, easing: "cubic-bezier(.22,1,.36,1)" },
         );
     }
-    if (preferences.autoFullscreen) void fullscreen(notify);
+    if (preferences.autoFullscreen) void runImmersiveAction();
   }
   useEffect(() => {
     if (view === "display") enterFocus.current?.focus({ preventScroll: true });
   }, [view]);
+  useEffect(() => {
+    if (view !== "display") return;
+    if (!saved.onboardingComplete) return;
+    if (!offerInstall) return;
+    if (isInstallHintDismissed()) return;
+    if (installAutoShown.current) return;
+    installAutoShown.current = true;
+    const timer = setTimeout(() => setInstallOpen(true), 800);
+    return () => clearTimeout(timer);
+  }, [view, saved.onboardingComplete, offerInstall]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (
@@ -336,7 +360,7 @@ export default function App() {
         e.preventDefault();
         wake();
       }
-      if (k === "f") void fullscreen(notify);
+      if (k === "f") void runImmersiveAction();
       if (k === "e") setEditing((v) => !v);
       if (k === "c") chooser();
       if (k === "escape") {
@@ -373,7 +397,7 @@ export default function App() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [view, editing, settings, wake, notify]);
+  }, [view, editing, settings, wake, runImmersiveAction]);
   async function share() {
     const url = location.origin + "/display?s=" + encodePreset(preset);
     const favorited = configurationFavorited;
@@ -562,11 +586,17 @@ export default function App() {
                   {shouldShowFullscreenControl() && (
                     <IconButton
                       label={
-                        isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+                        offerInstall
+                          ? "Add to Home Screen"
+                          : isFullscreen
+                            ? "Exit fullscreen"
+                            : "Enter fullscreen"
                       }
-                      onClick={() => void fullscreen(notify)}
+                      onClick={() => void runImmersiveAction()}
                     >
-                      {isFullscreen ? (
+                      {offerInstall ? (
+                        <SquarePlus size={uiPx(18)} />
+                      ) : isFullscreen ? (
                         <Minimize size={uiPx(18)} />
                       ) : (
                         <Maximize size={uiPx(18)} />
@@ -593,7 +623,8 @@ export default function App() {
                 </div>
               </div>
               <span className="display-shortcuts">
-                E to edit <span>·</span> F for fullscreen
+                E to edit <span>·</span>{" "}
+                {offerInstall ? "F to install" : "F for fullscreen"}
               </span>
             </div>
           </div>
@@ -633,10 +664,24 @@ export default function App() {
             setSettings(false);
             setAccountSyncOpen(true);
           }}
+          onOpenInstall={() => {
+            setSettings(false);
+            setInstallOpen(true);
+          }}
           session={account.session}
           syncConfigured={account.syncConfigured}
           onSignOut={() => void account.signOut()}
           weather={weather}
+        />
+      )}
+      {installOpen && (
+        <InstallSheet
+          canPrompt={pwaInstall.canPrompt}
+          onPromptInstall={pwaInstall.promptInstall}
+          onClose={() => setInstallOpen(false)}
+          onInstalled={() =>
+            notify("Klocky installed. Open it from your home screen.")
+          }
         />
       )}
       {accountSyncOpen && (

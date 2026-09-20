@@ -27,27 +27,52 @@ export function supportsDocumentFullscreen() {
     !!document.documentElement.requestFullscreen
   );
 }
+export const canUseDocumentFullscreen = supportsDocumentFullscreen;
+/** In-browser environments where home-screen install is the immersive path. */
+export function shouldOfferInstall() {
+  return !isStandaloneDisplay() && !supportsDocumentFullscreen();
+}
 /** Show enter/exit fullscreen when the API works or the user can still install. */
 export function shouldShowFullscreenControl() {
-  return supportsDocumentFullscreen() || !isStandaloneDisplay();
+  return supportsDocumentFullscreen() || shouldOfferInstall();
 }
-export async function fullscreen(notify: (text: string) => void) {
-  if (isStandaloneDisplay() && !supportsDocumentFullscreen()) return;
+export type FullscreenResult =
+  | "entered"
+  | "exited"
+  | "install-needed"
+  | "noop";
+export function isIosDevice() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return true;
+  return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+}
+export function isIosSafariBrowser() {
+  if (!isIosDevice()) return false;
+  const ua = navigator.userAgent;
+  return /Safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua);
+}
+export async function fullscreen(
+  notify: (text: string) => void,
+): Promise<FullscreenResult> {
+  if (isStandaloneDisplay() && !supportsDocumentFullscreen()) return "noop";
   try {
     if (document.fullscreenElement) {
       await document.exitFullscreen();
-    } else if (supportsDocumentFullscreen()) {
+      return "exited";
+    }
+    if (supportsDocumentFullscreen()) {
       await document.documentElement.requestFullscreen();
-    } else
-      notify(
-        "Fullscreen isn’t available here. Add Klocky to your Home Screen for an immersive display.",
-      );
+      return "entered";
+    }
+    if (shouldOfferInstall()) return "install-needed";
   } catch {
-    if (isStandaloneDisplay()) return;
+    if (isStandaloneDisplay()) return "noop";
     notify(
       "This browser couldn’t enter fullscreen. Try its fullscreen menu or install Klocky.",
     );
   }
+  return "noop";
 }
 export function useWakeLock(enabled: boolean, notify: (t: string) => void) {
   useEffect(() => {

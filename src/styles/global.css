@@ -2389,6 +2389,30 @@ html:has(.player) body {
 .share-fallback > .icon-button {
   float: right;
 }
+.install-sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(16px * var(--ui-scale));
+}
+.install-sheet-lede {
+  margin: 0;
+}
+.install-sheet-steps {
+  margin: 0;
+  padding-left: calc(22px * var(--ui-scale));
+  display: flex;
+  flex-direction: column;
+  gap: calc(10px * var(--ui-scale));
+}
+.install-sheet-primary {
+  align-self: flex-start;
+}
+.install-sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(10px * var(--ui-scale));
+  margin-top: calc(4px * var(--ui-scale));
+}
 @supports not (backdrop-filter: blur(10px)) {
   .share-fallback.glass-panel {
     background: #283323;

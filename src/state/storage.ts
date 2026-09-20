@@ -19,6 +19,21 @@ import {
 } from "../clock/definitions";
 import { backgrounds, uniformControls } from "../backgrounds/definitions";
 export const STORAGE_KEY = "klocky.v1";
+export const INSTALL_HINT_DISMISSED_KEY = "klocky.installHintDismissed";
+export function isInstallHintDismissed() {
+  try {
+    return localStorage.getItem(INSTALL_HINT_DISMISSED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+export function dismissInstallHint() {
+  try {
+    localStorage.setItem(INSTALL_HINT_DISMISSED_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
 export const defaultPreferences: UserPreferences = {
   hour24: false,
   unit: "celsius",

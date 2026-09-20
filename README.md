@@ -68,7 +68,7 @@ No location prompt on launch. Onboarding uses device time automatically and offe
 
 ## Browser behavior
 
-- Fullscreen requires browser support and often a user gesture. Installed mobile mode is the alternative when unavailable.
+- Fullscreen uses the browser Fullscreen API where supported. On iPhone and iPad in Safari, add Klocky to your Home Screen for an immersive display; the app shows step-by-step guidance. On Chrome, Edge, and similar browsers, an in-app Install button appears when the browser offers install.
 - Wake lock is reacquired after returning to a visible tab where permitted; low power mode can prevent it.
 - Reduced motion freezes shader time and removes UI/digit animations. The system preference takes precedence.
 - Hidden tabs stop animation and clock scheduling; current system time is read when returning.

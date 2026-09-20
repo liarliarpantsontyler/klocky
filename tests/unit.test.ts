@@ -538,7 +538,7 @@ describe("display fullscreen", () => {
     expect(notify).not.toHaveBeenCalled();
   });
 
-  it("prompts to install when not standalone and the API is missing", async () => {
+  it("returns install-needed when not standalone and the API is missing", async () => {
     vi.stubGlobal("matchMedia", () => ({
       matches: false,
       addEventListener: () => {},
@@ -546,14 +546,26 @@ describe("display fullscreen", () => {
     }));
     stubDocument(false);
     const notify = vi.fn();
-    const { shouldShowFullscreenControl, fullscreen } = await import(
-      "../src/hooks/useDisplay"
-    );
+    const {
+      shouldShowFullscreenControl,
+      shouldOfferInstall,
+      fullscreen,
+    } = await import("../src/hooks/useDisplay");
     expect(shouldShowFullscreenControl()).toBe(true);
-    await fullscreen(notify);
-    expect(notify).toHaveBeenCalledWith(
-      "Fullscreen isn’t available here. Add Klocky to your Home Screen for an immersive display.",
-    );
+    expect(shouldOfferInstall()).toBe(true);
+    await expect(fullscreen(notify)).resolves.toBe("install-needed");
+    expect(notify).not.toHaveBeenCalled();
+  });
+
+  it("does not offer install when the fullscreen API is available", async () => {
+    vi.stubGlobal("matchMedia", () => ({
+      matches: false,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }));
+    stubDocument(true);
+    const { shouldOfferInstall } = await import("../src/hooks/useDisplay");
+    expect(shouldOfferInstall()).toBe(false);
   });
 });
 

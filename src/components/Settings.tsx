@@ -10,6 +10,7 @@ export function Settings({
   onReset,
   onWelcome,
   onOpenAccountSync,
+  onOpenInstall,
   session,
   syncConfigured,
   onSignOut,
@@ -21,6 +22,7 @@ export function Settings({
   onReset: () => void;
   onWelcome: () => void;
   onOpenAccountSync: () => void;
+  onOpenInstall: () => void;
   session: AccountSession;
   syncConfigured: boolean;
   onSignOut: () => void;
@@ -129,6 +131,11 @@ export function Settings({
             weather={weather}
           />
         </details>
+        <div className="settings-sync-row">
+          <button type="button" className="quiet-button" onClick={onOpenInstall}>
+            Add to Home Screen…
+          </button>
+        </div>
         <details>
           <summary>Install Klocky</summary>
           <p className="help-text">
